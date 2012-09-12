@@ -10,6 +10,7 @@ public class Ban{
     private String reason;
     private String banner;
     private long timeOfBan;
+    
 	public Ban(String reason, String banner, long time){
 		this.reason=reason;
                 this.banner=banner;
@@ -19,9 +20,11 @@ public class Ban{
 	public String getReason(){
 		return reason;
 	}
+        
 	public String getBanner(){
 		return banner;
 	}
+        
 	public long getTimeOfBan(){
 		return timeOfBan;
 	}
