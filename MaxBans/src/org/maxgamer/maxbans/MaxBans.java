@@ -6,8 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MaxBans extends JavaPlugin{
 	
 	public void onEnable(){
-		if (true){
-                    
+		if (false){
+                    return;
                 }
 	}
 	public void onDisable(){
