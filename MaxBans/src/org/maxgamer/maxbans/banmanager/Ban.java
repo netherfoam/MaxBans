@@ -7,17 +7,22 @@ package org.maxgamer.maxbans.banmanager;
  *
  */
 public class Ban{
-	public Ban(){
-		
+    private String reason;
+    private String banner;
+    private long timeOfBan;
+	public Ban(String reason, String banner, long time){
+		this.reason=reason;
+                this.banner=banner;
+                this.timeOfBan=time;
 	}
 	
 	public String getReason(){
-		return null;
+		return reason;
 	}
 	public String getBanner(){
-		return null;
+		return banner;
 	}
 	public long getTimeOfBan(){
-		return 0;
+		return timeOfBan;
 	}
 }
