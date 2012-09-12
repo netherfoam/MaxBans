@@ -26,4 +26,8 @@ public class BanManager{
 	public void reload(){
 		
 	}
+        
+        public boolean isMuted(String name) {
+                return mutes.containsKey(name); 
+        }
 }

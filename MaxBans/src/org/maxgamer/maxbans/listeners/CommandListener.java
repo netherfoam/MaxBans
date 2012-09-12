@@ -3,9 +3,10 @@ package org.maxgamer.maxbans.listeners;
 import org.bukkit.event.Listener;
 import org.maxgamer.maxbans.MaxBans;
 
-public class JoinListener implements Listener{
+public class CommandListener implements Listener{
         private MaxBans plugin;
-        public JoinListener(MaxBans mb){
+        public CommandListener(MaxBans mb){
             plugin=mb;
         }
+            
 }
