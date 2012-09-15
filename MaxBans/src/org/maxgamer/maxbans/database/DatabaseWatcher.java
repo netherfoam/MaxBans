@@ -14,7 +14,6 @@ public class DatabaseWatcher implements Runnable{
 	 * What to do every time the scheduled event is called
 	 * - AKA, check buffer, run queries 
 	 */
-	@Override
 	public void run() {
 		Statement st = null;
 		try {

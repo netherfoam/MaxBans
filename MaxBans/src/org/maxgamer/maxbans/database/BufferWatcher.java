@@ -14,7 +14,6 @@ public class BufferWatcher implements Runnable{
 		this.buffer = buffer;
 		this.query = query;
 	}
-	@Override
 	public void run() {
 		while(buffer.locked){
 			//Nothing
