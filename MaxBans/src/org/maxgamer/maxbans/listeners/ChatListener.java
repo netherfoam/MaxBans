@@ -16,9 +16,9 @@ public class ChatListener implements Listener {
         @EventHandler(priority = EventPriority.LOWEST)
         public void onPlayerChat(AsyncPlayerChatEvent event) {
                 Player p = event.getPlayer();
-                if (plugin.getBanManager().isMuted(p.getName())) {
+                if (plugin.getBanManager().isMuted(p.getName())!=null) {
                     event.setCancelled(true);
-                    p.sendMessage(ChatColor.RED+"You have been muted!");
+                    p.sendMessage(ChatColor.RED+"You are muted!");
                 }
     }
 }
