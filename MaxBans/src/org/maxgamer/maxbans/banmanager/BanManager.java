@@ -65,4 +65,11 @@ public class BanManager{
     	}
     	return false;
     }
+    
+    public void ban(String name, String reason, String banner){
+    	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
+    	this.bans.put(name, ban);
+    	//TODO: SQL and set up tables
+    	plugin.getDB().getBuffer().addString("");
+    }
 }
