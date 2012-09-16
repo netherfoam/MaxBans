@@ -9,6 +9,44 @@ import java.sql.SQLException;
 import org.bukkit.plugin.Plugin;
 import org.maxgamer.maxbans.MaxBans;
 
+/**
+ * Suggested database format:
+ * Table: Bans
+ * 	Player	Reason	Banner	Time	Expires	
+ * 	Chuck	Spam	Azgod	143134	143956
+ * 
+ * Where,
+ * 		Player (Lowercase) is the name of the player to ban,
+ * 		Reason is the reason of the ban,
+ * 		Banner is the admin (Lowercase) who banned them,
+ * 		Time is the time the ban was created,
+ * 		Expires is the time when the ban runs out.
+ * 
+ * Table: IPBans
+ * 	IP		Reason	Banner	Time	Expires
+ * 	127.*	Spam	Azgod	143134	143956
+ * 
+ * Where,
+ * 		IP is the players IP,
+ * 		Reason is the ban reason,
+ * 		Banner (Lowercase) is the admin who banned them,
+ * 		Time is the time the ban was created,
+ * 		Expires is the time the ban will expire (0 = Never)
+ * 
+ * Table: IPHistory
+ * Player	Time	IP			Count
+ * Azgod	141134	127.0.0.1	1
+ * Azgod	143234	192.168.2.1	15
+ * Darek	143144	127.0.0.1	3
+ * Daxter	133134	127.0.0.1	8
+ * 
+ * Where,
+ * 		Player (Lowercase) is player name,
+ * 		Time is last login on that IP,
+ * 		IP is the ip address,
+ * 		Count is the number of times they've logged in from that IP.
+ *
+ */
 public class Database {
 	private Buffer buffer;
 	private MaxBans plugin;
