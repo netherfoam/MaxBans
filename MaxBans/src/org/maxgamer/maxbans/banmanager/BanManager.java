@@ -5,12 +5,12 @@ import org.maxgamer.maxbans.MaxBans;
 
 public class BanManager{
 	private MaxBans plugin;
-	private HashMap<String, Ban> bans = new HashMap<>();
-	private HashMap<String, TempBan> tempbans = new HashMap<>();
-	private HashMap<String, IPBan> ipbans = new HashMap<>();
-	private HashMap<String, TempIPBan> tempipbans = new HashMap<>();
-	private HashMap<String, Mute> mutes = new HashMap<>();
-	private HashMap<String, TempMute> tempmutes = new HashMap<>();
+	private HashMap<String, Ban> bans = new HashMap<String, Ban>();
+	private HashMap<String, TempBan> tempbans = new HashMap<String, TempBan>();
+	private HashMap<String, IPBan> ipbans = new HashMap<String, IPBan>();
+	private HashMap<String, TempIPBan> tempipbans = new HashMap<String, TempIPBan>();
+	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
+	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	
 	
 	public BanManager(MaxBans plugin){
@@ -26,7 +26,7 @@ public class BanManager{
 		
 	}
     
-    public Mute isMuted(String name) {
+    public Mute getMute(String name) {
         Mute mute = mutes.get(name);
         if (mute !=null) {
             return mute;
@@ -40,7 +40,7 @@ public class BanManager{
         return null;
     }
     
-    public Ban isBanned(String name){
+    public Ban getBan(String name){
     	name = name.toLowerCase();
     	
     	Ban ban = bans.get(name);
@@ -59,7 +59,7 @@ public class BanManager{
     	return null;
     }
     
-    public IPBan isIPBanned(String ip){
+    public IPBan getIPBan(String ip){
     	IPBan ipBan = ipbans.get(ip);
     	if(ipBan != null){
     		return ipBan;
@@ -77,6 +77,19 @@ public class BanManager{
     
     public void ban(String name, String reason, String banner){
     	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
+    	this.bans.put(name, ban);
+    	//TODO: SQL and set up tables
+    	plugin.getDB().getBuffer().addString("");
+    }
+    /**
+     * Incomplete.
+     * @param name
+     * @param reason
+     * @param banner
+     * @param expires
+     */
+    public void tempban(String name, String reason, String banner, long expires){
+    	TempBan ban = new Ban(reason, banner, System.currentTimeMillis(), );
     	this.bans.put(name, ban);
     	//TODO: SQL and set up tables
     	plugin.getDB().getBuffer().addString("");
