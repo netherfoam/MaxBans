@@ -82,15 +82,18 @@ public class BanManager{
     	plugin.getDB().getBuffer().addString("");
     }
     /**
-     * Incomplete.
-     * @param name
-     * @param reason
-     * @param banner
-     * @param expires
+     * @param name The name of the player.
+     * @param reason Reason for the ban
+     * @param banner The admin who banned them
+     * @param expires Epoch time (Milliseconds) that they're unbanned.
+     * Expirey time is NOT time from creating ban, it is milliseconds from 1970 (System.currentMillis())
      */
     public void tempban(String name, String reason, String banner, long expires){
-    	TempBan ban = new Ban(reason, banner, System.currentTimeMillis(), );
-    	this.bans.put(name, ban);
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
+    	
+    	TempBan ban = new TempBan(reason, banner, System.currentTimeMillis(), expires);
+    	this.tempbans.put(name, ban);
     	//TODO: SQL and set up tables
     	plugin.getDB().getBuffer().addString("");
     }

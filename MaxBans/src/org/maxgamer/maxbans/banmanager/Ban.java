@@ -13,8 +13,8 @@ public class Ban{
     
 	public Ban(String reason, String banner, long time){
 		this.reason=reason;
-                this.banner=banner;
-                this.timeOfBan=time;
+        this.banner=banner;
+        this.timeOfBan=time;
 	}
 	
 	public String getReason(){

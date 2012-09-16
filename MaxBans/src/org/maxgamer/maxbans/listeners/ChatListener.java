@@ -13,12 +13,12 @@ public class ChatListener implements Listener {
         public ChatListener(MaxBans mb){
                 plugin=mb;
         }
-        @EventHandler(priority = EventPriority.LOWEST)
+        @EventHandler(priority = EventPriority.LOWEST) //Shouldnt this be the highest?
         public void onPlayerChat(AsyncPlayerChatEvent event) {
-                Player p = event.getPlayer();
-                if (plugin.getBanManager().isMuted(p.getName())!=null) {
-                    event.setCancelled(true);
-                    p.sendMessage(ChatColor.RED+"You are muted!");
-                }
+            Player p = event.getPlayer();
+            if (plugin.getBanManager().getMute(p.getName())!=null) {
+                event.setCancelled(true);
+                p.sendMessage(ChatColor.RED+"You are muted!");
+            }
     }
 }

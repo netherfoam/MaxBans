@@ -12,7 +12,18 @@ import org.maxgamer.maxbans.listeners.*;
 public class MaxBans extends JavaPlugin{
         private BanManager banManager;
         private ChatListener chatListener;
-        private CommandListener commandListener;
+        //private CommandListener commandExecutor;
+        /*TODO: We're going to need command listeners for:
+         *		Ban
+         *		IPBan
+         *		TempBan
+         *		TempIPBan
+         *		Mute
+         *		Unmute(Maybe, toggle mute?)
+         *		Kick
+         *		
+         *		Unban (This should handle IP Bans too)
+        */	
         private JoinListener joinListener; 
         private Database db;
         
@@ -32,9 +43,10 @@ public class MaxBans extends JavaPlugin{
 		
 		banManager = new BanManager(this);
 		
+		this.chatListener = new ChatListener(this);
+		this.joinListener = new JoinListener(this);
 	
         Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
-        Bukkit.getServer().getPluginManager().registerEvents(this.commandListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
         
     }
