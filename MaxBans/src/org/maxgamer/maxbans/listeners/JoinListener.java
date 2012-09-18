@@ -1,11 +1,14 @@
 package org.maxgamer.maxbans.listeners;
 
 import java.net.InetAddress;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.*;
 
@@ -18,6 +21,13 @@ public class JoinListener implements Listener{
     @EventHandler (priority = EventPriority.LOWEST)
     public void onJoinHandler(PlayerLoginEvent event) {
         Player player = event.getPlayer();
+        
+        if(this.plugin.getBanManager().lockdown && !player.hasPermission("maxbans.bypass.lockdown")){
+    		event.setKickMessage(plugin.getBanManager().lockdownReason);
+    		event.setResult(Result.KICK_OTHER);
+    		return;
+    	}
+        
         InetAddress address = event.getAddress();
         
         //Ban
