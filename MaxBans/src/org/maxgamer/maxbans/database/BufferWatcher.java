@@ -1,7 +1,5 @@
 package org.maxgamer.maxbans.database;
 
-import java.util.List;
-
 /**
  * This class is used for running queries in another thread on the database.
  * This class cannot be used to read data.
