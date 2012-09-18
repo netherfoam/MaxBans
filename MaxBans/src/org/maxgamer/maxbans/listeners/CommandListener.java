@@ -3,7 +3,6 @@ package org.maxgamer.maxbans.listeners;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Listener;
 import org.maxgamer.maxbans.MaxBans;
 
 public class CommandListener implements CommandExecutor{
