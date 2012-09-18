@@ -3,13 +3,14 @@ package org.maxgamer.maxbans.database;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.bukkit.ChatColor;
+
 public class DatabaseWatcher implements Runnable{
 	private Database db;
 	public DatabaseWatcher(Database db){
 		this.db = db;
 	}
 
-	
 	/**
 	 * What to do every time the scheduled event is called
 	 * - AKA, check buffer, run queries 
@@ -32,10 +33,16 @@ public class DatabaseWatcher implements Runnable{
 		while(db.getBuffer().queries.size() > 0){
 			try {
 				st.addBatch(db.getBuffer().queries.get(0));
-			} catch (SQLException e) {
-				e.printStackTrace();
+			} catch (SQLException e2) {
+				e2.printStackTrace();
 			}
 			db.getBuffer().queries.remove(0);
+		}
+		try {
+			st.executeBatch();
+		} catch (SQLException e3) {
+			e3.printStackTrace();
+			this.db.getPlugin().getLogger().severe(ChatColor.RED + "Could not execute SQL query.");
 		}
 		
 		db.getBuffer().locked = false;
