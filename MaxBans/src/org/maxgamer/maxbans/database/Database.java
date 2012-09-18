@@ -12,15 +12,16 @@ import org.maxgamer.maxbans.MaxBans;
 /**
  * Suggested database format:
  * Table: Bans
- * 	Player	Reason	Banner	Time	Expires	
+ * 	Name	Reason	Banner	Time	Expires	
  * 	Chuck	Spam	Azgod	143134	143956
  * 
  * Where,
- * 		Player (Lowercase) is the name of the player to ban,
+ * 		Name (Lowercase) is the name of the player to ban,
  * 		Reason is the reason of the ban,
  * 		Banner is the admin (Lowercase) who banned them,
  * 		Time is the time the ban was created,
  * 		Expires is the time when the ban runs out.
+ * 		If expires = 0, then it never expires.
  * 
  * Table: IPBans
  * 	IP		Reason	Banner	Time	Expires
@@ -33,20 +34,44 @@ import org.maxgamer.maxbans.MaxBans;
  * 		Time is the time the ban was created,
  * 		Expires is the time the ban will expire (0 = Never)
  * 
+ * ====>	OLD	   <====
  * Table: IPHistory
- * Player	Time	IP			Count
+ * Name	Time	IP			Count
  * Azgod	141134	127.0.0.1	1
  * Azgod	143234	192.168.2.1	15
  * Darek	143144	127.0.0.1	3
  * Daxter	133134	127.0.0.1	8
  * 
  * Where,
- * 		Player (Lowercase) is player name,
+ * 		Name (Lowercase) is player name,
  * 		Time is last login on that IP,
  * 		IP is the ip address,
  * 		Count is the number of times they've logged in from that IP.
+ * 
+ * ====>	New	   <====
+ * Table: IPHistory
+ * Name	IP
+ * Azgod	127.0.0.1
+ * Azgod	192.168.2.1
+ * Frizire	127.0.0.1
+ * Daxter	192.168.2.15
+ * 
+ * Where,
+ * 		Name + IP combo is unique
+ * 		Name is the lowercase name
+ * 		IP is the ip theyve been recorded on.
  *
+ * Table: Mutes
+ * Name	Muter	Time	Expires
+ * Catty	Frizire	204234	0
+ * 
+ * Where,
+ * 		Name is the muted player. (Lowercase)
+ * 		Muter is the guy who muted them (Like banner)
+ * 		Time is the time they were muted
+ * 		Expires is the time that the mute expires. (0 = never)
  */
+//TODO: Write create DB tables methods
 public class Database {
 	private Buffer buffer;
 	private MaxBans plugin;
@@ -63,6 +88,28 @@ public class Database {
 	}
 	public Buffer getBuffer(){
 		return this.buffer;
+	}
+	
+	/**
+	 * Returns true if the table exists
+	 * @param table The table to check for
+	 * @return True if the table is found
+	 */
+	public boolean hasTable(String table){
+		//TODO: Write table checking query.
+		return false;
+	}
+	
+	public void createBanTable(){
+		//TODO: Write ban table creation query
+	}
+	
+	public void createIPBanTable(){
+		//TODO: Write ipban table creation query
+	}
+	
+	public void createMuteTable(){
+		//TODO: Write mute table creation query
 	}
 
 	/**
