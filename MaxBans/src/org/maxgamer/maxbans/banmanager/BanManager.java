@@ -361,6 +361,7 @@ public class BanManager{
     	
     	if(epoch % 60 > 0){
     		sb.append((epoch % 60) + " minutes,");
+    		epoch = epoch / 60;
     	}
     	
     	if(epoch > 0){
