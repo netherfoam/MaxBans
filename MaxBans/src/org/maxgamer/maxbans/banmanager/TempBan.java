@@ -1,14 +1,25 @@
 package org.maxgamer.maxbans.banmanager;
 
 public class TempBan extends Ban{
-        private long timeOfUnban;
+    private long expires;
         
-	public TempBan(String reason, String banner, long time, long unbanTime){
+    /**
+     * Creates a new tempban. Does not store it in memory or the DB.
+     * @param reason The reason for the ban
+     * @param banner The admin who banned him
+     * @param time The time the ban was created
+     * @param expires The time the ban will expires
+     */
+	public TempBan(String reason, String banner, long time, long expires){
             super(reason, banner, time);
-            timeOfUnban = unbanTime;
+            this.expires = expires;
 	}
-        
-        public long getTimeOfUnban() {
-            return timeOfUnban;
-        }
+
+	/**
+	 * Returns the time the ban expires
+	 * @return The time the ban expires
+	 */
+    public long getExpires() {
+        return expires;
+    }
 }

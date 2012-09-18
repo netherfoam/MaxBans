@@ -9,23 +9,38 @@ package org.maxgamer.maxbans.banmanager;
 public class Ban{
     private String reason;
     private String banner;
-    private long timeOfBan;
+    private long time;
     
+    /**
+     * 
+     * @param reason The reason for the ban
+     * @param banner The banner
+     * @param time The time they were banned
+     */
 	public Ban(String reason, String banner, long time){
 		this.reason=reason;
         this.banner=banner;
-        this.timeOfBan=time;
+        this.time=time;
 	}
 	
+	/**
+	 * @return The string reason why they were banned
+	 */
 	public String getReason(){
 		return reason;
 	}
-        
+    
+	/**
+	 * @return Returns the name of the admin who banned them
+	 */
 	public String getBanner(){
 		return banner;
 	}
-        
-	public long getTimeOfBan(){
-		return timeOfBan;
+    
+	/**
+	 * @return Returns the time they were banned
+	 */
+	public long getTime(){
+		return time;
 	}
 }
