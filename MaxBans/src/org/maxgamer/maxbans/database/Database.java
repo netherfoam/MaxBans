@@ -68,7 +68,6 @@ public class Database {
 	private MaxBans plugin;
 	private File dbFile;
 	private DatabaseWatcher dbw;
-	private int dbwID = 0;
 	
 	public Database(MaxBans plugin, File file){
 		this.plugin = plugin;
@@ -82,7 +81,11 @@ public class Database {
 	 * Reschedules the db watcher
 	 */
 	public void scheduleWatcher(){
-		this.dbwID = Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
+	}
+	
+	public DatabaseWatcher getDatabaseWatcher(){
+		return this.dbw;
 	}
 
 	public Plugin getPlugin() {
