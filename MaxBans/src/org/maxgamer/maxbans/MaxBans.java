@@ -54,6 +54,20 @@ public class MaxBans extends JavaPlugin{
 		//The database for bans
 		db = new Database(this, new File(this.getDataFolder(), "bans.db"));
 		
+		//Creates the database tables
+		if(!db.hasTable("bans")){
+			db.createBanTable();
+		}
+		if(!db.hasTable("ipbans")){
+			db.createIPBanTable();
+		}
+		if(!db.hasTable("mutes")){
+			db.createMuteTable();
+		}
+		if(!db.hasTable("iphistory")){
+			db.createIPHistoryTable();
+		}
+		
 		//BanManager
 		banManager = new BanManager(this);
 		
