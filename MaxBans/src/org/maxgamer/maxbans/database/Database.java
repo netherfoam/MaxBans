@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -98,14 +100,28 @@ public class Database {
 	 * @return True if the table is found
 	 */
 	public boolean hasTable(String table){
-		//TODO: Write table checking query.
+		String query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+table+"'";
+		try {
+			PreparedStatement ps = this.getConnection().prepareStatement(query);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create bans table.");
+			return false;
+		}
 		return false;
 	}
 	
+	/**
+	 * Creates the bans table
+	 */
 	public void createBanTable(){
 		String query = "CREATE TABLE 'bans' ( 'name'  TEXT(30) NOT NULL, 'reason'  TEXT(100), 'banner'  TEXT(30), 'time'  INTEGER NOT NULL DEFAULT 0, 'expires'  INTEGER NOT NULL DEFAULT 0 );";
-		//TODO: Write ban table creation query
-		
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -115,9 +131,11 @@ public class Database {
 		}
 	}
 	
+	/**
+	 * Creates the IPBan table
+	 */
 	public void createIPBanTable(){
 		String query = "CREATE TABLE 'ipbans' ( 'ip'  TEXT(20) NOT NULL, 'reason'  TEXT(100), 'banner'  TEXT(30), 'time'  INTEGER NOT NULL DEFAULT 0, 'expires'  INTEGER NOT NULL DEFAULT 0 );";
-		//TODO: Write ipban table creation query
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -127,9 +145,11 @@ public class Database {
 		}
 	}
 	
+	/**
+	 * Creates the mutes table
+	 */
 	public void createMuteTable(){
 		String query = "CREATE TABLE 'mutes' ( 'name'  TEXT(30) NOT NULL, 'muter'  TEXT(30), 'time'  INTEGER DEFAULT 0, 'expires'  INTEGER DEFAULT 0 );";
-		//TODO: Write mute table creation query
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -139,6 +159,9 @@ public class Database {
 		}
 	}
 	
+	/**
+	 * Creates the iphistory table
+	 */
 	public void createIPHistoryTable(){
 		String query = "CREATE TABLE 'iphistory' ( 'name'  TEXT(30) NOT NULL, 'ip'  TEXT(20) NOT NULL, PRIMARY KEY ('name', 'ip') );";
 		try {
