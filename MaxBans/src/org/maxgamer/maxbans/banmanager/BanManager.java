@@ -31,6 +31,8 @@ public class BanManager{
 	public BanManager(MaxBans plugin){
 		this.plugin = plugin;
 		this.db = plugin.getDB();
+		
+		this.reload();
 	}
 	
 	
