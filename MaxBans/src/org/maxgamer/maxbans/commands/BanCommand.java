@@ -8,9 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 
-public class Ban implements CommandExecutor{
+public class BanCommand implements CommandExecutor{
     private MaxBans plugin;
-    public Ban(MaxBans plugin){
+    public BanCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

@@ -6,12 +6,15 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
+import org.maxgamer.maxbans.commands.BanCommand;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
 
 public class MaxBans extends JavaPlugin{
         private BanManager banManager;
         private ChatListener chatListener;
+        private BanCommand banCommand;
+        
         //private CommandListener commandExecutor;
         /*TODO: We're going to need command listeners for:
          *		Ban
@@ -81,7 +84,8 @@ public class MaxBans extends JavaPlugin{
     }
 	//TODO: Write onDisable method
 	public void onDisable(){
-		
+		//TODO: Clean up database watchers
+		//TODO: Clean up buffer watchers
 	}
 	/**
 	 * Returns the ban manager for banning and checking bans and mutes.
