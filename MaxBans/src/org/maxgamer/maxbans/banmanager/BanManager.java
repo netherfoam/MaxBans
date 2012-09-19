@@ -299,7 +299,57 @@ public class BanManager{
     	
     	this.ipbans.put(ip, ipban);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO bans (ip, reason, banner, time) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
+    	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
+    }
+    
+    /**
+     * IP Bans an IP address so they can't join.
+     * @param ip The IP to ban (e.g. 127.0.0.1)
+     * @param reason The reason ("Misconduct!")
+     * @param banner The admin who banned them
+     * @param expires The time the ban expires
+     */
+    public void tempipban(String ip, String reason, String banner, long expires){
+    	banner = banner.toLowerCase();
+    	
+    	TempIPBan tib = new TempIPBan(reason, banner, System.currentTimeMillis(), expires);
+    	
+    	this.tempipbans.put(ip, tib);
+    	
+    	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
+    }
+    
+    /**
+     * Mutes a player so they can't chat.
+     * @param name The name of the player to mute
+     * @param banner The admin who muted them
+     */
+    public void mute(String name, String banner){
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
+    	
+    	Mute mute = new Mute(banner, System.currentTimeMillis());
+    	
+    	this.mutes.put(name, mute);
+    	
+    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, banner, time) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"');");
+    }
+    
+    /**
+     * Mutes a player so they can't chat.
+     * @param name The name of the player to mute
+     * @param banner The admin who muted them
+     * @param expires The time the mute expires
+     */
+    public void tempmute(String name, String banner, long expires){
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
+    	
+    	TempMute tmute = new TempMute(banner, System.currentTimeMillis(), expires);
+    	
+    	this.tempmutes.put(name, tmute);
+    	
+    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, banner, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
     }
     
     /**
