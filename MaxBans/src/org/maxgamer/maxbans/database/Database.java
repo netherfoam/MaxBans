@@ -76,7 +76,6 @@ import org.maxgamer.maxbans.MaxBans;
  * 		Time is the time they were muted
  * 		Expires is the time that the mute expires. (0 = never)
  */
-//TODO: Write create DB tables methods
 public class Database {
 	private Buffer buffer;
 	private MaxBans plugin;

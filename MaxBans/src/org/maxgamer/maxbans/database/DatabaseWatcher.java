@@ -21,7 +21,6 @@ public class DatabaseWatcher implements Runnable{
 		try {
 			st = db.getConnection().createStatement();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return;
 		}
