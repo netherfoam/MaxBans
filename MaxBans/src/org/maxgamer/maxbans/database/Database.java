@@ -95,7 +95,7 @@ public class Database {
 	 * Reschedules the db watcher
 	 */
 	public void scheduleWatcher(){
-		Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
+		this.dbwID = Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
 	}
 
 	public Plugin getPlugin() {
