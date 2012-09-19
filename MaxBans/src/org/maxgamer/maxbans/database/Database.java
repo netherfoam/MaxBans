@@ -39,19 +39,6 @@ import org.maxgamer.maxbans.MaxBans;
  * 		Time is the time the ban was created,
  * 		Expires is the time the ban will expire (0 = Never)
  * 
- * ====>	OLD	   <====
- * Table: IPHistory
- * Name	Time	IP			Count
- * Azgod	141134	127.0.0.1	1
- * Azgod	143234	192.168.2.1	15
- * Darek	143144	127.0.0.1	3
- * Daxter	133134	127.0.0.1	8
- * 
- * Where,
- * 		Name (Lowercase) is player name,
- * 		Time is last login on that IP,
- * 		IP is the ip address,
- * 		Count is the number of times they've logged in from that IP.
  * 
  * ====>	New	   <====
  * Table: IPHistory
