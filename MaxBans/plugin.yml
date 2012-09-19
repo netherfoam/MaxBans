@@ -1,0 +1,12 @@
+name: MaxBans
+version: 0.1
+main: org.maxgamer.maxbans.MaxBans
+author: [Darekfive, Netherfoam]
+
+description: Banning plugin
+website: http://maxgamer.org
+
+commands:
+    ban:
+        description: Ban command
+        usage: /ban <player> [-s] <reason>
