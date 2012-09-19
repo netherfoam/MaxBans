@@ -74,6 +74,12 @@ public class MaxBans extends JavaPlugin{
 		//BanManager
 		banManager = new BanManager(this);
 		
+		//Commands
+		this.banCommand = new BanCommand(this);
+		
+		//Register commands
+		this.getCommand("ban").setExecutor(banCommand);
+		
 		//Listeners for chat (mute) and join (Ban)
 		this.chatListener = new ChatListener(this);
 		this.joinListener = new JoinListener(this);
