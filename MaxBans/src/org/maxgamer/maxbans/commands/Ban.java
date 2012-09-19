@@ -21,8 +21,8 @@ public class Ban implements CommandExecutor{
 			boolean silent = isSilent(args);
 			StringBuilder sb = new StringBuilder(20);
 			
-			for(String s : args){
-				sb.append(s);
+			for(int i = 1; i < args.length; i++){
+				sb.append(args[i]);
 			}
 			
 			//TODO: Take this from the config
@@ -43,16 +43,18 @@ public class Ban implements CommandExecutor{
 			
 			plugin.getBanManager().ban(player, reason, banner);
 			
+			if(silent) return true;
+			
 			for(Player p : Bukkit.getOnlinePlayers()){
 				if(p == null || !p.isOnline()) continue;
 				p.sendMessage(ChatColor.RED + player + " has been banned by " + banner + ". reason: " + reason);
 			}
+			return true;
 		}
 		else{
 			sender.sendMessage(usage);
+			return true;
 		}
-		
-		return false;
 	}
 	
 	private boolean isSilent(String[] args){
