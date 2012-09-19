@@ -81,7 +81,7 @@ public class JoinListener implements Listener{
             							// Ban is lifted instead? E.g. 3 days 2 hours
             							// Is easier than GEO IP'ing them and everything*/
         }
-        event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
+        event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         event.setKickMessage(km.toString());
     }
 }
