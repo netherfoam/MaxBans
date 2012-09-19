@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.maxgamer.maxbans.MaxBans;
 
@@ -50,7 +52,7 @@ import org.maxgamer.maxbans.MaxBans;
  * 
  * ====>	New	   <====
  * Table: IPHistory
- * Name	IP
+ * Name		IP
  * Azgod	127.0.0.1
  * Azgod	192.168.2.1
  * Frizire	127.0.0.1
@@ -62,7 +64,7 @@ import org.maxgamer.maxbans.MaxBans;
  * 		IP is the ip theyve been recorded on.
  *
  * Table: Mutes
- * Name	Muter	Time	Expires
+ * Name		Muter	Time	Expires
  * Catty	Frizire	204234	0
  * 
  * Where,
@@ -101,15 +103,51 @@ public class Database {
 	}
 	
 	public void createBanTable(){
+		String query = "CREATE TABLE 'bans' ( 'name'  TEXT(30) NOT NULL, 'reason'  TEXT(100), 'banner'  TEXT(30), 'time'  INTEGER NOT NULL DEFAULT 0, 'expires'  INTEGER NOT NULL DEFAULT 0 );";
 		//TODO: Write ban table creation query
+		
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create bans table.");
+		}
 	}
 	
 	public void createIPBanTable(){
+		String query = "CREATE TABLE 'ipbans' ( 'ip'  TEXT(20) NOT NULL, 'reason'  TEXT(100), 'banner'  TEXT(30), 'time'  INTEGER NOT NULL DEFAULT 0, 'expires'  INTEGER NOT NULL DEFAULT 0 );";
 		//TODO: Write ipban table creation query
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create ipbans table.");
+		}
 	}
 	
 	public void createMuteTable(){
+		String query = "CREATE TABLE 'mutes' ( 'name'  TEXT(30) NOT NULL, 'muter'  TEXT(30), 'time'  INTEGER DEFAULT 0, 'expires'  INTEGER DEFAULT 0 );";
 		//TODO: Write mute table creation query
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create mutes table.");
+		}
+	}
+	
+	public void createIPHistoryTable(){
+		String query = "CREATE TABLE 'iphistory' ( 'name'  TEXT(30) NOT NULL, 'ip'  TEXT(20) NOT NULL, PRIMARY KEY ('name', 'ip') );";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create iphistory table.");
+		}
 	}
 
 	/**
