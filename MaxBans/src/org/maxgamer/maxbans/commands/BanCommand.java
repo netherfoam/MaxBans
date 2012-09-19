@@ -43,11 +43,12 @@ public class BanCommand implements CommandExecutor{
 			
 			plugin.getBanManager().ban(player, reason, banner);
 			
-			if(silent) return true;
+			
 			
 			for(Player p : Bukkit.getOnlinePlayers()){
 				if(p == null || !p.isOnline()) continue;
 				if(p.getName().equalsIgnoreCase(player)) p.kickPlayer("Banned");
+				if(silent) continue;
 				p.sendMessage(ChatColor.RED + player + " has been banned by " + banner + ". reason: " + reason);
 			}
 			return true;
