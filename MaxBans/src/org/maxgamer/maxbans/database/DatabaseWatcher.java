@@ -54,4 +54,7 @@ public class DatabaseWatcher implements Runnable{
 	public void stop(){
 		this.run = false;
 	}
+	public void start(){
+		this.run = true;
+	}
 }

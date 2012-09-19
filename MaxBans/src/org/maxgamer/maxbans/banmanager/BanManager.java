@@ -41,7 +41,8 @@ public class BanManager{
 	 * Don't use this except when starting up.
 	 */
 	public void reload(){
-		//TODO: Flush the dbwatcher.
+		plugin.getDB().getDatabaseWatcher().stop();
+		plugin.getDB().getDatabaseWatcher().run(); //Clears it. Does not restart it.
 		
 		//Check the database is the same instance
 		this.db = plugin.getDB();
@@ -164,6 +165,9 @@ public class BanManager{
 			plugin.getLogger().severe(ChatColor.RED + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
+		
+		db.getDatabaseWatcher().start(); //Unpauses it
+		db.scheduleWatcher(); //Actually starts it.
 	}
     
 	/**

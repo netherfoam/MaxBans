@@ -84,6 +84,10 @@ public class Database {
 	public void scheduleWatcher(){
 		this.dbwID = Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
 	}
+	
+	public DatabaseWatcher getDatabaseWatcher(){
+		return this.dbw;
+	}
 
 	public Plugin getPlugin() {
 		return this.plugin;

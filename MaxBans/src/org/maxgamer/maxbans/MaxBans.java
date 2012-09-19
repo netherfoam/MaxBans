@@ -17,14 +17,12 @@ public class MaxBans extends JavaPlugin{
         
         //private CommandListener commandExecutor;
         /*TODO: We're going to need command listeners for:
-         *		Ban
          *		IPBan
          *		TempBan
          *		TempIPBan
          *		Mute
          *		Unmute(Maybe, toggle mute?)
          *		Kick
-         *		
          *		Unban (This should handle IP Bans too)
         */	
         private JoinListener joinListener; 
@@ -88,10 +86,11 @@ public class MaxBans extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
     }
-	//TODO: Write onDisable method
 	public void onDisable(){
-		//TODO: Clean up database watchers
-		//TODO: Clean up buffer watchers
+		this.getLogger().info("Disabling Maxbans...");
+		this.db.getDatabaseWatcher().stop(); //Pauses
+		this.db.getDatabaseWatcher().run(); //Empties buffer
+		this.getLogger().info("Cleared buffer...");
 	}
 	/**
 	 * Returns the ban manager for banning and checking bans and mutes.
