@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.maxgamer.maxbans.MaxBans;
@@ -80,11 +81,21 @@ public class Database {
 	private Buffer buffer;
 	private MaxBans plugin;
 	private File dbFile;
+	private DatabaseWatcher dbw;
+	private int dbwID = 0;
 	
 	public Database(MaxBans plugin, File file){
 		this.plugin = plugin;
 		this.dbFile = file;
 		this.buffer = new Buffer(this);
+		this.dbw = new DatabaseWatcher(this);
+	}
+	
+	/**
+	 * Reschedules the db watcher
+	 */
+	public void scheduleWatcher(){
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
 	}
 
 	public Plugin getPlugin() {

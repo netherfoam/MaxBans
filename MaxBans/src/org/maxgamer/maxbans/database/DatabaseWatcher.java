@@ -46,5 +46,8 @@ public class DatabaseWatcher implements Runnable{
 		}
 		
 		db.getBuffer().locked = false;
+		
+		//Schedule the next run of this.
+		db.scheduleWatcher();
 	}
 }
