@@ -18,7 +18,7 @@ public class BanCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String player = args[0];
-			boolean silent = isSilent(args);
+			boolean silent = plugin.getBanManager().isSilent(args);
 			StringBuilder sb = new StringBuilder(20);
 			
 			for(int i = 1; i < args.length; i++){
@@ -57,22 +57,5 @@ public class BanCommand implements CommandExecutor{
 			sender.sendMessage(usage);
 			return true;
 		}
-	}
-	
-	private boolean isSilent(String[] args){
-		if(args == null || args.length <= 0){
-			return false;
-		}
-		for(int i = 0; i < 2 && i < args.length; i++){
-			if(args[i].equalsIgnoreCase("-s")){
-				//Shuffles down the array
-				for(int j = i; j < args.length - 1; i++){
-					args[j] = args[j+1];
-				}
-				args[args.length - 1] = "";
-				return true;
-			}
-		}
-		return false;
 	}
 }

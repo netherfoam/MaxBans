@@ -432,4 +432,71 @@ public class BanManager{
     	}
     	return sb.toString();
     }
+    
+    /**
+     * Convenience function for stripping -s arguments and returning true if its found
+     * @param args The arguments from a command
+     * @return
+     */
+	public boolean isSilent(String[] args){
+		if(args == null){
+			return false;
+		}
+		for(int i = 0; i < args.length; i++){
+			if(args[i].equalsIgnoreCase("-s")){
+				//Shuffles down the array
+				for(int j = i; j < args.length - 1; i++){
+					args[j] = args[j+1];
+				}
+				args[args.length - 1] = "";
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Fetches the milliseconds from a time eg 4 mins or 6 seconds
+	 * @param args
+	 * @return
+	 */
+	public long getTime(String[] args){
+		int modifier;
+		
+		String arg = args[2].toLowerCase();
+		
+		if(arg.startsWith("hour")){
+			modifier = 3600;
+		}
+		else if(arg.startsWith("min")){
+			modifier = 60;
+		}
+		else if(arg.startsWith("sec")){
+			modifier = 1;
+		}
+		else if(arg.startsWith("week")){
+			modifier = 604800;
+		}
+		else if(arg.startsWith("day")){
+			modifier = 86400;
+		}
+		else if(arg.startsWith("year")){
+			modifier = 31449600;
+		}
+		else if(arg.startsWith("month")){
+			modifier = 18446400;
+		}
+		else{
+			modifier = 0;
+		}
+		
+		double time = 0;
+		try{
+			time = Double.parseDouble(args[1]);
+		}
+		catch(NumberFormatException e){
+		}
+		
+		return (long) (modifier * time) * 1000;
+	}
 }
