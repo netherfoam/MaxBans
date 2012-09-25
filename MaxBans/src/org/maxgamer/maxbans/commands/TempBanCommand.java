@@ -23,6 +23,7 @@ public class TempBanCommand implements CommandExecutor{
 		else{
 			String name = args[0];
 			//TODO: Validate name, try match player
+			Player player = Bukkit.getPlayer(name);
 			
 			boolean silent = false;
 			StringBuilder sb = new StringBuilder();
@@ -46,7 +47,7 @@ public class TempBanCommand implements CommandExecutor{
 				banner = ((Player) sender).getName();
 			}
 			
-			long expires = this.getTime(args);
+			long expires = plugin.getBanManager().getTime(args);
 			if(expires <= 0){
 				sender.sendMessage(usage);
 				return true;
@@ -54,51 +55,17 @@ public class TempBanCommand implements CommandExecutor{
 			
 			plugin.getBanManager().tempban(name, sb.toString(), banner, expires);
 			
-			for(Player p : Bukkit.getOnlinePlayers()){
-				if(p == null || !p.isOnline()) continue;
-				if(p.getName().equalsIgnoreCase(name)) p.kickPlayer("Banned");
-				if(silent) continue;
-				p.sendMessage(ChatColor.RED + name + " has been banned by " + banner + ". reason: " + sb.toString());
+			if(player != null && player.isOnline()){
+				player.kickPlayer(sb.toString());
+			}
+			
+			if(!silent){
+				for(Player p : Bukkit.getOnlinePlayers()){
+					p.sendMessage(ChatColor.RED + name + " has been banned by " + banner + ". reason: " + sb.toString());
+				}
 			}
 			
 			return true;
 		}
-	}
-	
-	public long getTime(String[] args){
-		int modifier = 0;
-		
-		String arg = args[2].toLowerCase();
-		
-		if(arg.startsWith("hour")){
-			modifier = 3600;
-		}
-		else if(arg.startsWith("min")){
-			modifier = 60;
-		}
-		else if(arg.startsWith("sec")){
-			modifier = 1;
-		}
-		else if(arg.startsWith("week")){
-			modifier = 604800;
-		}
-		else if(arg.startsWith("day")){
-			modifier = 86400;
-		}
-		else if(arg.startsWith("year")){
-			modifier = 31449600;
-		}
-		else if(arg.startsWith("month")){
-			modifier = 18446400;
-		}
-		
-		double time = 0;
-		try{
-			time = Double.parseDouble(args[1]);
-		}
-		catch(NumberFormatException e){
-		}
-		
-		return (long) (modifier * time) * 1000;
 	}
 }
