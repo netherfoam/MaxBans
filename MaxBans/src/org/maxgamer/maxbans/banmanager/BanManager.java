@@ -356,6 +356,11 @@ public class BanManager{
     	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, banner, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
     }
     
+    //TODO: Warn method
+    public void warn(String name, String reason){
+    	
+    }
+    
     /**
      * Fetches a hashset (unsorted list) of users whose most recent IP is the given IP address.
      * Will return null if no history for that IP address.

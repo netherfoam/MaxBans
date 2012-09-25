@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
-import org.maxgamer.maxbans.banmanager.TempBan;
 
 public class TempBanCommand implements CommandExecutor{
     private MaxBans plugin;
