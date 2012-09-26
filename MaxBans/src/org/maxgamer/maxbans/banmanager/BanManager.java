@@ -23,6 +23,10 @@ public class BanManager{
 	//String: IP, HashSet: Lowercase usernames on that IP
 	private HashMap<String, HashSet<String>> iphistory = new HashMap<String, HashSet<String>>();
 	
+	//HashMap<Username, IP>();
+	//TODO: Find a better way of storing this.
+	private HashMap<String, String> recentips = new HashMap<String, String>();
+	
 	public boolean lockdown = false;
 	public String lockdownReason = "None";
 	
