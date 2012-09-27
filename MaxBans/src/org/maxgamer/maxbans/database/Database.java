@@ -87,10 +87,6 @@ public class Database {
 	public DatabaseWatcher getDatabaseWatcher(){
 		return this.dbw;
 	}
-	
-	public DatabaseWatcher getDatabaseWatcher(){
-		return this.dbw;
-	}
 
 	public Plugin getPlugin() {
 		return this.plugin;
