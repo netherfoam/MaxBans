@@ -133,7 +133,7 @@ public class BanManager{
 			
 			while(rs.next()){
 				String name = rs.getString("name");
-				String banner = rs.getString("banner");
+				String banner = rs.getString("muter");
 				
 				long expires = rs.getLong("expires");
 				long time = rs.getLong("time");
