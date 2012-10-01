@@ -49,3 +49,6 @@ commands:
     kick:
         description: Kicks a player from the game
         usage: /kick <player> [reason]
+    lockdown:
+        description: Prevents anyone without maxbans.lockdown.bypass from joining. Toggles if no reason given.
+        usage: /lockdown [reason]
