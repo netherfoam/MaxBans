@@ -48,7 +48,6 @@ public class BanManager{
 	 * Don't use this except when starting up.
 	 */
 	public void reload(){
-		//TODO: Reload lockdown and lockdownReason from config
 		plugin.getDB().getDatabaseWatcher().stop();
 		plugin.getDB().getDatabaseWatcher().run(); //Clears it. Does not restart it.
 		
@@ -62,7 +61,12 @@ public class BanManager{
 		this.tempipbans.clear();
 		this.mutes.clear();
 		this.tempmutes.clear();
-		//this.iphistory.clear();
+		this.recentips.clear();
+		
+		plugin.reloadConfig();
+		
+		this.lockdown = plugin.getConfig().getBoolean("lockdown");
+		this.lockdownReason = plugin.getConfig().getString("lockdown-reason");
 		
 		//Reload the cache from the database.
 		String query = "none";
@@ -698,6 +702,10 @@ public class BanManager{
 		
 		if(sb.length() < 2){
 			sb.append("Misconduct");
+		}
+		else{
+			//Remove that space char.
+			sb.replace(sb.length(), sb.length() - 1, "");
 		}
 		
 		return sb.toString();
