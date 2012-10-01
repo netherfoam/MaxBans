@@ -33,7 +33,7 @@ public class KickCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			if(name.equals("*")){
+			if(name.equals("*") && sender.hasPermission("maxbans.kick.all")){
 				for(Player p : Bukkit.getOnlinePlayers()){
 					p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
 				}
