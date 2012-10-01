@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -158,15 +157,29 @@ public class BanManager{
 				String name = rs.getString("name");
 				String ip = rs.getString("ip");
 				
-				//HashSet<String> users = this.iphistory.get(ip);
-				
-				//if(users == null){
-				//	users = new HashSet<String>();
-					//this.iphistory.put(ip, users);
-				//	this.ip
-				//}
-				
 				this.recentips.put(name, ip);
+			}
+			
+			//Phase 5 loading: Load Warn history
+			
+			plugin.getLogger().info("Loading warn history...");
+			query = "SELECT * FROM warnings";
+			ps = db.getConnection().prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				String name = rs.getString("name");
+				String reason = rs.getString("reason");
+				String banner = rs.getString("banner");
+				
+				Warn warn = new Warn(reason,banner);
+				
+				List<Warn> warns = this.warnings.get(name);
+				if(warns == null){
+					warns = new ArrayList<Warn>();
+					this.warnings.put(name, warns);
+				}
+				warns.add(warn);
 			}
 		}
 		catch(SQLException e){
@@ -369,8 +382,9 @@ public class BanManager{
      * @param name The name of the player
      * @param reason The reason for the warning
      */
-    public void warn(String name, String reason){
+    public void warn(String name, String reason, String banner){
     	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
     	
     	List<Warn> warns = this.warnings.get(name);
     	
@@ -380,7 +394,7 @@ public class BanManager{
     	}
     	
     	//Adds it to warnings
-    	warns.add(new Warn(reason));
+    	warns.add(new Warn(reason, banner));
     	
     	if(warns.size() > 3){
     		//TODO: Tempban them
