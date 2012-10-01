@@ -7,9 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
-import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
-import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 
 public class IPBanCommand implements CommandExecutor{
