@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.banmanager.TempIPBan;
 
 public class TempIPBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -18,15 +20,42 @@ public class TempIPBanCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String name = args[0];
-			boolean silent = plugin.getBanManager().isSilent(args);
-			long time = plugin.getBanManager().getTime(args);
 			
+			//Get expirey time
+			long time = plugin.getBanManager().getTime(args);
 			if(time <= 0){
 				sender.sendMessage(usage);
 				return true;
 			}
-			
 			time += System.currentTimeMillis();
+			
+			//Fetch their IP address from history
+			String ip = plugin.getBanManager().getIP(name);
+			
+			IPBan ban = plugin.getBanManager().getIPBan(ip);
+			if(ban != null){
+				if(ban instanceof TempIPBan){
+					//They're already tempbanned!
+					
+					TempIPBan tBan = (TempIPBan) ban;
+					if(tBan.getExpires() > time){
+						//Their old ban lasts longer than this one!
+						sender.sendMessage(ChatColor.RED + "That player has a tempban which will last longer than the one you supplied!");
+						return true;
+					}
+					else{
+						//Increasing a previous ban, remove the old one first.
+						plugin.getBanManager().unban(name);
+					}
+				}
+				else{
+					//Already perma banned
+					sender.sendMessage(ChatColor.RED + "That player is already banned.");
+					return true;
+				}
+			}
+			
+			boolean silent = plugin.getBanManager().isSilent(args);
 			
 			//Build the reason
 			StringBuilder sb = new StringBuilder(20);
@@ -52,8 +81,7 @@ public class TempIPBanCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			//Fetch their IP address from history
-			String ip = plugin.getBanManager().getIP(name);
+			
 			//Ban them
 			plugin.getBanManager().tempipban(ip, reason, banner, time);
 			

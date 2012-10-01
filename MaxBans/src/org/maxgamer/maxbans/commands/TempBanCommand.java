@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Ban;
+import org.maxgamer.maxbans.banmanager.TempBan;
 
 public class TempBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -22,6 +24,38 @@ public class TempBanCommand implements CommandExecutor{
 		}
 		else{
 			String name = args[0];
+			
+			long expires = plugin.getBanManager().getTime(args);
+			if(expires <= 0){
+				sender.sendMessage(usage);
+				return true;
+			}
+			expires += System.currentTimeMillis();
+			
+			Ban ban = plugin.getBanManager().getBan(name);
+			
+			if(ban != null){
+				if(ban instanceof TempBan){
+					//They're already tempbanned!
+					
+					TempBan tBan = (TempBan) ban;
+					if(tBan.getExpires() > expires){
+						//Their old ban lasts longer than this one!
+						sender.sendMessage(ChatColor.RED + "That player has a tempban which will last longer than the one you supplied!");
+						return true;
+					}
+					else{
+						//Increasing a previous ban, remove the old one first.
+						plugin.getBanManager().unban(name);
+					}
+				}
+				else{
+					//Already perma banned
+					sender.sendMessage(ChatColor.RED + "That player is already banned.");
+					return true;
+				}
+			}
+			
 			//TODO: Validate name, try match player
 			Player player = Bukkit.getPlayer(name);
 			
@@ -46,14 +80,6 @@ public class TempBanCommand implements CommandExecutor{
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();
 			}
-			
-			long expires = plugin.getBanManager().getTime(args);
-			if(expires <= 0){
-				sender.sendMessage(usage);
-				return true;
-			}
-			
-			expires += System.currentTimeMillis();
 			
 			plugin.getBanManager().tempban(name, sb.toString(), banner, expires);
 			
