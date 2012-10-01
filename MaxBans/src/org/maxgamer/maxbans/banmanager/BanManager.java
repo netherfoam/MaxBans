@@ -573,8 +573,9 @@ public class BanManager{
      * @return The time (String format) until the epoch ends in the format X weeks, Y days, Z hours, M minutes, S seconds. If values are 0 (X,Y,Z,M,S), it will ignore that segment. E.g. Mins = 0 so output will be [...] Z hours, S seconds [...]
      */
     public String getTimeUntil(long epoch){
+    	//TODO: Fix commas
     	epoch -= System.currentTimeMillis();
-    	epoch =  epoch / 1000 + 1; //CBF dealing in milliseconds
+    	epoch =  epoch / 1000 + 1; //Work in seconds.
     	StringBuilder sb = new StringBuilder(40);
     	
     	if(epoch / 31449600 > 0){
@@ -702,16 +703,17 @@ public class BanManager{
 	public String buildReason(String[] args){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 1; i < args.length; i++){
+			if(args[i].equals("")) break; //This is the end.
 			sb.append(args[i]);
 			sb.append(" ");
 		}
 		
-		if(sb.length() < 2){
-			sb.append("Misconduct");
+		if(sb.length() < 1){
+			sb = new StringBuilder("Misconduct.");
 		}
 		else{
 			//Remove that space char.
-			sb.replace(sb.length() - 1, sb.length() - 1, "");
+			sb.replace(sb.length() - 1, sb.length(), "");
 		}
 		
 		return sb.toString();
