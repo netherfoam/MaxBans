@@ -530,6 +530,7 @@ public class BanManager{
      * @return The time (String format) until the epoch ends in the format X weeks, Y days, Z hours, M minutes, S seconds. If values are 0 (X,Y,Z,M,S), it will ignore that segment. E.g. Mins = 0 so output will be [...] Z hours, S seconds [...]
      */
     public String getTimeUntil(long epoch){
+    	epoch -= System.currentTimeMillis();
     	epoch = epoch / 1000; //CBF dealing in milliseconds
     	StringBuilder sb = new StringBuilder(40);
     	
