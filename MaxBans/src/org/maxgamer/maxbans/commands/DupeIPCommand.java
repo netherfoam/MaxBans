@@ -31,7 +31,11 @@ public class DupeIPCommand implements CommandExecutor{
 			
 			String ip = plugin.getBanManager().getIP(name);
 			
-			sender.sendMessage(plugin.color_primary + "Scanning " + ChatColor.WHITE + name + plugin.color_primary + " on " + ChatColor.WHITE + ip);
+			if(ip == null){
+				sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " has no IP history.");
+			}
+			
+			sender.sendMessage(plugin.color_primary + "Scanning " + plugin.color_secondary + name + plugin.color_primary + " on " + plugin.color_secondary + ip);
 			
 			HashMap<String, String> ipHistory = plugin.getBanManager().getIPHistory();
 			StringBuilder sb = new StringBuilder();
@@ -40,7 +44,7 @@ public class DupeIPCommand implements CommandExecutor{
 				if(entry.getValue().equals(ip) && !entry.getKey().equals(name)){
 					String dupe = entry.getKey();
 					if(plugin.getBanManager().getBan(dupe) != null){
-						sb.append(plugin.color_secondary);
+						sb.append(ChatColor.RED);
 						sb.append(dupe);
 						sb.append(", ");
 					}
