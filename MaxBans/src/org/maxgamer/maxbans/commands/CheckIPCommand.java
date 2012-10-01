@@ -19,7 +19,7 @@ public class CheckIPCommand implements CommandExecutor{
 			
 			String ip = plugin.getBanManager().getIP(name);
 			
-			sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.WHITE + name + ChatColor.AQUA + " last used the IP " + ChatColor.WHITE + ip);
+			sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.RED + name + ChatColor.AQUA + " last used the IP " + ChatColor.RED + ip);
 			return true;
 		}
 		else{
