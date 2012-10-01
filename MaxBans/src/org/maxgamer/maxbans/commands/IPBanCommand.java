@@ -56,7 +56,7 @@ public class IPBanCommand implements CommandExecutor{
 			//Notify online players
 			if(!silent){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been banned by " + banner + ". reason: " + sb.toString());
+					p.sendMessage(ChatColor.RED + name + " has been banned (forever) by " + banner + ". reason: " + sb.toString());
 				}
 			}
 			
