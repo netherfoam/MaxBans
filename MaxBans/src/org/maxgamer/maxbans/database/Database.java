@@ -128,6 +128,28 @@ public class Database {
 	}
 	
 	/**
+	 * Creates the database tables (bans ipbans mutes iphistory and warnings)
+	 */
+	public void createTables(){
+		//Creates the database tables
+		if(!this.hasTable("bans")){
+			this.createBanTable();
+		}
+		if(!this.hasTable("ipbans")){
+			this.createIPBanTable();
+		}
+		if(!this.hasTable("mutes")){
+			this.createMuteTable();
+		}
+		if(!this.hasTable("iphistory")){
+			this.createIPHistoryTable();
+		}
+		if(!this.hasTable("warnings")){
+			this.createWarningsTable();
+		}
+	}
+	
+	/**
 	 * Creates the bans table
 	 */
 	public void createBanTable(){
@@ -209,25 +231,7 @@ public class Database {
 				this.dbFile.createNewFile();
 				Class.forName("org.sqlite.JDBC");
 				Connection dbCon = DriverManager.getConnection("jdbc:sqlite:" + this.dbFile);
-				
-				//Creates the database tables
-				//May cause a freeze on boot, Idk lol.
-				if(!this.hasTable("bans")){
-					this.createBanTable();
-				}
-				if(!this.hasTable("ipbans")){
-					this.createIPBanTable();
-				}
-				if(!this.hasTable("mutes")){
-					this.createMuteTable();
-				}
-				if(!this.hasTable("iphistory")){
-					this.createIPHistoryTable();
-				}
-				if(!this.hasTable("warnings")){
-					this.createWarningsTable();
-				}
-				
+				this.createTables();
 				return dbCon;
 			} 
 			catch (IOException e) {
