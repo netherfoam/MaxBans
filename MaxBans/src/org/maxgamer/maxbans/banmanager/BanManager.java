@@ -201,7 +201,7 @@ public class BanManager{
     	name = name.toLowerCase();
     	
         Mute mute = mutes.get(name);
-        if (mute !=null) {
+        if (mute != null) {
             return mute;
         }
         TempMute tempm = tempmutes.get(name);
@@ -290,6 +290,7 @@ public class BanManager{
      * @param banner The admin who banned them
      */
     public void ban(String name, String reason, String banner){
+    	name = name.toLowerCase();
     	banner = banner.toLowerCase();
     	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
@@ -583,7 +584,7 @@ public class BanManager{
 		for(int i = 0; i < args.length; i++){
 			if(args[i].equalsIgnoreCase("-s")){
 				//Shuffles down the array
-				for(int j = i; j < args.length - 1; i++){
+				for(int j = i; j < args.length - 1; j++){
 					args[j] = args[j+1];
 				}
 				args[args.length - 1] = "";
