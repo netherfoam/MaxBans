@@ -284,6 +284,10 @@ public class BanManager{
     	return this.getIPBan(addr.getHostAddress());
     }
     
+    /**
+     * Fetches the IP history of everyone ever
+     * @return the IP history of everyone ever. Format: HashMap<Username, IP Address>.
+     */
     public HashMap<String, String> getIPHistory(){
     	return this.recentips;
     }
