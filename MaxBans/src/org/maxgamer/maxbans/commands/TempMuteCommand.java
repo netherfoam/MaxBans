@@ -19,7 +19,7 @@ public class TempMuteCommand implements CommandExecutor{
 			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /tempmute <player>";
+		String usage = ChatColor.RED + "Usage: /tempmute <player> <time> <timeform>";
 		
 		if(args.length > 2){
 			String name = args[0];
