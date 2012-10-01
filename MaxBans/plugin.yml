@@ -8,5 +8,26 @@ website: http://maxgamer.org
 
 commands:
     ban:
-        description: Ban command
+        description: Bans a player
         usage: /ban <player> [-s] <reason>
+    unban:
+        description: Unbans a player, includes ip bans
+        usage: /unban <player>
+    tempban:
+        description: Bans a player temporarily
+        usage: /tempban <player> <time> <timeform> [-s] <reason>
+    tempipban:
+        description: Temporarily ip bans a player
+        usage: /tempipban <player> <time> <timeform> [-s] <reason>
+    ipban:
+        description: IP bans a player
+        usage: /tempipban <player> [-s] <reason>
+    mute:
+        description: Toggles a players mute
+        usage: /mute <player>
+    unmute:
+        description: Unmutes a player
+        usage: /unmute <player>
+    tempmute:
+        description: Mutes a player for a time
+        usage: /tempmute <player> <time> <timeform>
