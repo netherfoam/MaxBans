@@ -7,18 +7,29 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Mute;
+import org.maxgamer.maxbans.banmanager.TempMute;
 
 public class ChatListener implements Listener {
-        private MaxBans plugin;
-        public ChatListener(MaxBans mb){
-                plugin=mb;
+    private MaxBans plugin;
+    public ChatListener(MaxBans mb){
+            plugin = mb;
+    }
+    @EventHandler(priority = EventPriority.HIGH) //High, we dont want to interfere with QUICKSHOP, like the retard making GP, do we?
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        Player p = event.getPlayer();
+        
+        Mute mute = plugin.getBanManager().getMute(p.getName());
+        if (mute != null) {
+        	if(mute instanceof TempMute){
+        		TempMute tMute = (TempMute) mute;
+        		p.sendMessage(ChatColor.RED+"You're muted for another " + plugin.getBanManager().getTimeUntil(tMute.getExpires()));
+        	}
+        	else{
+        		p.sendMessage(ChatColor.RED+"You're muted!");
+        	}
+        	
+            event.setCancelled(true);
         }
-        @EventHandler(priority = EventPriority.LOWEST) //Shouldnt this be the highest?
-        public void onPlayerChat(AsyncPlayerChatEvent event) {
-            Player p = event.getPlayer();
-            if (plugin.getBanManager().getMute(p.getName())!=null) {
-                event.setCancelled(true);
-                p.sendMessage(ChatColor.RED+"You are muted!");
-            }
     }
 }
