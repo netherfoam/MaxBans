@@ -17,7 +17,7 @@ public class BanCommand implements CommandExecutor{
 		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
 		
 		if(args.length > 0){
-			String player = args[0];
+			String name = args[0];
 			boolean silent = plugin.getBanManager().isSilent(args);
 			StringBuilder sb = new StringBuilder(20);
 			
@@ -41,15 +41,19 @@ public class BanCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			plugin.getBanManager().ban(player, reason, banner);
+			plugin.getBanManager().ban(name, reason, banner);
 			
+			//Kick them
+			Player player = Bukkit.getPlayer(name);
+			if(player != null && player.isOnline()){
+				player.kickPlayer(sb.toString());
+			}
 			
-			
-			for(Player p : Bukkit.getOnlinePlayers()){
-				if(p == null || !p.isOnline()) continue;
-				if(p.getName().equalsIgnoreCase(player)) p.kickPlayer("Banned");
-				if(silent) continue;
-				p.sendMessage(ChatColor.RED + player + " has been banned by " + banner + ". reason: " + reason);
+			//Notify online players
+			if(!silent){
+				for(Player p : Bukkit.getOnlinePlayers()){
+					p.sendMessage(ChatColor.RED + name + " has been banned (forever) by " + banner + ". reason: " + sb.toString());
+				}
 			}
 			return true;
 		}
