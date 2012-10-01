@@ -18,11 +18,11 @@ public class ForceSpawnCommand implements CommandExecutor{
         this.spawn = spawn;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.kick")){
+		if(!sender.hasPermission("maxbans.forcespawn")){
 			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /kick <player> [reason]";
+		String usage = ChatColor.RED + "Usage: /forcespawn <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
