@@ -32,16 +32,6 @@ public class MaxBans extends JavaPlugin{
         private WarnCommand warnCommand;
         private ClearWarningsCommand clearWarningsCommand;
         
-        //private CommandListener commandExecutor;
-        /*TODO: We're going to need command listeners for:
-         *		IPBan
-         *		TempBan
-         *		TempIPBan
-         *		Mute
-         *		Unmute(Maybe, toggle mute?)
-         *		Kick
-         *		Unban (This should handle IP Bans too)
-        */	
         private JoinListener joinListener; 
         private Database db;
         

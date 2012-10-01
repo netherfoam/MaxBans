@@ -61,7 +61,6 @@ public class TempBanCommand implements CommandExecutor{
 				}
 			}
 			
-			//TODO: Validate name, try match player
 			Player player = Bukkit.getPlayerExact(name);
 			
 			boolean silent = plugin.getBanManager().isSilent(args);
