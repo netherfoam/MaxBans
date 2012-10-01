@@ -9,9 +9,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
 
-public class DupeIP implements CommandExecutor{
+public class DupeIPCommand implements CommandExecutor{
     private MaxBans plugin;
-    public DupeIP(MaxBans plugin){
+    public DupeIPCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
