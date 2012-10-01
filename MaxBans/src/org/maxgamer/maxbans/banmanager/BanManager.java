@@ -617,12 +617,10 @@ public class BanManager{
     	}
     	
     	if(epoch > 0){
-    		sb.append(epoch + " seconds");
+    		sb.append(epoch + " seconds ");
     	}
     	
-    	if(sb.length() > 0 && sb.charAt(sb.length() - 2) == ','){
-    		sb.replace(sb.length() - 1, sb.length(), "");
-    	}
+		sb.replace(sb.length() - 1, sb.length(), "");
     	return sb.toString();
     }
     
