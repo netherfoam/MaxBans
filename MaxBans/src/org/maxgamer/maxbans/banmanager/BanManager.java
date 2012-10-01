@@ -27,9 +27,6 @@ public class BanManager{
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
 	
-	//String: IP, HashSet: Lowercase usernames on that IP
-	//private HashMap<String, HashSet<String>> iphistory = new HashMap<String, HashSet<String>>();
-	
 	//HashMap<Username, IP>();
 	private HashMap<String, String> recentips = new HashMap<String, String>();
 	
@@ -195,24 +192,6 @@ public class BanManager{
 			plugin.getLogger().severe(ChatColor.RED + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
-		
-		if(!plugin.getConfig().getBoolean("imported-ub")){
-			Plugin plug = Bukkit.getPluginManager().getPlugin("UltraBan");
-			if(plug != null){
-				UltraBan ub = (UltraBan) plug;
-				
-				for(String name : ub.bannedPlayers){
-					this.ban(name, "Banned by Ultrabans.", "console");
-				}
-				
-				for(String ip : ub.bannedIPs){
-					this.ipban(ip, "Banned by Ultrabans.", "console");
-				}
-			}
-			plugin.getConfig().set("imported-ub", true);
-		}
-		
-		
 
 		db.getDatabaseWatcher().start(); //Unpauses it
 		db.scheduleWatcher(); //Actually starts it.

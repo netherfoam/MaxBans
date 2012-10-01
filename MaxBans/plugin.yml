@@ -3,6 +3,8 @@ version: 0.1
 main: org.maxgamer.maxbans.MaxBans
 author: [Darekfive, Netherfoam]
 
+soft-depend: [UltraBan]
+
 description: Banning plugin
 website: http://maxgamer.org
 

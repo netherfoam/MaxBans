@@ -13,7 +13,6 @@ import org.maxgamer.maxbans.listeners.*;
 
 public class MaxBans extends JavaPlugin{
         private BanManager banManager;
-        private ChatListener chatListener;
         
         private BanCommand banCommand;
         private IPBanCommand ipBanCommand;
@@ -38,6 +37,9 @@ public class MaxBans extends JavaPlugin{
         private ForceSpawnCommand forceSpawnCommand;
                 
         private JoinListener joinListener; 
+        private ChatListener chatListener;
+        //private PluginListener pluginListener;
+        
         private Database db;
         
 	public void onEnable(){
@@ -122,10 +124,12 @@ public class MaxBans extends JavaPlugin{
 		//Listeners for chat (mute) and join (Ban)
 		this.chatListener = new ChatListener(this);
 		this.joinListener = new JoinListener(this);
+		//this.pluginListener = new PluginListener(this);
 	
 		//Register listeners
         Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
+        //Bukkit.getServer().getPluginManager().registerEvents(this.pluginListener, this);
     }
 	public void onDisable(){
 		this.getLogger().info("Disabling Maxbans...");
