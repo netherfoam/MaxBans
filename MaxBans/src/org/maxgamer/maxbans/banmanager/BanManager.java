@@ -696,7 +696,7 @@ public class BanManager{
 			sb.append(" ");
 		}
 		
-		if(sb.length() < 1){
+		if(sb.length() < 2){
 			sb.append("Misconduct");
 		}
 		
