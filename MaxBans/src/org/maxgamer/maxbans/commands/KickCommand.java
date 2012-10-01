@@ -24,13 +24,19 @@ public class KickCommand implements CommandExecutor{
 			String name = args[0];
 			String reason = plugin.getBanManager().buildReason(args);
 			boolean silent = plugin.getBanManager().isSilent(args);
-			
 			String banner;
+			
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();
 			}
 			else{
 				banner = "Console";
+			}
+			
+			if(name.equals("*")){
+				for(Player p : Bukkit.getOnlinePlayers()){
+					p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
+				}
 			}
 			
 			Player p = Bukkit.getPlayer(name);
