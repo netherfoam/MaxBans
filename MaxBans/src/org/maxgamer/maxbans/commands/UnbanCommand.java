@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
-import org.maxgamer.maxbans.banmanager.Mute;
 
 public class UnbanCommand implements CommandExecutor{
     private MaxBans plugin;

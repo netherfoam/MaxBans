@@ -6,14 +6,24 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
-import org.maxgamer.maxbans.commands.BanCommand;
+import org.maxgamer.maxbans.commands.*;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
 
 public class MaxBans extends JavaPlugin{
         private BanManager banManager;
         private ChatListener chatListener;
+        
         private BanCommand banCommand;
+        private IPBanCommand ipBanCommand;
+        private MuteCommand muteCommand;
+        
+        private TempBanCommand tempBanCommand;
+        private TempIPBanCommand tempIPBanCommand;
+        private TempMuteCommand tempMuteCommand;
+        
+        private UnbanCommand unbanCommand;
+        private UnMuteCommand unMuteCommand;
         
         //private CommandListener commandExecutor;
         /*TODO: We're going to need command listeners for:
@@ -57,9 +67,27 @@ public class MaxBans extends JavaPlugin{
 		
 		//Commands
 		this.banCommand = new BanCommand(this);
+		this.ipBanCommand = new IPBanCommand(this);
+		this.muteCommand = new MuteCommand(this);
+		
+		this.tempBanCommand = new TempBanCommand(this);
+		this.tempIPBanCommand = new TempIPBanCommand(this);
+		this.tempMuteCommand = new TempMuteCommand(this);
+		
+		this.unbanCommand = new UnbanCommand(this);
+		this.unMuteCommand = new UnMuteCommand(this);
 		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
+		this.getCommand("ipban").setExecutor(ipBanCommand);
+		this.getCommand("mute").setExecutor(muteCommand);
+		
+		this.getCommand("tempban").setExecutor(tempBanCommand);
+		this.getCommand("tempipban").setExecutor(tempIPBanCommand);
+		this.getCommand("tempmute").setExecutor(tempMuteCommand);
+		
+		this.getCommand("unban").setExecutor(unbanCommand);
+		this.getCommand("unmute").setExecutor(unMuteCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
 		this.chatListener = new ChatListener(this);
