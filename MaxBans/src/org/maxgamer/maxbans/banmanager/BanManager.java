@@ -211,7 +211,7 @@ public class BanManager{
             }
             else{
             	tempmutes.remove(name);
-            	String query = "DELETE FROM mutes WHERE Player = '"+name+"' AND expires <> 0";
+            	String query = "DELETE FROM mutes WHERE name = '"+name+"' AND expires <> 0";
             	db.getBuffer().addString(query);
             }
         }
@@ -239,7 +239,7 @@ public class BanManager{
     		}
     		else{
     			tempbans.remove(name);
-    			String query = "DELETE FROM bans WHERE Player = '"+name+"' AND expires <> 0";
+    			String query = "DELETE FROM bans WHERE name = '"+name+"' AND expires <> 0";
             	db.getBuffer().addString(query);
     		}
     	}
@@ -566,7 +566,7 @@ public class BanManager{
     		sb.append((epoch) + " seconds.");
     	}
     	
-    	if(sb.charAt(sb.length() - 1) == ','){
+    	if(sb.length() > 0 && sb.charAt(sb.length() - 1) == ','){
     		sb.replace(sb.length(), sb.length(), ",");
     	}
     	return sb.toString();
