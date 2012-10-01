@@ -284,6 +284,10 @@ public class BanManager{
     	return this.getIPBan(addr.getHostAddress());
     }
     
+    public HashMap<String, String> getIPHistory(){
+    	return this.recentips;
+    }
+    
     /**
      * Creates a new ban and stores it in the database
      * @param name The name of the player who is banned
