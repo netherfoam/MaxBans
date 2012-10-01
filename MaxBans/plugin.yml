@@ -52,3 +52,6 @@ commands:
     lockdown:
         description: Prevents anyone without maxbans.lockdown.bypass from joining. Toggles if no reason given.
         usage: /lockdown [reason]
+    forcespawn:
+        description: Teleports a player to the spawn.
+        usage: /forcespawn <player>

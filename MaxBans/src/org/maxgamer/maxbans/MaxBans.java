@@ -4,6 +4,7 @@ package org.maxgamer.maxbans;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
 import org.maxgamer.maxbans.commands.*;
@@ -34,7 +35,8 @@ public class MaxBans extends JavaPlugin{
         
         private LockdownCommand lockdownCommand;
         private KickCommand kickCommand;
-        
+        private ForceSpawnCommand forceSpawnCommand;
+                
         private JoinListener joinListener; 
         private Database db;
         
@@ -89,6 +91,9 @@ public class MaxBans extends JavaPlugin{
 		this.lockdownCommand = new LockdownCommand(this);
 		this.kickCommand = new KickCommand(this);
 		
+		Location spawn = new Location(Bukkit.getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"));
+		this.forceSpawnCommand = new ForceSpawnCommand(this,spawn);
+		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
 		this.getCommand("ipban").setExecutor(ipBanCommand);
@@ -110,6 +115,7 @@ public class MaxBans extends JavaPlugin{
 		
 		this.getCommand("lockdown").setExecutor(lockdownCommand);
 		this.getCommand("kick").setExecutor(kickCommand);
+		this.getCommand("forcespawn").setExecutor(forceSpawnCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
 		this.chatListener = new ChatListener(this);
