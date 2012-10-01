@@ -554,37 +554,53 @@ public class BanManager{
      */
     public String getTimeUntil(long epoch){
     	epoch -= System.currentTimeMillis();
-    	epoch = epoch / 1000; //CBF dealing in milliseconds
+    	epoch =  epoch / 1000 + 1; //CBF dealing in milliseconds
     	StringBuilder sb = new StringBuilder(40);
     	
+    	if(epoch / 31449600 > 0){
+    		//Days
+    		long weeks = epoch / 31449600;
+    		sb.append(weeks + " years, ");
+    		epoch -= weeks * 31449600;
+    	}
+    	if(epoch / 2620800 > 0){
+    		//Days
+    		long weeks = epoch / 2620800;
+    		sb.append(weeks + " months, ");
+    		epoch -= weeks * 2620800;
+    	}
     	if(epoch / 604800 > 0){
     		//Days
-    		sb.append(epoch / 604800 + " weeks, ");
-    		epoch = (long) (epoch / 604800.0);
+    		long weeks = epoch / 604800;
+    		sb.append(weeks + " weeks, ");
+    		epoch -= weeks * 604800;
     	}
     	if(epoch / 86400 > 0){
     		//Days
-    		sb.append(epoch / 86400 + " days, ");
-    		epoch = (long) (epoch / 86400.0);
+    		long days = epoch / 86400;
+    		sb.append(days + " days, ");
+    		epoch -= days * 86400;
     	}
     	
     	if(epoch / 3600 > 0){
     		//More than one hour
-    		sb.append((epoch / 3600) + " hours,");
-    		epoch = (long) (epoch / 3600.0);
+    		long hours = epoch / 3600;
+    		sb.append(hours + " hours, ");
+    		epoch -= hours * 3600;
     	}
     	
     	if(epoch / 60 > 0){
-    		sb.append((epoch / 60) + " minutes,");
-    		epoch = (long) (epoch / 60.0);
+    		long minutes = epoch / 60;
+    		sb.append(minutes + " minutes, ");
+    		epoch -= minutes * 60;
     	}
     	
     	if(epoch > 0){
-    		sb.append((epoch) + " seconds.");
+    		sb.append(epoch + " seconds.");
     	}
     	
-    	if(sb.length() > 0 && sb.charAt(sb.length() - 1) == ','){
-    		sb.replace(sb.length(), sb.length(), "");
+    	if(sb.length() > 0 && sb.charAt(sb.length() - 2) == ','){
+    		sb.replace(sb.length() - 1, sb.length(), "");
     	}
     	return sb.toString();
     }
