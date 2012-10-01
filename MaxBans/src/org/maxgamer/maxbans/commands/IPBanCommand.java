@@ -8,65 +8,62 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 
-public class TempBanCommand implements CommandExecutor{
+public class IPBanCommand implements CommandExecutor{
     private MaxBans plugin;
-    public TempBanCommand(MaxBans plugin){
+    public IPBanCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		String usage = ChatColor.RED + "Usage: /ban <player> <time> <time form> [-s] <reason>";
+		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
 		
-		if(args.length < 3){
-			sender.sendMessage(usage);
-			return true;
-		}
-		else{
+		if(args.length > 0){
 			String name = args[0];
-			//TODO: Validate name, try match player
-			Player player = Bukkit.getPlayer(name);
+			boolean silent = plugin.getBanManager().isSilent(args);
 			
-			boolean silent = false;
-			StringBuilder sb = new StringBuilder();
-			
-			if(args[3].equalsIgnoreCase("-s")){
-				silent = true;
-			}
-			
-			for(int i = (silent ? 4 : 3); i < args.length; i++){
+			//Build the reason
+			StringBuilder sb = new StringBuilder(20);
+			for(int i = 1; i < args.length; i++){
 				sb.append(args[i]);
 			}
 			
+			//TODO: Take this from the config
 			if(sb.length() < 1){
 				sb.append("Misconduct.");
-				//TODO: Take misconduct from config
 			}
 			
-			String banner = "console";
+			String reason = sb.toString();
+			String banner;
 			
+			//Get the banners name
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();
 			}
-			
-			long expires = plugin.getBanManager().getTime(args);
-			if(expires <= 0){
-				sender.sendMessage(usage);
-				return true;
+			else{
+				banner = "Console";
 			}
 			
-			expires += System.currentTimeMillis();
+			//Fetch their IP address from history
+			String ip = plugin.getBanManager().getIP(name);
+			//Ban them
+			plugin.getBanManager().ipban(ip, reason, banner);
 			
-			plugin.getBanManager().tempban(name, sb.toString(), banner, expires);
-			
+			//Kick them
+			Player player = Bukkit.getPlayer(name);
 			if(player != null && player.isOnline()){
 				player.kickPlayer(sb.toString());
 			}
 			
+			//Notify online players
 			if(!silent){
 				for(Player p : Bukkit.getOnlinePlayers()){
 					p.sendMessage(ChatColor.RED + name + " has been banned by " + banner + ". reason: " + sb.toString());
 				}
 			}
 			
+			return true;
+		}
+		else{
+			sender.sendMessage(usage);
 			return true;
 		}
 	}

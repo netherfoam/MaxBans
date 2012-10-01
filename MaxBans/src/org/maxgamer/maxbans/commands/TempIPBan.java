@@ -8,17 +8,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 
-public class IPBan implements CommandExecutor{
+public class TempIPBan implements CommandExecutor{
     private MaxBans plugin;
-    public IPBan(MaxBans plugin){
+    public TempIPBan(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
+		String usage = ChatColor.RED + "Usage: /ipban <player> <time> <timeform> [-s] <reason>";
 		
 		if(args.length > 0){
 			String name = args[0];
 			boolean silent = plugin.getBanManager().isSilent(args);
+			long time = plugin.getBanManager().getTime(args);
+			
+			if(time <= 0){
+				sender.sendMessage(usage);
+				return true;
+			}
+			
+			time += System.currentTimeMillis();
 			
 			//Build the reason
 			StringBuilder sb = new StringBuilder(20);
@@ -45,7 +53,7 @@ public class IPBan implements CommandExecutor{
 			//Fetch their IP address from history
 			String ip = plugin.getBanManager().getIP(name);
 			//Ban them
-			plugin.getBanManager().ipban(ip, reason, banner);
+			plugin.getBanManager().tempipban(ip, reason, banner, time);
 			
 			//Kick them
 			Player player = Bukkit.getPlayer(name);
