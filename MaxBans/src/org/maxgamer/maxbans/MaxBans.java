@@ -29,10 +29,7 @@ public class MaxBans extends JavaPlugin{
         private Database db;
         
 	public void onEnable(){
-		
-		/*
-		 * Generates files for the first run
-		 */
+		/* Generates files for the first run */
 		if(!this.getDataFolder().exists()){
 			this.getDataFolder().mkdir();
 		}
@@ -48,7 +45,7 @@ public class MaxBans extends JavaPlugin{
 		 * Reloads the config from disk.
 		 * Normally this is done before onEnable()
 		 * anyway, but, if we do /plugman reload MaxBans,
-		 * this makes it friendlier.
+		 * it doesnt.  This makes it friendlier.
 		 */
 		this.reloadConfig();
 		
