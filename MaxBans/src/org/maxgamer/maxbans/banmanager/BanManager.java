@@ -730,4 +730,23 @@ public class BanManager{
 			return targets.get(0).getName();
 		}
 	}
+	
+	/**
+	 * Prepares a query for the database by fixing \ and 's
+	 * @param s The string to escape E.g. can't do that :\
+	 * @return The escaped string. E.g. can\'t do that :\\
+	 */
+	public String escape(String s){
+		StringBuilder sb = new StringBuilder(s);
+		
+		char[] chars = s.toCharArray();
+		
+		for(int i = 0; i < chars.length; i++){
+			//If char == ' or char == \
+			if(chars[i] == '\'' || chars[i] == '\\'){
+				sb.insert(i, '\\');
+			}
+		}
+		return sb.toString();
+	}
 }
