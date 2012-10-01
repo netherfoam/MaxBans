@@ -40,3 +40,6 @@ commands:
     dupeip:
         description: Scans a players IP address and reports anyone else who uses it.
         usage: /dupeip <player>
+    warn:
+        description: Warns a player
+        usage: /warn <player> <reason>
