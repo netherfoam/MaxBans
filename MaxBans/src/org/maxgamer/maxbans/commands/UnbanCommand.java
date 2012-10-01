@@ -37,6 +37,7 @@ public class UnbanCommand implements CommandExecutor{
 			}
 			else{
 				sender.sendMessage(ChatColor.RED + "Could not find a ban for " + name);
+				return true;
 			}
 			
 			for(Player p : Bukkit.getOnlinePlayers()){
