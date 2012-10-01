@@ -17,9 +17,9 @@ public class ClearWarningsCommand implements CommandExecutor{
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		String usage = ChatColor.RED + "Usage: /warn <player> <reason>";
+		String usage = ChatColor.RED + "Usage: /clearwarnings <player> <reason>";
 		
-		if(args.length > 1){
+		if(args.length > 0){
 			String name = args[0];
 			
 			name = plugin.getBanManager().match(name);
