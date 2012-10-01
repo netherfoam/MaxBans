@@ -28,10 +28,10 @@ public class CheckBanCommand implements CommandExecutor{
 			if(ban != null){
 				if(ban instanceof TempBan){
 					TempBan tBan = (TempBan) ban;
-					sender.sendMessage(ChatColor.AQUA + name + " is temp banned for " + tBan.getReason() + " by " + tBan.getBanner() + " until " + plugin.getBanManager().getTimeUntil(tBan.getExpires())+".");
+					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is temp banned for " + ChatColor.RED + tBan.getReason() + ChatColor.AQUA + " by " + ChatColor.RED +  tBan.getBanner() + ChatColor.AQUA + " until " + ChatColor.RED + plugin.getBanManager().getTimeUntil(tBan.getExpires())+ ChatColor.AQUA + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.AQUA + name + " is banned for " + ban.getReason() + " by " + ban.getBanner() + ".");
+					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA +  " is banned for " + ChatColor.RED + ban.getReason() + ChatColor.AQUA + " by " + ChatColor.RED + ban.getBanner() + ChatColor.AQUA + ".");
 				}
 			}
 			
@@ -41,10 +41,10 @@ public class CheckBanCommand implements CommandExecutor{
 			if(ipBan != null){
 				if(ipBan instanceof TempIPBan){
 					TempIPBan tipBan = (TempIPBan) ipBan;
-					sender.sendMessage(ChatColor.AQUA + name + " is temp IP banned for " + tipBan.getReason() + " by " + tipBan.getBanner() + " until " + plugin.getBanManager().getTimeUntil(tipBan.getExpires())+".");
+					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is temp IP banned for " + ChatColor.RED + tipBan.getReason() + ChatColor.AQUA + " by " + ChatColor.RED + tipBan.getBanner() + ChatColor.AQUA + " until " + ChatColor.RED + plugin.getBanManager().getTimeUntil(tipBan.getExpires())+ ChatColor.AQUA + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.AQUA + name + " is IP banned for " + ipBan.getReason() + " by " + ipBan.getBanner() + ".");
+					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is IP banned for " + ChatColor.RED + ipBan.getReason() + ChatColor.AQUA + " by " + ChatColor.RED +  ipBan.getBanner() + ChatColor.AQUA + ".");
 				}
 			}
 			
@@ -52,15 +52,15 @@ public class CheckBanCommand implements CommandExecutor{
 			if(mute != null){
 				if(mute instanceof TempMute){
 					TempMute tMute = (TempMute) mute;
-					sender.sendMessage(ChatColor.AQUA + name + " is temp muted by " + tMute.getMuter() + " until " + tMute.getExpires() + ".");
+					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is temp muted by " + ChatColor.RED + tMute.getMuter() + ChatColor.AQUA + " until " + ChatColor.RED + tMute.getExpires() + ChatColor.AQUA + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.AQUA + name + " is muted by " + mute.getMuter() + ".");
+					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is muted by " + mute.getMuter() + ChatColor.AQUA + ".");
 				}
 			}
 			
 			if(mute == null && ipBan == null && ban == null){
-				sender.sendMessage(ChatColor.AQUA + "No records for " + name);
+				sender.sendMessage(ChatColor.AQUA + "No records for " + ChatColor.RED + name);
 			}
 			
 			return true;
