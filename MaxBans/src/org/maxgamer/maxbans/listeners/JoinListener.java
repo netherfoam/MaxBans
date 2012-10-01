@@ -37,6 +37,7 @@ public class JoinListener implements Listener{
         
         //If they havent been banned or IP banned, they can join.
         if(ipban == null && ban == null){
+        	plugin.getBanManager().logIP(player.getName(), address.getHostAddress());
         	return;
         }
         

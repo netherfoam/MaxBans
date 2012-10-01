@@ -67,8 +67,6 @@ public class TempIPBanCommand implements CommandExecutor{
 			if(sb.length() < 1){
 				sb.append("Misconduct.");
 			}
-			//TODO: Consistency with messages!
-			sb.insert(0, "You have been Temporarily IP Banned for: \n");
 			
 			String reason = sb.toString();
 			String banner;
@@ -88,7 +86,7 @@ public class TempIPBanCommand implements CommandExecutor{
 			//Kick them
 			Player player = Bukkit.getPlayer(name);
 			if(player != null && player.isOnline()){
-				player.kickPlayer(sb.toString());
+				player.kickPlayer("You have been Temporarily IP Banned for: \n"+sb.toString());
 			}
 			
 			//Notify online players

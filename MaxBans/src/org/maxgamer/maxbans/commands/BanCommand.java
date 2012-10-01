@@ -38,6 +38,7 @@ public class BanCommand implements CommandExecutor{
 			if(sb.length() < 1){
 				sb.append("Misconduct.");
 			}
+			
 			String reason = sb.toString();
 			
 			//Build banner
@@ -54,7 +55,7 @@ public class BanCommand implements CommandExecutor{
 			//Kick them
 			Player player = Bukkit.getPlayer(name);
 			if(player != null && player.isOnline()){
-				player.kickPlayer(sb.toString());
+				player.kickPlayer("You have been banned for: \n" + sb.toString());
 			}
 			
 			//Notify online players

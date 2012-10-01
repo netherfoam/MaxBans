@@ -84,7 +84,7 @@ public class TempBanCommand implements CommandExecutor{
 			plugin.getBanManager().tempban(name, sb.toString(), banner, expires);
 			
 			if(player != null && player.isOnline()){
-				player.kickPlayer(sb.toString());
+				player.kickPlayer("You have been Temporarily Banned for: \n"+sb.toString());
 			}
 			
 			if(!silent){

@@ -60,7 +60,7 @@ public class IPBanCommand implements CommandExecutor{
 			//Kick them
 			Player player = Bukkit.getPlayer(name);
 			if(player != null && player.isOnline()){
-				player.kickPlayer(sb.toString());
+				player.kickPlayer("You have been IP Banned for: \n" + sb.toString());
 			}
 			
 			//Notify online players

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
 
@@ -530,6 +531,14 @@ public class BanManager{
     }
     
     /**
+     * Notes that a player joined from the given IP.
+     * @param p The player who is connecting
+     */
+    public void logIP(Player p){
+    	this.logIP(p.getName(), p.getAddress().getAddress().getHostAddress());
+    }
+    
+    /**
      * Finds the time until a specific epoch.
      * @param epoch the epoch (Milliseconds) time to check
      * @return The time (String format) until the epoch ends in the format X weeks, Y days, Z hours, M minutes, S seconds. If values are 0 (X,Y,Z,M,S), it will ignore that segment. E.g. Mins = 0 so output will be [...] Z hours, S seconds [...]
@@ -539,27 +548,26 @@ public class BanManager{
     	epoch = epoch / 1000; //CBF dealing in milliseconds
     	StringBuilder sb = new StringBuilder(40);
     	
-    	if(epoch % 604800 > 0){
+    	if(epoch / 604800 > 0){
     		//Days
     		sb.append(epoch % 604800 + " weeks, ");
-    		epoch = epoch / 604800;
+    		epoch = (long) (epoch / 604800.0);
     	}
-    	if(epoch % 86400 > 0){
+    	if(epoch / 86400 > 0){
     		//Days
     		sb.append(epoch % 86400 + " days, ");
-    		epoch = epoch / 86400;
+    		epoch = (long) (epoch / 86400.0);
     	}
     	
-    	if(epoch % 3600 > 0){
+    	if(epoch / 3600 > 0){
     		//More than one hour
-    		
     		sb.append((epoch % 3600) + " hours,");
-    		epoch = epoch / 3600;
+    		epoch = (long) (epoch / 3600.0);
     	}
     	
-    	if(epoch % 60 > 0){
+    	if(epoch / 60 > 0){
     		sb.append((epoch % 60) + " minutes,");
-    		epoch = epoch / 60;
+    		epoch = (long) (epoch / 60.0);
     	}
     	
     	if(epoch > 0){
@@ -623,7 +631,7 @@ public class BanManager{
 			modifier = 31449600;
 		}
 		else if(arg.startsWith("month")){
-			modifier = 18446400;
+			modifier = 2620800;
 		}
 		else{
 			modifier = 0;
