@@ -450,7 +450,7 @@ public class BanManager{
     	
     	this.mutes.put(name, mute);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, banner, time) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"');");
+    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"');");
     }
     
     /**
@@ -467,7 +467,7 @@ public class BanManager{
     	
     	this.tempmutes.put(name, tmute);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, banner, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
+    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
     }
     
     /**
