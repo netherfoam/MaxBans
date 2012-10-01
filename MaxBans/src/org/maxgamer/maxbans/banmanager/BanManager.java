@@ -314,8 +314,10 @@ public class BanManager{
      * @param banner The admin who banned them
      */
     public void ban(String name, String reason, String banner){
-    	name = name.toLowerCase();
-    	banner = banner.toLowerCase();
+    	name = escape(name.toLowerCase());
+    	banner = escape(banner.toLowerCase());
+    	reason = escape(reason);
+    	
     	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
     	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
@@ -396,8 +398,9 @@ public class BanManager{
      * Expirey time is NOT time from creating ban, it is milliseconds from 1970 (System.currentMillis())
      */
     public void tempban(String name, String reason, String banner, long expires){
-    	name = name.toLowerCase();
-    	banner = banner.toLowerCase();
+    	name = escape(name.toLowerCase());
+    	banner = escape(banner.toLowerCase());
+    	reason = escape(reason);
     	
     	TempBan ban = new TempBan(reason, banner, System.currentTimeMillis(), expires);
     	this.tempbans.put(name, ban);
@@ -411,7 +414,8 @@ public class BanManager{
      * @param banner The admin who banned them
      */
     public void ipban(String ip, String reason, String banner){
-    	banner = banner.toLowerCase();
+    	banner = escape(banner.toLowerCase());
+    	reason = escape(reason);
     	
     	IPBan ipban = new IPBan(reason, banner, System.currentTimeMillis());
     	
@@ -428,7 +432,8 @@ public class BanManager{
      * @param expires The time the ban expires
      */
     public void tempipban(String ip, String reason, String banner, long expires){
-    	banner = banner.toLowerCase();
+    	banner = escape(banner.toLowerCase());
+    	reason = escape(reason);
     	
     	TempIPBan tib = new TempIPBan(reason, banner, System.currentTimeMillis(), expires);
     	
@@ -443,8 +448,8 @@ public class BanManager{
      * @param banner The admin who muted them
      */
     public void mute(String name, String banner){
-    	name = name.toLowerCase();
-    	banner = banner.toLowerCase();
+    	name = escape(name.toLowerCase());
+    	banner = escape(banner.toLowerCase());
     	
     	Mute mute = new Mute(banner, System.currentTimeMillis());
     	
@@ -460,8 +465,8 @@ public class BanManager{
      * @param expires The time the mute expires
      */
     public void tempmute(String name, String banner, long expires){
-    	name = name.toLowerCase();
-    	banner = banner.toLowerCase();
+    	name = escape(name.toLowerCase());
+    	banner = escape(banner.toLowerCase());
     	
     	TempMute tmute = new TempMute(banner, System.currentTimeMillis(), expires);
     	
@@ -476,8 +481,9 @@ public class BanManager{
      * @param reason The reason for the warning
      */
     public void warn(String name, String reason, String banner){
-    	name = name.toLowerCase();
-    	banner = banner.toLowerCase();
+    	name = escape(name.toLowerCase());
+    	banner = escape(banner.toLowerCase());
+    	reason = escape(reason);
     	
     	List<Warn> warns = this.warnings.get(name);
     	
@@ -538,7 +544,7 @@ public class BanManager{
      * @param ip The ip they're connecting from.
      */
     public void logIP(String name, String ip){
-    	name = name.toLowerCase();
+    	name = escape(name.toLowerCase());
     	String query;
     	
     	if(this.recentips.containsKey(name)){
