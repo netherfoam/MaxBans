@@ -267,7 +267,7 @@ public class BanManager{
     		}
     		else{
     			ipbans.remove(ip);
-    			String query = "DELETE FROM bans WHERE ip = '"+ip+"' AND expires <> 0";
+    			String query = "DELETE FROM ipbans WHERE ip = '"+ip+"' AND expires <> 0";
             	db.getBuffer().addString(query);
     		}
     	}
@@ -643,6 +643,13 @@ public class BanManager{
 		}
 		catch(NumberFormatException e){
 		}
+		
+		//Shuffles down the array
+		for(int j = 0; j < args.length - 2; j++){
+			args[j] = args[j+2];
+		}
+		args[args.length - 1] = "";
+		args[args.length - 2] = "";
 		
 		return (long) (modifier * time) * 1000;
 	}
