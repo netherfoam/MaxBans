@@ -7,6 +7,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Ban;
+import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.banmanager.TempBan;
+import org.maxgamer.maxbans.banmanager.TempIPBan;
 
 public class IPBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -18,6 +22,16 @@ public class IPBanCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String name = args[0];
+			
+			//Fetch their IP address from history
+			String ip = plugin.getBanManager().getIP(name);
+			
+			IPBan ban = plugin.getBanManager().getIPBan(ip);
+			if(ban != null && !(ban instanceof TempIPBan)){
+				sender.sendMessage(ChatColor.RED + "That player is already IP banned.");
+				return true;
+			}
+			
 			boolean silent = plugin.getBanManager().isSilent(args);
 			
 			//Build the reason
@@ -42,8 +56,6 @@ public class IPBanCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			//Fetch their IP address from history
-			String ip = plugin.getBanManager().getIP(name);
 			//Ban them
 			plugin.getBanManager().ipban(ip, reason, banner);
 			

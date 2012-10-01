@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Ban;
+import org.maxgamer.maxbans.banmanager.TempBan;
 
 public class BanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -18,22 +20,28 @@ public class BanCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String name = args[0];
-			boolean silent = plugin.getBanManager().isSilent(args);
-			StringBuilder sb = new StringBuilder(20);
 			
+			Ban ban = plugin.getBanManager().getBan(name);
+			if(ban != null && !(ban instanceof TempBan)){
+				sender.sendMessage(ChatColor.RED + "That player is already banned.");
+				return true;
+			}
+			
+			boolean silent = plugin.getBanManager().isSilent(args);
+			
+			//Build reason
+			StringBuilder sb = new StringBuilder(20);
 			for(int i = 1; i < args.length; i++){
 				sb.append(args[i]);
 			}
-			
 			//TODO: Take this from the config
 			if(sb.length() < 1){
 				sb.append("Misconduct.");
 			}
-			
 			String reason = sb.toString();
 			
+			//Build banner
 			String banner;
-			
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();
 			}
