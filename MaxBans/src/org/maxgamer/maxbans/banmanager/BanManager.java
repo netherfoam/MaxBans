@@ -522,14 +522,7 @@ public class BanManager{
     	banner = escape(banner);
     	reason = escape(reason);
     	
-    	try{
-    		PreparedStatement ps = this.db.getConnection().prepareStatement("INSERT INTO warnings (name, reason, banner) VALUES ('"+name+"','"+reason+"','"+banner+"')");
-    		ps.execute();
-    	}
-    	catch(SQLException e){
-    		e.printStackTrace();
-    		plugin.getLogger().severe("Could not save warning for " + name + "!");
-    	}
+    	db.getBuffer().addString("INSERT INTO warnings (name, reason, banner) VALUES ('"+name+"','"+reason+"','"+banner+"')");
     	
     	if(warns.size() >= plugin.getConfig().getInt("max-warnings")){
     		this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
