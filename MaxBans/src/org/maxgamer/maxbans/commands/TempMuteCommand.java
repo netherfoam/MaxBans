@@ -7,9 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 
-public class TempMute implements CommandExecutor{
+public class TempMuteCommand implements CommandExecutor{
     private MaxBans plugin;
-    public TempMute(MaxBans plugin){
+    public TempMuteCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

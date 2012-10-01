@@ -6,10 +6,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Mute;
 
-public class Mute implements CommandExecutor{
+public class MuteCommand implements CommandExecutor{
     private MaxBans plugin;
-    public Mute(MaxBans plugin){
+    public MuteCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -18,6 +19,13 @@ public class Mute implements CommandExecutor{
 		if(args.length > 0){
 			String name = args[0];
 			String banner;
+			
+			Mute mute = plugin.getBanManager().getMute(name);
+			if(mute != null){
+				plugin.getBanManager().unmute(name);
+				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
+				return true;
+			}
 			
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();

@@ -295,6 +295,70 @@ public class BanManager{
     	this.bans.put(name, ban);
     	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
     }
+    
+    /**
+     * Removes a ban and removes it from the database
+     * @param name The name of the player who is banned
+     */
+    public void unban(String name){
+    	name = name.toLowerCase();
+    	Ban ban = this.bans.get(name);
+    	TempBan tBan = this.tempbans.get(name);
+    	String ip = this.getIP(name);
+    	
+    	String query = "";
+    	if(ban != null){
+    		this.bans.remove(name);
+    		query += "DELETE FROM bans WHERE name = '"+name+"'; ";
+    	}
+    	if(tBan != null){
+    		this.tempbans.remove(name);
+    		query += "DELETE FROM bans WHERE name = '"+name+"'; ";
+    	}
+    	unbanip(ip);
+    	plugin.getDB().getBuffer().addString(query);
+    }
+    
+    /**
+     * Removes a ban and removes it from the database
+     * @param ip The ip of the player who is banned
+     */
+    public void unbanip(String ip){
+    	IPBan ipBan = this.ipbans.get(ip);
+    	TempIPBan tipBan = this.tempipbans.get(ip);
+    	
+    	String query = "";
+    	if(ipBan != null){
+    		this.ipbans.remove(ip);
+    		query += "DELETE FROM ipbans WHERE ip = '"+ip+"'; ";
+    	}
+    	if(tipBan != null){
+    		this.tempipbans.remove(ip);
+    		query += "DELETE FROM bans WHERE name = '"+ip+"'; ";
+    	}
+    	plugin.getDB().getBuffer().addString(query);
+    }
+    
+    public void unmute(String name){
+    	name = name.toLowerCase();
+    	
+    	Mute mute = this.mutes.get(name);
+    	TempMute tMute = this.tempmutes.get(name);
+    	
+    	String query = "";
+    	
+    	if(mute != null){
+    		this.mutes.remove(name);
+    		query = "DELETE FROM mutes WHERE name = '"+name+"';";
+    	}
+    	if(tMute != null){
+    		this.tempmutes.remove(name);
+    		query = "DELETE FROM mutes WHERE name = '"+name+"';";
+    	}
+    	
+    	plugin.getDB().getBuffer().addString(query);
+    }
+    
     /**
      * @param name The name of the player.
      * @param reason Reason for the ban
