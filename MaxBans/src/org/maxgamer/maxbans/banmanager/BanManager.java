@@ -333,6 +333,7 @@ public class BanManager{
     	TempBan tBan = this.tempbans.get(name);
     	String ip = this.getIP(name);
     	
+    	name = escape(name);
     	String query = "";
     	if(ban != null){
     		this.bans.remove(name);
@@ -363,7 +364,7 @@ public class BanManager{
     	}
     	if(tipBan != null){
     		this.tempipbans.remove(ip);
-    		query += "DELETE FROM bans WHERE name = '"+ip+"'; ";
+    		query += "DELETE FROM ipbans WHERE ip = '"+ip+"'; ";
     	}
     	if(!query.isEmpty()){
 	    	plugin.getDB().getBuffer().addString(query);
@@ -748,9 +749,10 @@ public class BanManager{
 		char[] chars = s.toCharArray();
 		
 		for(int i = 0; i < chars.length; i++){
-			//If char == ' or char == \
-			if(chars[i] == '\'' || chars[i] == '\\'){
-				sb.insert(i, '\\');
+			//If char == ', make it a double.
+			if(chars[i] == '\''/* || chars[i] == '\\'*/){
+				sb.insert(i, '\'');
+				//i++; //Don't want to get stuck
 			}
 		}
 		return sb.toString();
