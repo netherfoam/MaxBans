@@ -60,6 +60,8 @@ public class MaxBans extends JavaPlugin{
 		 * it doesnt.  This makes it friendlier.
 		 */
 		this.reloadConfig();
+		this.getConfig().options().copyDefaults();
+		
 		
 		//The database for bans
 		db = new Database(this, new File(this.getDataFolder(), "bans.db"));
