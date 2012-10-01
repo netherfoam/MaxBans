@@ -41,7 +41,7 @@ public class DupeIPCommand implements CommandExecutor{
 			StringBuilder sb = new StringBuilder();
 			
 			for(Entry<String, String> entry : ipHistory.entrySet()){
-				if(entry.getValue().equals(ip) && !entry.getKey().equals(name)){
+				if(entry.getValue().equals(ip) && !entry.getKey().equals(name.toLowerCase())){
 					String dupe = entry.getKey();
 					if(plugin.getBanManager().getBan(dupe) != null){
 						sb.append(ChatColor.RED);
