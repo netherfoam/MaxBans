@@ -29,7 +29,14 @@ public class CheckIPCommand implements CommandExecutor{
 			
 			String ip = plugin.getBanManager().getIP(name);
 			
-			sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.RED + name + ChatColor.AQUA + " last used the IP " + ChatColor.RED + ip);
+			if(ip == null){
+				sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.RED + name + ChatColor.AQUA + " has no recorded IP history.");
+			}
+			else{
+				sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.RED + name + ChatColor.AQUA + " last used the IP " + ChatColor.RED + ip);
+			}
+			
+			
 			return true;
 		}
 		else{
