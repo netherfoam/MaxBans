@@ -32,6 +32,11 @@ public class TempIPBanCommand implements CommandExecutor{
 			//Fetch their IP address from history
 			String ip = plugin.getBanManager().getIP(name);
 			
+			if(ip == null){
+				sender.sendMessage(ChatColor.RED + "No IP recorded for " + name + " - Try ban them normally instead?");
+				return true;
+			}
+			
 			IPBan ban = plugin.getBanManager().getIPBan(ip);
 			if(ban != null){
 				if(ban instanceof TempIPBan){
