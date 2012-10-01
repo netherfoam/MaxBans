@@ -711,7 +711,7 @@ public class BanManager{
 		}
 		else{
 			//Remove that space char.
-			sb.replace(sb.length(), sb.length() - 1, "");
+			sb.replace(sb.length() - 1, sb.length() - 1, "");
 		}
 		
 		return sb.toString();
