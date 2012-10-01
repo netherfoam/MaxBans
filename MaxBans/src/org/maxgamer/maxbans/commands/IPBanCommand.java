@@ -38,17 +38,7 @@ public class IPBanCommand implements CommandExecutor{
 			boolean silent = plugin.getBanManager().isSilent(args);
 			
 			//Build the reason
-			StringBuilder sb = new StringBuilder(20);
-			for(int i = 1; i < args.length; i++){
-				sb.append(args[i]);
-			}
-			
-			//TODO: Take this from the config
-			if(sb.length() < 1){
-				sb.append("Misconduct.");
-			}
-			
-			String reason = sb.toString();
+			String reason = plugin.getBanManager().buildReason(args);
 			String banner;
 			
 			//Get the banners name
@@ -65,13 +55,13 @@ public class IPBanCommand implements CommandExecutor{
 			//Kick them
 			Player player = Bukkit.getPlayer(name);
 			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been IP Banned for: \n" + sb.toString());
+				player.kickPlayer("You have been IP Banned for: \n" + reason);
 			}
 			
 			//Notify online players
 			if(!silent){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been banned (forever) by " + banner + ". reason: " + sb.toString());
+					p.sendMessage(ChatColor.RED + name + " has been banned (forever) by " + banner + ". reason: " + reason);
 				}
 			}
 			

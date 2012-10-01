@@ -31,6 +31,7 @@ public class DatabaseWatcher implements Runnable{
 		db.getBuffer().locked = true;
 		
 		while(db.getBuffer().queries.size() > 0){
+			this.db.getPlugin().getLogger().info("Running Query: " + db.getBuffer().queries.get(0));
 			try {
 				st.addBatch(db.getBuffer().queries.get(0));
 			} catch (SQLException e2) {

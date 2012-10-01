@@ -59,37 +59,25 @@ public class TempBanCommand implements CommandExecutor{
 			//TODO: Validate name, try match player
 			Player player = Bukkit.getPlayer(name);
 			
-			boolean silent = false;
-			StringBuilder sb = new StringBuilder();
+			boolean silent = plugin.getBanManager().isSilent(args);
 			
-			if(args[3].equalsIgnoreCase("-s")){
-				silent = true;
-			}
+			String reason = plugin.getBanManager().buildReason(args);
 			
-			for(int i = (silent ? 4 : 3); i < args.length; i++){
-				sb.append(args[i]);
-			}
-			
-			if(sb.length() < 1){
-				sb.append("Misconduct.");
-				//TODO: Take misconduct from config
-			}
-			
-			String banner = "console";
+			String banner = "Console";
 			
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();
 			}
 			
-			plugin.getBanManager().tempban(name, sb.toString(), banner, expires);
+			plugin.getBanManager().tempban(name, reason, banner, expires);
 			
 			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been Temporarily Banned for: \n"+sb.toString());
+				player.kickPlayer("You have been Temporarily Banned for: \n"+reason);
 			}
 			
 			if(!silent){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + banner + ". reason: " + sb.toString());
+					p.sendMessage(ChatColor.RED + name + " has been banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + banner + ". reason: " + reason);
 				}
 			}
 			

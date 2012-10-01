@@ -646,4 +646,18 @@ public class BanManager{
 		
 		return (long) (modifier * time) * 1000;
 	}
+	
+	public String buildReason(String[] args){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 1; i < args.length; i++){
+			sb.append(args[i]);
+			sb.append(" ");
+		}
+		
+		if(sb.length() < 1){
+			sb.append("Misconduct");
+		}
+		
+		return sb.toString();
+	}
 }
