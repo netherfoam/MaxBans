@@ -704,6 +704,7 @@ public class BanManager{
 	}
 	
 	public void announce(String s){
+		plugin.getLogger().info(s);
 		for(Player p : Bukkit.getOnlinePlayers()){
 			p.sendMessage(s);
 		}
