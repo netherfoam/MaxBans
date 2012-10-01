@@ -1,6 +1,5 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,10 +13,10 @@ public class WarnCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.warn")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /warn <player> <reason>";
+		String usage = plugin.color_secondary + "Usage: /warn <player> <reason>";
 		
 		if(args.length > 1){
 			String name = args[0];
@@ -38,7 +37,7 @@ public class WarnCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been warned for " + ChatColor.RED + reason + ChatColor.AQUA + " by " + ChatColor.RED + banner + ChatColor.AQUA + ".");
+			plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been warned for " + plugin.color_secondary + reason + plugin.color_primary + " by " + plugin.color_secondary + banner + plugin.color_primary + ".");
 			plugin.getBanManager().warn(name, reason, banner);
 			
 			return true;

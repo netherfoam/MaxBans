@@ -1,6 +1,5 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,11 +12,11 @@ public class CheckIPCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.checkip")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
 		
-		String usage = ChatColor.RED + "Usage: /checkip <player>";
+		String usage = plugin.color_secondary + "Usage: /checkip <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -30,10 +29,10 @@ public class CheckIPCommand implements CommandExecutor{
 			String ip = plugin.getBanManager().getIP(name);
 			
 			if(ip == null){
-				sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.RED + name + ChatColor.AQUA + " has no recorded IP history.");
+				sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " has no recorded IP history.");
 			}
 			else{
-				sender.sendMessage(ChatColor.AQUA + "Player " + ChatColor.RED + name + ChatColor.AQUA + " last used the IP " + ChatColor.RED + ip);
+				sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " last used the IP " + plugin.color_secondary + ip);
 			}
 			
 			

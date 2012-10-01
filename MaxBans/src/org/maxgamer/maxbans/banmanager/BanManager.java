@@ -9,13 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
-
-import com.modcrafting.ultrabans.UltraBan;
 
 public class BanManager{
 	private MaxBans plugin;
@@ -189,7 +185,7 @@ public class BanManager{
 			}
 		}
 		catch(SQLException e){
-			plugin.getLogger().severe(ChatColor.RED + "Could not load database history using: " + query);
+			plugin.getLogger().severe(plugin.color_secondary + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
 
@@ -530,7 +526,7 @@ public class BanManager{
     		if(p != null){
     			p.kickPlayer("Reached Max Warnings:\n" + reason);
     		}
-    		announce(ChatColor.RED + name + ChatColor.AQUA + " has reached max warnings.  One hour ban.");
+    		announce(plugin.color_secondary + name + plugin.color_primary + " has reached max warnings.  One hour ban.");
     		
     		clearWarnings(name);
     	}

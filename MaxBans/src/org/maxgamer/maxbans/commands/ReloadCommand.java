@@ -13,11 +13,11 @@ public class ReloadCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.reload")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
 		
-		sender.sendMessage(ChatColor.RED + "Reloading MaxBans");
+		sender.sendMessage(plugin.color_secondary + "Reloading MaxBans");
 		plugin.getBanManager().reload();
 		sender.sendMessage(ChatColor.GREEN + "Reload Complete");
 		return true;

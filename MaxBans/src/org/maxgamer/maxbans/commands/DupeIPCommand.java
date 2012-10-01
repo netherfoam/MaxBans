@@ -16,10 +16,10 @@ public class DupeIPCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.dupeip")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /dupeip <player>";
+		String usage = plugin.color_secondary + "Usage: /dupeip <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -31,7 +31,7 @@ public class DupeIPCommand implements CommandExecutor{
 			
 			String ip = plugin.getBanManager().getIP(name);
 			
-			sender.sendMessage(ChatColor.AQUA + "Scanning " + ChatColor.WHITE + name + ChatColor.AQUA + " on " + ChatColor.WHITE + ip);
+			sender.sendMessage(plugin.color_primary + "Scanning " + ChatColor.WHITE + name + plugin.color_primary + " on " + ChatColor.WHITE + ip);
 			
 			HashMap<String, String> ipHistory = plugin.getBanManager().getIPHistory();
 			StringBuilder sb = new StringBuilder();
@@ -40,7 +40,7 @@ public class DupeIPCommand implements CommandExecutor{
 				if(entry.getValue().equals(ip) && !entry.getKey().equals(name)){
 					String dupe = entry.getKey();
 					if(plugin.getBanManager().getBan(dupe) != null){
-						sb.append(ChatColor.RED);
+						sb.append(plugin.color_secondary);
 						sb.append(dupe);
 						sb.append(", ");
 					}
@@ -57,7 +57,7 @@ public class DupeIPCommand implements CommandExecutor{
 				sender.sendMessage(sb.toString());
 			}
 			else{
-				sender.sendMessage(ChatColor.AQUA + "No duplicates!");
+				sender.sendMessage(plugin.color_primary + "No duplicates!");
 			}
 			return true;
 		}

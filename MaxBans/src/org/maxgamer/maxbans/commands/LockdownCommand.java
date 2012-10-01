@@ -1,6 +1,5 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +12,7 @@ public class LockdownCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.lockdown.use")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
 		if(args.length > 0){
@@ -21,7 +20,7 @@ public class LockdownCommand implements CommandExecutor{
 			
 			plugin.getBanManager().lockdown = true;
 			plugin.getBanManager().lockdownReason = reason;
-			sender.sendMessage(ChatColor.AQUA + "Lockdown enabled.  Reason: " + ChatColor.RED + reason + ChatColor.AQUA + ".");
+			sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + reason + plugin.color_primary + ".");
 			
 			plugin.getConfig().set("lockdown", true);
 			plugin.getConfig().set("lockdown-reason", reason);
@@ -30,7 +29,7 @@ public class LockdownCommand implements CommandExecutor{
 			if(plugin.getBanManager().lockdown){
 				plugin.getBanManager().lockdown = false;
 				plugin.getBanManager().lockdownReason = "";
-				sender.sendMessage(ChatColor.AQUA + "Lockdown disabled.");
+				sender.sendMessage(plugin.color_primary + "Lockdown disabled.");
 				
 				plugin.getConfig().set("lockdown", false);
 				plugin.getConfig().set("lockdown-reason", "");
@@ -38,7 +37,7 @@ public class LockdownCommand implements CommandExecutor{
 			else{
 				plugin.getBanManager().lockdown = true;
 				plugin.getBanManager().lockdownReason = "Maintenance";
-				sender.sendMessage(ChatColor.AQUA + "Lockdown enabled.  Reason: " + ChatColor.RED + "Maintenance" + ChatColor.AQUA + ".");
+				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + "Maintenance" + plugin.color_primary + ".");
 				
 				plugin.getConfig().set("lockdown", true);
 				plugin.getConfig().set("lockdown-reason", "Maintenance");

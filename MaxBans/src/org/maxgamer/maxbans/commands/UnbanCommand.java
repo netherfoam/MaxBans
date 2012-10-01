@@ -16,10 +16,10 @@ public class UnbanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.unban")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /unban <player>";
+		String usage = plugin.color_secondary + "Usage: /unban <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -40,11 +40,11 @@ public class UnbanCommand implements CommandExecutor{
 				sender.sendMessage(ChatColor.GREEN + "Unbanned " + name);
 			}
 			else{
-				sender.sendMessage(ChatColor.AQUA + "Could not find a ban for " + ChatColor.RED + name + ChatColor.AQUA + ".");
+				sender.sendMessage(plugin.color_primary + "Could not find a ban for " + plugin.color_secondary + name + plugin.color_primary + ".");
 				return true;
 			}
 			
-			plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been unbanned by " + ChatColor.RED + banner + ChatColor.AQUA + ".");
+			plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been unbanned by " + plugin.color_secondary + banner + plugin.color_primary + ".");
 			
 			return true;
 		}

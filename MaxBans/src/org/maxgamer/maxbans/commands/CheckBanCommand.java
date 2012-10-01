@@ -1,6 +1,5 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,11 +18,11 @@ public class CheckBanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.checkban")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
 		
-		String usage = ChatColor.RED + "Usage: /checkban <player>";
+		String usage = plugin.color_secondary + "Usage: /checkban <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -38,10 +37,10 @@ public class CheckBanCommand implements CommandExecutor{
 			if(ban != null){
 				if(ban instanceof TempBan){
 					TempBan tBan = (TempBan) ban;
-					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is temp banned for " + ChatColor.RED + tBan.getReason() + ChatColor.AQUA + " by " + ChatColor.RED +  tBan.getBanner() + ChatColor.AQUA + ". Remaining: " + ChatColor.RED + plugin.getBanManager().getTimeUntil(tBan.getExpires())+ ChatColor.AQUA + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp banned for " + plugin.color_secondary + tBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary +  tBan.getBanner() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + plugin.getBanManager().getTimeUntil(tBan.getExpires())+ plugin.color_primary + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA +  " is banned for " + ChatColor.RED + ban.getReason() + ChatColor.AQUA + " by " + ChatColor.RED + ban.getBanner() + ChatColor.AQUA + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary +  " is banned for " + plugin.color_secondary + ban.getReason() + plugin.color_primary + " by " + plugin.color_secondary + ban.getBanner() + plugin.color_primary + ".");
 				}
 			}
 			
@@ -51,10 +50,10 @@ public class CheckBanCommand implements CommandExecutor{
 			if(ipBan != null){
 				if(ipBan instanceof TempIPBan){
 					TempIPBan tipBan = (TempIPBan) ipBan;
-					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is temp IP banned for " + ChatColor.RED + tipBan.getReason() + ChatColor.AQUA + " by " + ChatColor.RED + tipBan.getBanner() + ChatColor.AQUA + ". Remaining: " + ChatColor.RED + plugin.getBanManager().getTimeUntil(tipBan.getExpires())+ ChatColor.AQUA + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp IP banned for " + plugin.color_secondary + tipBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary + tipBan.getBanner() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + plugin.getBanManager().getTimeUntil(tipBan.getExpires())+ plugin.color_primary + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is IP banned for " + ChatColor.RED + ipBan.getReason() + ChatColor.AQUA + " by " + ChatColor.RED +  ipBan.getBanner() + ChatColor.AQUA + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is IP banned for " + plugin.color_secondary + ipBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary +  ipBan.getBanner() + plugin.color_primary + ".");
 				}
 			}
 			
@@ -62,15 +61,15 @@ public class CheckBanCommand implements CommandExecutor{
 			if(mute != null){
 				if(mute instanceof TempMute){
 					TempMute tMute = (TempMute) mute;
-					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is temp muted by " + ChatColor.RED + tMute.getMuter() + ChatColor.AQUA + ". Remaining: " + ChatColor.RED + tMute.getExpires() + ChatColor.AQUA + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp muted by " + plugin.color_secondary + tMute.getMuter() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + tMute.getExpires() + plugin.color_primary + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.RED + name + ChatColor.AQUA + " is muted by " + mute.getMuter() + ChatColor.AQUA + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is muted by " + mute.getMuter() + plugin.color_primary + ".");
 				}
 			}
 			
 			if(mute == null && ipBan == null && ban == null){
-				sender.sendMessage(ChatColor.AQUA + "No records for " + ChatColor.RED + name);
+				sender.sendMessage(plugin.color_primary + "No records for " + plugin.color_secondary + name);
 			}
 			
 			return true;

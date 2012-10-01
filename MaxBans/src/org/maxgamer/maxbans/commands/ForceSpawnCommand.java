@@ -1,25 +1,27 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.maxgamer.maxbans.MaxBans;
 
 public class ForceSpawnCommand implements CommandExecutor{
     private Location spawn;
-    public ForceSpawnCommand(Location spawn){
+    private MaxBans plugin;
+    public ForceSpawnCommand(MaxBans plugin, Location spawn){
         this.spawn = spawn;
+        this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.forcespawn")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /forcespawn <player>";
+		String usage = plugin.color_secondary + "Usage: /forcespawn <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -37,11 +39,11 @@ public class ForceSpawnCommand implements CommandExecutor{
 				//Double TP for /back'ers
 				p.teleport(spawn, TeleportCause.PLUGIN);
 				p.teleport(spawn, TeleportCause.PLUGIN);
-				p.sendMessage(ChatColor.RED + "Forced to the spawn by " + banner);
-				sender.sendMessage(ChatColor.AQUA + "Forced " + ChatColor.RED + p.getName() + ChatColor.AQUA + " to the spawn.");
+				p.sendMessage(plugin.color_secondary + "Forced to the spawn by " + banner);
+				sender.sendMessage(plugin.color_primary + "Forced " + plugin.color_secondary + p.getName() + plugin.color_primary + " to the spawn.");
 			}
 			else{
-				sender.sendMessage(ChatColor.AQUA + "No player found: " + ChatColor.RED + name);
+				sender.sendMessage(plugin.color_primary + "No player found: " + plugin.color_secondary + name);
 			}
 			
 			return true;

@@ -14,10 +14,10 @@ public class UnMuteCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.unmute")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /unmute <player>";
+		String usage = plugin.color_secondary + "Usage: /unmute <player>";
 		
 		if(args.length > 0){
 			String name = args[0];

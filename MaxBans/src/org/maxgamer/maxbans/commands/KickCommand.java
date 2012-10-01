@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,10 +14,10 @@ public class KickCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.kick")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /kick <player> [reason]";
+		String usage = plugin.color_secondary + "Usage: /kick <player> [reason]";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -43,14 +42,14 @@ public class KickCommand implements CommandExecutor{
 			if(p != null){
 				p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
 				if(!silent){
-					plugin.getBanManager().announce(ChatColor.RED + p.getName() + ChatColor.AQUA + " was kicked by " + ChatColor.RED + banner + ChatColor.AQUA + " for " + ChatColor.RED + reason + ChatColor.AQUA + ".");
+					plugin.getBanManager().announce(plugin.color_secondary + p.getName() + plugin.color_primary + " was kicked by " + plugin.color_secondary + banner + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.AQUA + "Kicked " + ChatColor.RED + p.getName() + ChatColor.AQUA + " for " + ChatColor.RED + reason + ChatColor.AQUA + "silently.");
+					sender.sendMessage(plugin.color_primary + "Kicked " + plugin.color_secondary + p.getName() + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + "silently.");
 				}
 			}
 			else{
-				sender.sendMessage(ChatColor.AQUA + "No player found: " + ChatColor.RED + name);
+				sender.sendMessage(plugin.color_primary + "No player found: " + plugin.color_secondary + name);
 			}
 			
 			

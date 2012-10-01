@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,10 +16,10 @@ public class TempMuteCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.tempmute")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /tempmute <player> <time> <timeform>";
+		String usage = plugin.color_secondary + "Usage: /tempmute <player> <time> <timeform>";
 		
 		if(args.length > 2){
 			String name = args[0];
@@ -52,13 +51,13 @@ public class TempMuteCommand implements CommandExecutor{
 				if(mute instanceof TempMute){
 					TempMute tMute = (TempMute) mute;
 					if(tMute.getExpires() > time){
-						sender.sendMessage(ChatColor.AQUA + "That player already has a mute which lasts longer than the one you tried to give.");
+						sender.sendMessage(plugin.color_primary + "That player already has a mute which lasts longer than the one you tried to give.");
 						return true;
 					}
 					//else: Continue normally.
 				}
 				else{
-					sender.sendMessage(ChatColor.AQUA + "That player is already permantly muted.");
+					sender.sendMessage(plugin.color_primary + "That player is already permantly muted.");
 					return true;
 				}
 			}
@@ -68,9 +67,9 @@ public class TempMuteCommand implements CommandExecutor{
 			String until = plugin.getBanManager().getTimeUntil(time);
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
-				p.sendMessage(ChatColor.RED + " You have been muted for " + until);
+				p.sendMessage(plugin.color_secondary + " You have been muted for " + until);
 			}
-			sender.sendMessage(ChatColor.AQUA + "Muted " + ChatColor.AQUA + name + ChatColor.AQUA + " until " + ChatColor.RED + until);
+			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_primary + name + plugin.color_primary + " until " + plugin.color_secondary + until);
 			
 			return true;
 		}

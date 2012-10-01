@@ -16,10 +16,10 @@ public class MuteCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.mute")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /mute <player>";
+		String usage = plugin.color_secondary + "Usage: /mute <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -49,9 +49,9 @@ public class MuteCommand implements CommandExecutor{
 			
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
-				p.sendMessage(ChatColor.RED + " You have been muted.");
+				p.sendMessage(plugin.color_secondary + " You have been muted.");
 			}
-			sender.sendMessage(ChatColor.AQUA + "Muted " + ChatColor.AQUA + name);
+			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_primary + name);
 			
 			return true;
 		}

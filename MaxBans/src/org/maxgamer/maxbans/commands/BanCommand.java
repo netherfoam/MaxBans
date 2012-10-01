@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,11 +16,11 @@ public class BanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.ban")){
-			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
 		
-		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
+		String usage = plugin.color_secondary + "Usage: /ban <player> [-s] <reason>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -33,7 +32,7 @@ public class BanCommand implements CommandExecutor{
 			
 			Ban ban = plugin.getBanManager().getBan(name);
 			if(ban != null && !(ban instanceof TempBan)){
-				sender.sendMessage(ChatColor.RED + "That player is already banned.");
+				sender.sendMessage(plugin.color_secondary + "That player is already banned.");
 				return true;
 			}
 			
@@ -61,7 +60,7 @@ public class BanCommand implements CommandExecutor{
 			
 			//Notify online players
 			if(!silent){
-				plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been banned by " + ChatColor.RED + banner + ChatColor.AQUA + ". Reason: " + ChatColor.RED + reason + ".");
+				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			return true;
 		}

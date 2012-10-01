@@ -4,6 +4,7 @@ package org.maxgamer.maxbans;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
@@ -43,6 +44,9 @@ public class MaxBans extends JavaPlugin{
         //private PluginListener pluginListener;
         
         private Database db;
+        
+        public ChatColor color_primary = ChatColor.GREEN;
+        public ChatColor color_secondary = ChatColor.WHITE;
         
 	public void onEnable(){
 		/* Generates files for the first run */
@@ -98,7 +102,7 @@ public class MaxBans extends JavaPlugin{
 		this.kickCommand = new KickCommand(this);
 		
 		Location spawn = new Location(Bukkit.getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"));
-		this.forceSpawnCommand = new ForceSpawnCommand(spawn);
+		this.forceSpawnCommand = new ForceSpawnCommand(this, spawn);
 		
 		this.reloadCommand = new ReloadCommand(this);
 		
