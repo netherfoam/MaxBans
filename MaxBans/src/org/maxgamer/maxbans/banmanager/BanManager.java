@@ -377,8 +377,8 @@ public class BanManager{
     	Mute mute = this.mutes.get(name);
     	TempMute tMute = this.tempmutes.get(name);
     	
+    	name = escape(name);
     	String query = "";
-    	
     	if(mute != null){
     		this.mutes.remove(name);
     		query = "DELETE FROM mutes WHERE name = '"+name+"';";
