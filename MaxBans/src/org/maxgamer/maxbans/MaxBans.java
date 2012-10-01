@@ -45,8 +45,8 @@ public class MaxBans extends JavaPlugin{
         
         private Database db;
         
-        public ChatColor color_primary = ChatColor.GREEN;
-        public ChatColor color_secondary = ChatColor.WHITE;
+        public ChatColor color_primary;
+        public ChatColor color_secondary;
         
 	public void onEnable(){
 		/* Generates files for the first run */
@@ -70,6 +70,11 @@ public class MaxBans extends JavaPlugin{
 		this.reloadConfig();
 		this.getConfig().options().copyDefaults();
 		
+		//this.color_primary = ChatColor.GREEN;
+		//this.color_secondary = ChatColor.WHITE;
+		
+		this.color_primary = ChatColor.getByChar(getConfig().getString("color.primary"));
+		this.color_secondary = ChatColor.getByChar(getConfig().getString("color.secondary"));
 		
 		//The database for bans
 		db = new Database(this, new File(this.getDataFolder(), "bans.db"));

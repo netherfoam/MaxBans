@@ -57,3 +57,6 @@ commands:
     forcespawn:
         description: Teleports a player to the spawn.
         usage: /forcespawn <player>
+    mbreload:
+        description: Reloads MaxBans from the DB and config
+        usage: /mbreload

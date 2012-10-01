@@ -8,3 +8,7 @@ spawn:
     z: -300.5
     
 max-warnings: 3
+
+color:
+    primary: f
+    secondary: a
