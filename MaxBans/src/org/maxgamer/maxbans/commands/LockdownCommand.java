@@ -44,6 +44,7 @@ public class LockdownCommand implements CommandExecutor{
 				plugin.getConfig().set("lockdown-reason", "Maintenance");
 			}
 		}
+		plugin.saveConfig();
 		return true;
 	}
 }
