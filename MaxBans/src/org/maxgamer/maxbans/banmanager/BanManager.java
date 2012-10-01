@@ -314,12 +314,17 @@ public class BanManager{
      * @param banner The admin who banned them
      */
     public void ban(String name, String reason, String banner){
-    	name = escape(name.toLowerCase());
-    	banner = escape(banner.toLowerCase());
-    	reason = escape(reason);
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
     	
     	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
+    	
+    	//Now we can escape them
+    	name = escape(name);
+    	banner = escape(banner);
+    	reason = escape(reason);
+    	
     	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
     }
     
@@ -333,6 +338,7 @@ public class BanManager{
     	TempBan tBan = this.tempbans.get(name);
     	String ip = this.getIP(name);
     	
+    	//Now we can escape it
     	name = escape(name);
     	String query = "";
     	if(ban != null){
@@ -377,6 +383,7 @@ public class BanManager{
     	Mute mute = this.mutes.get(name);
     	TempMute tMute = this.tempmutes.get(name);
     	
+    	//Escape it
     	name = escape(name);
     	String query = "";
     	if(mute != null){
@@ -399,12 +406,17 @@ public class BanManager{
      * Expirey time is NOT time from creating ban, it is milliseconds from 1970 (System.currentMillis())
      */
     public void tempban(String name, String reason, String banner, long expires){
-    	name = escape(name.toLowerCase());
-    	banner = escape(banner.toLowerCase());
-    	reason = escape(reason);
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
     	
     	TempBan ban = new TempBan(reason, banner, System.currentTimeMillis(), expires);
     	this.tempbans.put(name, ban);
+    	
+    	//Safe to escape now
+    	name = escape(name);
+    	banner = escape(banner);
+    	reason = escape(reason);
+    	
     	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time, expires) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
     }
     
@@ -415,12 +427,15 @@ public class BanManager{
      * @param banner The admin who banned them
      */
     public void ipban(String ip, String reason, String banner){
-    	banner = escape(banner.toLowerCase());
-    	reason = escape(reason);
+    	banner = banner.toLowerCase();
     	
     	IPBan ipban = new IPBan(reason, banner, System.currentTimeMillis());
     	
     	this.ipbans.put(ip, ipban);
+    	
+    	//Safe to escape now
+    	banner = escape(banner);
+    	reason = escape(reason);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
     }
@@ -433,12 +448,15 @@ public class BanManager{
      * @param expires The time the ban expires
      */
     public void tempipban(String ip, String reason, String banner, long expires){
-    	banner = escape(banner.toLowerCase());
-    	reason = escape(reason);
+    	banner = banner.toLowerCase();
     	
     	TempIPBan tib = new TempIPBan(reason, banner, System.currentTimeMillis(), expires);
     	
     	this.tempipbans.put(ip, tib);
+    	
+    	//Safe to escape now
+    	banner = escape(banner);
+    	reason = escape(reason);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
     }
@@ -449,12 +467,14 @@ public class BanManager{
      * @param banner The admin who muted them
      */
     public void mute(String name, String banner){
-    	name = escape(name.toLowerCase());
-    	banner = escape(banner.toLowerCase());
+    	name = name.toLowerCase();
     	
     	Mute mute = new Mute(banner, System.currentTimeMillis());
     	
     	this.mutes.put(name, mute);
+    	
+    	name = escape(name);
+    	banner = escape(banner);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"');");
     }
@@ -466,12 +486,15 @@ public class BanManager{
      * @param expires The time the mute expires
      */
     public void tempmute(String name, String banner, long expires){
-    	name = escape(name.toLowerCase());
-    	banner = escape(banner.toLowerCase());
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
     	
     	TempMute tmute = new TempMute(banner, System.currentTimeMillis(), expires);
     	
     	this.tempmutes.put(name, tmute);
+    	
+    	name = escape(name);
+    	banner = escape(banner);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
     }
@@ -482,9 +505,8 @@ public class BanManager{
      * @param reason The reason for the warning
      */
     public void warn(String name, String reason, String banner){
-    	name = escape(name.toLowerCase());
-    	banner = escape(banner.toLowerCase());
-    	reason = escape(reason);
+    	name = name.toLowerCase();
+    	banner = banner.toLowerCase();
     	
     	List<Warn> warns = this.warnings.get(name);
     	
@@ -495,6 +517,10 @@ public class BanManager{
     	
     	//Adds it to warnings
     	warns.add(new Warn(reason, banner));
+    	
+    	name = escape(name);
+    	banner = escape(banner);
+    	reason = escape(reason);
     	
     	try{
     		PreparedStatement ps = this.db.getConnection().prepareStatement("INSERT INTO warnings (name, reason, banner) VALUES ('"+name+"','"+reason+"','"+banner+"')");
@@ -519,6 +545,8 @@ public class BanManager{
     	
     	this.warnings.put(name, null);
     	
+    	//Escape it
+    	name = escape(name);
     	try{
 	    	PreparedStatement ps = this.db.getConnection().prepareStatement("DELETE FROM warnings WHERE name = '"+name+"'");
 	    	ps.execute();
@@ -545,14 +573,14 @@ public class BanManager{
      * @param ip The ip they're connecting from.
      */
     public void logIP(String name, String ip){
-    	name = escape(name.toLowerCase());
+    	name = name.toLowerCase();
     	String query;
     	
     	if(this.recentips.containsKey(name)){
-    		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+name+"'";
+    		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+escape(name)+"'";
     	}
     	else{
-    		query = "INSERT INTO iphistory (name, ip) VALUES ('"+name+"','"+ip+"')";
+    		query = "INSERT INTO iphistory (name, ip) VALUES ('"+escape(name)+"','"+ip+"')";
     	}
     	
     	this.recentips.put(name, ip);
