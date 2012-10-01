@@ -17,10 +17,11 @@ public class IPBan implements CommandExecutor{
 		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
 		
 		if(args.length > 0){
-			String player = args[0];
+			String name = args[0];
 			boolean silent = plugin.getBanManager().isSilent(args);
-			StringBuilder sb = new StringBuilder(20);
 			
+			//Build the reason
+			StringBuilder sb = new StringBuilder(20);
 			for(int i = 1; i < args.length; i++){
 				sb.append(args[i]);
 			}
@@ -31,9 +32,9 @@ public class IPBan implements CommandExecutor{
 			}
 			
 			String reason = sb.toString();
-			
 			String banner;
 			
+			//Get the banners name
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();
 			}
@@ -41,16 +42,24 @@ public class IPBan implements CommandExecutor{
 				banner = "Console";
 			}
 			
+			//Fetch their IP address from history
+			String ip = plugin.getBanManager().getIP(name);
+			//Ban them
+			plugin.getBanManager().ipban(ip, reason, banner);
 			
-			
-			plugin.getBanManager().ban(player, reason, banner);
-			
-			for(Player p : Bukkit.getOnlinePlayers()){
-				if(p == null || !p.isOnline()) continue;
-				if(p.getName().equalsIgnoreCase(player)) p.kickPlayer("Banned");
-				if(silent) continue;
-				p.sendMessage(ChatColor.RED + player + " has been banned by " + banner + ". reason: " + reason);
+			//Kick them
+			Player player = Bukkit.getPlayer(name);
+			if(player != null && player.isOnline()){
+				player.kickPlayer(sb.toString());
 			}
+			
+			//Notify online players
+			if(!silent){
+				for(Player p : Bukkit.getOnlinePlayers()){
+					p.sendMessage(ChatColor.RED + name + " has been banned by " + banner + ". reason: " + sb.toString());
+				}
+			}
+			
 			return true;
 		}
 		else{
