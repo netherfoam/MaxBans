@@ -4,8 +4,10 @@ import java.net.InetAddress;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.maxgamer.maxbans.MaxBans;
@@ -19,12 +21,12 @@ public class BanManager{
 	private HashMap<String, TempIPBan> tempipbans = new HashMap<String, TempIPBan>();
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
+	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
 	
 	//String: IP, HashSet: Lowercase usernames on that IP
-	private HashMap<String, HashSet<String>> iphistory = new HashMap<String, HashSet<String>>();
+	//private HashMap<String, HashSet<String>> iphistory = new HashMap<String, HashSet<String>>();
 	
 	//HashMap<Username, IP>();
-	//TODO: Find a better way of storing this.
 	private HashMap<String, String> recentips = new HashMap<String, String>();
 	
 	public boolean lockdown = false;
@@ -45,6 +47,7 @@ public class BanManager{
 	 * Don't use this except when starting up.
 	 */
 	public void reload(){
+		//TODO: Reload lockdown and lockdownReason from config
 		plugin.getDB().getDatabaseWatcher().stop();
 		plugin.getDB().getDatabaseWatcher().run(); //Clears it. Does not restart it.
 		
@@ -58,7 +61,7 @@ public class BanManager{
 		this.tempipbans.clear();
 		this.mutes.clear();
 		this.tempmutes.clear();
-		this.iphistory.clear();
+		//this.iphistory.clear();
 		
 		//Reload the cache from the database.
 		String query = "none";
@@ -155,14 +158,15 @@ public class BanManager{
 				String name = rs.getString("name");
 				String ip = rs.getString("ip");
 				
-				HashSet<String> users = this.iphistory.get(ip);
+				//HashSet<String> users = this.iphistory.get(ip);
 				
-				if(users == null){
-					users = new HashSet<String>();
-					this.iphistory.put(ip, users);
-				}
+				//if(users == null){
+				//	users = new HashSet<String>();
+					//this.iphistory.put(ip, users);
+				//	this.ip
+				//}
 				
-				users.add(name);
+				this.recentips.put(name, ip);
 			}
 		}
 		catch(SQLException e){
@@ -360,19 +364,37 @@ public class BanManager{
     	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, banner, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
     }
     
-    //TODO: Warn method
+    /**
+     * Gives a player a warning
+     * @param name The name of the player
+     * @param reason The reason for the warning
+     */
     public void warn(String name, String reason){
+    	name = name.toLowerCase();
     	
+    	List<Warn> warns = this.warnings.get(name);
+    	
+    	if(warns == null){
+    		warns = new ArrayList<Warn>();
+    		this.warnings.put(name, warns);
+    	}
+    	
+    	//Adds it to warnings
+    	warns.add(new Warn(reason));
+    	
+    	if(warns.size() > 3){
+    		//TODO: Tempban them
+    	}
     }
     
     /**
-     * Fetches a hashset (unsorted list) of users whose most recent IP is the given IP address.
+     * Gets the IP address a player last used, even if offline
      * Will return null if no history for that IP address.
      * @param ip The IP to lookup
      * @return a hashset of users whose most recent IP is the given one
      */
-    public HashSet<String> getUsersFromIP(String ip){
-    	return this.iphistory.get(ip);
+    public String getIP(String user){
+    	return this.recentips.get(user.toLowerCase());
     }
     
     /**
@@ -382,17 +404,18 @@ public class BanManager{
      */
     public void logIP(String name, String ip){
     	name = name.toLowerCase();
+    	String query;
     	
-    	HashSet<String> users = this.getUsersFromIP(ip);
-    	if(users == null){
-    		users = new HashSet<String>();
-    		this.iphistory.put(ip, users);
+    	if(this.recentips.containsKey(name)){
+    		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+name+"'";
+    	}
+    	else{
+    		query = "INSERT INTO iphistory (name, ip) VALUES ('"+name+"','"+ip+"')";
     	}
     	
-    	//Hashsets eliminate duplicates anyway
-    	users.add(name);
+    	this.recentips.put(name, ip);
     	
-    	this.db.getBuffer().addString("INSERT INTO iphistory (name, ip) VALUES ('"+name+"','"+ip+"')");
+    	this.db.getBuffer().addString(query);
     }
     
     /**
