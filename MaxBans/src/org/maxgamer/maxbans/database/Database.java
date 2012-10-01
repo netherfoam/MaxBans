@@ -62,6 +62,15 @@ import org.maxgamer.maxbans.MaxBans;
  * 		Muter is the guy who muted them (Like banner)
  * 		Time is the time they were muted
  * 		Expires is the time that the mute expires. (0 = never)
+ * 
+ * Table: Warnings
+ * Name		Reason			Banner
+ * adam126	Stupid noob		darekfive
+ * 
+ * Where,
+ * 		Name is the warned player, lowercase
+ * 		Reason is the reason for the warning
+ * 		Banner is the admin who warned them
  */
 public class Database {
 	private Buffer buffer;
@@ -165,6 +174,20 @@ public class Database {
 	 */
 	public void createIPHistoryTable(){
 		String query = "CREATE TABLE 'iphistory' ( 'name'  TEXT(30) NOT NULL, 'ip'  TEXT(20) NOT NULL, PRIMARY KEY ('name', 'ip') );";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create iphistory table.");
+		}
+	}
+	
+	/**
+	 * Creates the warnings table
+	 */
+	public void createWarningsTable(){
+		String query = "CREATE TABLE 'warnings' ('name' TEXT(30) NOT NULL, 'reason' TEXT(100) NOT NULL, 'banner' TEXT(30) NOT NULL);";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
