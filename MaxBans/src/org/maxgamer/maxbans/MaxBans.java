@@ -32,6 +32,8 @@ public class MaxBans extends JavaPlugin{
         private WarnCommand warnCommand;
         private ClearWarningsCommand clearWarningsCommand;
         
+        private LockdownCommand lockdownCommand;
+        
         private JoinListener joinListener; 
         private Database db;
         
@@ -81,6 +83,8 @@ public class MaxBans extends JavaPlugin{
 		this.warnCommand = new WarnCommand(this);
 		this.clearWarningsCommand = new ClearWarningsCommand(this);
 		
+		this.lockdownCommand = new LockdownCommand(this);
+		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
 		this.getCommand("ipban").setExecutor(ipBanCommand);
@@ -99,6 +103,8 @@ public class MaxBans extends JavaPlugin{
 		
 		this.getCommand("warn").setExecutor(warnCommand);
 		this.getCommand("clearwarnings").setExecutor(clearWarningsCommand);
+		
+		this.getCommand("lockdown").setExecutor(lockdownCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
 		this.chatListener = new ChatListener(this);
