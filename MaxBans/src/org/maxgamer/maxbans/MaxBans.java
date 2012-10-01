@@ -61,6 +61,8 @@ public class MaxBans extends JavaPlugin{
 		
 		//The database for bans
 		db = new Database(this, new File(this.getDataFolder(), "bans.db"));
+		//Creates the tables if they don't exist
+		db.createTables();
 		
 		//BanManager
 		banManager = new BanManager(this);
