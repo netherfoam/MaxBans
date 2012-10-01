@@ -581,43 +581,43 @@ public class BanManager{
     	if(epoch / 31449600 > 0){
     		//Days
     		long weeks = epoch / 31449600;
-    		sb.append(weeks + " years, ");
+    		sb.append(weeks + " years ");
     		epoch -= weeks * 31449600;
     	}
     	if(epoch / 2620800 > 0){
     		//Days
     		long weeks = epoch / 2620800;
-    		sb.append(weeks + " months, ");
+    		sb.append(weeks + " months ");
     		epoch -= weeks * 2620800;
     	}
     	if(epoch / 604800 > 0){
     		//Days
     		long weeks = epoch / 604800;
-    		sb.append(weeks + " weeks, ");
+    		sb.append(weeks + " weeks ");
     		epoch -= weeks * 604800;
     	}
     	if(epoch / 86400 > 0){
     		//Days
     		long days = epoch / 86400;
-    		sb.append(days + " days, ");
+    		sb.append(days + " days ");
     		epoch -= days * 86400;
     	}
     	
     	if(epoch / 3600 > 0){
     		//More than one hour
     		long hours = epoch / 3600;
-    		sb.append(hours + " hours, ");
+    		sb.append(hours + " hours ");
     		epoch -= hours * 3600;
     	}
     	
     	if(epoch / 60 > 0){
     		long minutes = epoch / 60;
-    		sb.append(minutes + " minutes, ");
+    		sb.append(minutes + " minutes ");
     		epoch -= minutes * 60;
     	}
     	
     	if(epoch > 0){
-    		sb.append(epoch + " seconds.");
+    		sb.append(epoch + " seconds");
     	}
     	
     	if(sb.length() > 0 && sb.charAt(sb.length() - 2) == ','){
@@ -709,7 +709,7 @@ public class BanManager{
 		}
 		
 		if(sb.length() < 1){
-			sb = new StringBuilder("Misconduct.");
+			sb = new StringBuilder("Misconduct");
 		}
 		else{
 			//Remove that space char.
