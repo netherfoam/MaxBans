@@ -40,9 +40,7 @@ public class UnbanCommand implements CommandExecutor{
 				return true;
 			}
 			
-			for(Player p : Bukkit.getOnlinePlayers()){
-				p.sendMessage(ChatColor.RED + name + " has been unbanned by " + banner + ".");
-			}
+			plugin.getBanManager().announce(ChatColor.RED + name + " has been unbanned by " + banner + ".");
 			
 			return true;
 		}

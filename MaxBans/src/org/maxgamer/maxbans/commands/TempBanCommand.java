@@ -76,9 +76,7 @@ public class TempBanCommand implements CommandExecutor{
 			}
 			
 			if(!silent){
-				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + banner + ". reason: " + reason);
-				}
+				plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been temp banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + ChatColor.RED + banner + ChatColor.AQUA + ". Reason: " + ChatColor.RED + reason + ".");
 			}
 			
 			return true;

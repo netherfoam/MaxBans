@@ -51,9 +51,7 @@ public class BanCommand implements CommandExecutor{
 			
 			//Notify online players
 			if(!silent){
-				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been banned (forever) by " + banner + ". reason: " + reason);
-				}
+				plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been banned by " + ChatColor.RED + banner + ChatColor.AQUA + ". Reason: " + ChatColor.RED + reason + ".");
 			}
 			return true;
 		}

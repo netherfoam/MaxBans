@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
@@ -674,5 +675,11 @@ public class BanManager{
 		}
 		
 		return sb.toString();
+	}
+	
+	public void announce(String s){
+		for(Player p : Bukkit.getOnlinePlayers()){
+			p.sendMessage(s);
+		}
 	}
 }

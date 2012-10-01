@@ -31,3 +31,12 @@ commands:
     tempmute:
         description: Mutes a player for a time
         usage: /tempmute <player> <time> <timeform>
+    checkban:
+        description: Reports any mutes, bans or ipbans a player has
+        usage: /checkban <player>
+    checkip:
+        description: Reports a players IP address
+        usage: /checkip <player>
+    dupeip:
+        description: Scans a players IP address and reports anyone else who uses it.
+        usage: /dupeip <player>

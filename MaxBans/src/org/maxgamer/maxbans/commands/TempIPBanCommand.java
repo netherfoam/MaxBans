@@ -86,9 +86,7 @@ public class TempIPBanCommand implements CommandExecutor{
 			
 			//Notify online players
 			if(!silent){
-				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been temp ip banned ("+plugin.getBanManager().getTimeUntil(time)+") by " + banner + ". Reason: " + reason);
-				}
+				plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been temp IP banned ("+plugin.getBanManager().getTimeUntil(time)+") by " + ChatColor.RED + banner + ChatColor.AQUA + ". Reason: " + ChatColor.RED + reason + ".");
 			}
 			
 			return true;
