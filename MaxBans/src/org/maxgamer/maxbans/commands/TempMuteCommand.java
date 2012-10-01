@@ -6,6 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Mute;
+import org.maxgamer.maxbans.banmanager.TempMute;
 
 public class TempMuteCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -42,6 +44,23 @@ public class TempMuteCommand implements CommandExecutor{
 				return true;
 			}
 			time += System.currentTimeMillis();
+			
+			//Make sure giving this mute will change something.
+			Mute mute = plugin.getBanManager().getMute(name);
+			if(mute != null){
+				if(mute instanceof TempMute){
+					TempMute tMute = (TempMute) mute;
+					if(tMute.getExpires() > time){
+						sender.sendMessage(ChatColor.AQUA + "That player already has a mute which lasts longer than the one you tried to give.");
+						return true;
+					}
+					//else: Continue normally.
+				}
+				else{
+					sender.sendMessage(ChatColor.AQUA + "That player is already permantly muted.");
+					return true;
+				}
+			}
 			
 			plugin.getBanManager().tempmute(name, banner, time);
 			return true;
