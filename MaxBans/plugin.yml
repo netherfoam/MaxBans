@@ -43,3 +43,6 @@ commands:
     warn:
         description: Warns a player
         usage: /warn <player> <reason>
+    clearwarnings:
+        description: Removes a players warning history
+        usage: /clearwarnings <player>

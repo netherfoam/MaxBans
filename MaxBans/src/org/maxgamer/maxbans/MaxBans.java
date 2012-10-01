@@ -29,6 +29,9 @@ public class MaxBans extends JavaPlugin{
         private CheckBanCommand checkBanCommand;
         private DupeIPCommand dupeIPCommand;
         
+        private WarnCommand warnCommand;
+        private ClearWarningsCommand clearWarningsCommand;
+        
         //private CommandListener commandExecutor;
         /*TODO: We're going to need command listeners for:
          *		IPBan
@@ -85,6 +88,9 @@ public class MaxBans extends JavaPlugin{
 		this.checkBanCommand = new CheckBanCommand(this);
 		this.dupeIPCommand = new DupeIPCommand(this);
 		
+		this.warnCommand = new WarnCommand(this);
+		this.clearWarningsCommand = new ClearWarningsCommand(this);
+		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
 		this.getCommand("ipban").setExecutor(ipBanCommand);
@@ -100,6 +106,9 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("checkip").setExecutor(checkIPCommand);
 		this.getCommand("checkban").setExecutor(checkBanCommand);
 		this.getCommand("dupeip").setExecutor(dupeIPCommand);
+		
+		this.getCommand("warn").setExecutor(warnCommand);
+		this.getCommand("clearwarnings").setExecutor(clearWarningsCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
 		this.chatListener = new ChatListener(this);
