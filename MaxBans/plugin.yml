@@ -46,3 +46,6 @@ commands:
     clearwarnings:
         description: Removes a players warning history
         usage: /clearwarnings <player>
+    kick:
+        description: Kicks a player from the game
+        usage: /kick <player> [reason]
