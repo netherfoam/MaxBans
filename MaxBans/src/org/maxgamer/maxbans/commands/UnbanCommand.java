@@ -20,11 +20,6 @@ public class UnbanCommand implements CommandExecutor{
 		if(args.length > 0){
 			String name = args[0];
 			
-			name = plugin.getBanManager().match(name);
-			if(name == null){
-				name = args[0]; //Use exact name then.
-			}
-			
 			String banner;
 
 			if(sender instanceof Player){
