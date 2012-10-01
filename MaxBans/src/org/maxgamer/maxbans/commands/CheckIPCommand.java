@@ -12,6 +12,11 @@ public class CheckIPCommand implements CommandExecutor{
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!sender.hasPermission("maxbans.checkip")){
+			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			return true;
+		}
+		
 		String usage = ChatColor.RED + "Usage: /checkip <player>";
 		
 		if(args.length > 0){

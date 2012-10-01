@@ -16,6 +16,10 @@ public class IPBanCommand implements CommandExecutor{
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!sender.hasPermission("maxbans.ipban")){
+			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			return true;
+		}
 		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
 		
 		if(args.length > 0){

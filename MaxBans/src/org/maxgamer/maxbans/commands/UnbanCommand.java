@@ -15,6 +15,10 @@ public class UnbanCommand implements CommandExecutor{
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!sender.hasPermission("maxbans.unban")){
+			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			return true;
+		}
 		String usage = ChatColor.RED + "Usage: /unban <player>";
 		
 		if(args.length > 0){

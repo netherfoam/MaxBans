@@ -13,6 +13,10 @@ public class TempMuteCommand implements CommandExecutor{
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!sender.hasPermission("maxbans.tempmute")){
+			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
+			return true;
+		}
 		String usage = ChatColor.RED + "Usage: /tempmute <player> <reason>";
 		
 		if(args.length > 0){
