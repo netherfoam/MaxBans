@@ -531,6 +531,8 @@ public class BanManager{
     			p.kickPlayer("Reached Max Warnings:\n" + reason);
     		}
     		announce(ChatColor.RED + name + ChatColor.AQUA + " has reached max warnings.  One hour ban.");
+    		
+    		clearWarnings(name);
     	}
     }
     
@@ -545,14 +547,8 @@ public class BanManager{
     	
     	//Escape it
     	name = escape(name);
-    	try{
-	    	PreparedStatement ps = this.db.getConnection().prepareStatement("DELETE FROM warnings WHERE name = '"+name+"'");
-	    	ps.execute();
-    	}
-    	catch(SQLException e){
-    		e.printStackTrace();
-    		plugin.getLogger().severe("Could not delete warnings for " + name + "!");
-    	}
+
+    	db.getBuffer().addString("DELETE FROM warnings WHERE name = '"+name+"'");
     }
     
     /**
