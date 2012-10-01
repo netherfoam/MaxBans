@@ -22,7 +22,7 @@ public class TempIPBanCommand implements CommandExecutor{
 		}
 		String usage = ChatColor.RED + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
 		
-		if(args.length > 0){
+		if(args.length > 2){
 			String name = args[0];
 			
 			name = plugin.getBanManager().match(name);

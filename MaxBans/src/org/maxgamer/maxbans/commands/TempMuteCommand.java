@@ -21,7 +21,7 @@ public class TempMuteCommand implements CommandExecutor{
 		}
 		String usage = ChatColor.RED + "Usage: /tempmute <player>";
 		
-		if(args.length > 0){
+		if(args.length > 2){
 			String name = args[0];
 			name = plugin.getBanManager().match(name);
 			if(name == null){

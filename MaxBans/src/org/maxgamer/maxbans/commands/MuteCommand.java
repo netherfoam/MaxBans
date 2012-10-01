@@ -1,5 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,6 +46,13 @@ public class MuteCommand implements CommandExecutor{
 			}
 			
 			plugin.getBanManager().mute(name, banner);
+			
+			Player p = Bukkit.getPlayerExact(name);
+			if(p != null){
+				p.sendMessage(ChatColor.RED + " You have been muted.");
+			}
+			sender.sendMessage(ChatColor.AQUA + "Muted " + ChatColor.AQUA + name);
+			
 			return true;
 		}
 		else{
