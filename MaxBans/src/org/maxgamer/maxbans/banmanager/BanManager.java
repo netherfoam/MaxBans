@@ -396,8 +396,36 @@ public class BanManager{
     	//Adds it to warnings
     	warns.add(new Warn(reason, banner));
     	
+    	try{
+    		PreparedStatement ps = this.db.getConnection().prepareStatement("INSERT INTO warnings (name, reason, banner) VALUES ('"+name+"','"+reason+"','"+banner+"')");
+    		ps.execute();
+    	}
+    	catch(SQLException e){
+    		e.printStackTrace();
+    		plugin.getLogger().severe("Could not save warning for " + name + "!");
+    	}
+    	
     	if(warns.size() > 3){
     		//TODO: Tempban them
+    	}
+    }
+    
+    /**
+     * Removes all warnings for a player from memory and the database
+     * @param name The name of the player. Case insensitive.
+     */
+    public void clearWarnings(String name){
+    	name = name.toLowerCase();
+    	
+    	this.warnings.put(name, null);
+    	
+    	try{
+	    	PreparedStatement ps = this.db.getConnection().prepareStatement("DELETE FROM warnings WHERE name = '"+name+"'");
+	    	ps.execute();
+    	}
+    	catch(SQLException e){
+    		e.printStackTrace();
+    		plugin.getLogger().severe("Could not delete warnings for " + name + "!");
     	}
     }
     
