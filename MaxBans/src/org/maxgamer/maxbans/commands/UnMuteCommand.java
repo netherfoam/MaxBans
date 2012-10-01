@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 
-public class UnMute implements CommandExecutor{
+public class UnMuteCommand implements CommandExecutor{
     private MaxBans plugin;
-    public UnMute(MaxBans plugin){
+    public UnMuteCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

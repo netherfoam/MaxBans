@@ -8,9 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 
-public class TempIPBan implements CommandExecutor{
+public class TempIPBanCommand implements CommandExecutor{
     private MaxBans plugin;
-    public TempIPBan(MaxBans plugin){
+    public TempIPBanCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

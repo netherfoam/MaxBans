@@ -11,9 +11,9 @@ import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.Mute;
 
-public class Unban implements CommandExecutor{
+public class UnbanCommand implements CommandExecutor{
     private MaxBans plugin;
-    public Unban(MaxBans plugin){
+    public UnbanCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
