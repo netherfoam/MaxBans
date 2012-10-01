@@ -25,6 +25,11 @@ public class TempBanCommand implements CommandExecutor{
 		else{
 			String name = args[0];
 			
+			name = plugin.getBanManager().match(name);
+			if(name == null){
+				name = args[0]; //Use exact name then.
+			}
+			
 			long expires = plugin.getBanManager().getTime(args);
 			if(expires <= 0){
 				sender.sendMessage(usage);

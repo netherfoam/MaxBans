@@ -18,6 +18,11 @@ public class UnMuteCommand implements CommandExecutor{
 		if(args.length > 0){
 			String name = args[0];
 			
+			name = plugin.getBanManager().match(name);
+			if(name == null){
+				name = args[0]; //Use exact name then.
+			}
+			
 			Mute mute = plugin.getBanManager().getMute(name);
 			if(mute != null){
 				plugin.getBanManager().unmute(name);

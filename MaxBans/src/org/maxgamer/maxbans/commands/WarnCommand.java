@@ -17,6 +17,12 @@ public class WarnCommand implements CommandExecutor{
 		
 		if(args.length > 1){
 			String name = args[0];
+			
+			name = plugin.getBanManager().match(name);
+			if(name == null){
+				name = args[0]; //Use exact name then.
+			}
+			
 			String banner;
 			
 			String reason = plugin.getBanManager().buildReason(args);

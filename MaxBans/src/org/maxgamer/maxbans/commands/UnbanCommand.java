@@ -19,6 +19,12 @@ public class UnbanCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String name = args[0];
+			
+			name = plugin.getBanManager().match(name);
+			if(name == null){
+				name = args[0]; //Use exact name then.
+			}
+			
 			String banner;
 
 			if(sender instanceof Player){
@@ -35,11 +41,11 @@ public class UnbanCommand implements CommandExecutor{
 				sender.sendMessage(ChatColor.GREEN + "Unbanned " + name);
 			}
 			else{
-				sender.sendMessage(ChatColor.RED + "Could not find a ban for " + name);
+				sender.sendMessage(ChatColor.AQUA + "Could not find a ban for " + ChatColor.RED + name + ChatColor.AQUA + ".");
 				return true;
 			}
 			
-			plugin.getBanManager().announce(ChatColor.RED + name + " has been unbanned by " + banner + ".");
+			plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been unbanned by " + ChatColor.RED + banner + ChatColor.AQUA + ".");
 			
 			return true;
 		}

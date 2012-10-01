@@ -20,6 +20,11 @@ public class DupeIPCommand implements CommandExecutor{
 		if(args.length > 0){
 			String name = args[0];
 			
+			name = plugin.getBanManager().match(name);
+			if(name == null){
+				name = args[0]; //Use exact name then.
+			}
+			
 			String ip = plugin.getBanManager().getIP(name);
 			
 			sender.sendMessage(ChatColor.AQUA + "Scanning " + ChatColor.WHITE + name + ChatColor.AQUA + " on " + ChatColor.WHITE + ip);

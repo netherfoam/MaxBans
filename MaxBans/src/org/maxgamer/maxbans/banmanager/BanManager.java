@@ -709,4 +709,17 @@ public class BanManager{
 			p.sendMessage(s);
 		}
 	}
+	
+	public String match(String name){
+		List<Player> targets = Bukkit.matchPlayer(name);
+		if(targets == null || targets.size() == 0){
+			return null;
+		}
+		else if(targets.size() > 1){
+			return null;
+		}
+		else{
+			return targets.get(0).getName();
+		}
+	}
 }
