@@ -45,7 +45,7 @@ public class TempIPBanCommand implements CommandExecutor{
 					}
 					else{
 						//Increasing a previous ban, remove the old one first.
-						plugin.getBanManager().unban(name);
+						plugin.getBanManager().unbanip(ip);
 					}
 				}
 				else{
