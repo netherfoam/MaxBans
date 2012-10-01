@@ -23,22 +23,24 @@ public class JoinListener implements Listener{
     public void onJoinHandler(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         
-        if(this.plugin.getBanManager().lockdown && !player.hasPermission("maxbans.lockdown.bypass")){
-    		event.setKickMessage(plugin.getBanManager().lockdownReason);
-    		event.setResult(Result.KICK_OTHER);
-    		return;
-    	}
-        else{ //Delay this, because it's fucken more important than essentials
-        	final String name = player.getName();
-        	Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
-				public void run() {
-					Player p = Bukkit.getPlayerExact(name);
-					if(p != null){
-						p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
+        if(plugin.getBanManager().lockdown){
+	        if(!player.hasPermission("maxbans.lockdown.bypass")){
+	    		event.setKickMessage(plugin.getBanManager().lockdownReason);
+	    		event.setResult(Result.KICK_OTHER);
+	    		return;
+	    	}
+	        else{ //Delay this, because it's fucken more important than essentials
+	        	final String name = player.getName();
+	        	Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+					public void run() {
+						Player p = Bukkit.getPlayerExact(name);
+						if(p != null){
+							p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
+						}
 					}
-				}
-        		
-        	}, 40);
+	        		
+	        	}, 40);
+	        }
         }
         
         InetAddress address = event.getAddress();
