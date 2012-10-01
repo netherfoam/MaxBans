@@ -20,7 +20,7 @@ public class IPBanCommand implements CommandExecutor{
 			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /ban <player> [-s] <reason>";
+		String usage = ChatColor.RED + "Usage: /ipban <player> [-s] <reason>";
 		
 		if(args.length > 0){
 			String name = args[0];
