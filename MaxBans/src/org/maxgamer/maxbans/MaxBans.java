@@ -94,7 +94,7 @@ public class MaxBans extends JavaPlugin{
 		this.kickCommand = new KickCommand(this);
 		
 		Location spawn = new Location(Bukkit.getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"));
-		this.forceSpawnCommand = new ForceSpawnCommand(this,spawn);
+		this.forceSpawnCommand = new ForceSpawnCommand(spawn);
 		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);

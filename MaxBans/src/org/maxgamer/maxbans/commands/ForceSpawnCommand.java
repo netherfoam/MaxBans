@@ -8,13 +8,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.maxgamer.maxbans.MaxBans;
 
 public class ForceSpawnCommand implements CommandExecutor{
-    private MaxBans plugin;
     private Location spawn;
-    public ForceSpawnCommand(MaxBans plugin, Location spawn){
-        this.plugin = plugin;
+    public ForceSpawnCommand(Location spawn){
         this.spawn = spawn;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
