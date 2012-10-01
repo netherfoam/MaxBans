@@ -1,5 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -63,6 +64,14 @@ public class TempMuteCommand implements CommandExecutor{
 			}
 			
 			plugin.getBanManager().tempmute(name, banner, time);
+			
+			String until = plugin.getBanManager().getTimeUntil(time);
+			Player p = Bukkit.getPlayerExact(name);
+			if(p != null){
+				p.sendMessage(ChatColor.RED + " You have been muted for " + until);
+			}
+			sender.sendMessage(ChatColor.AQUA + "Muted " + ChatColor.AQUA + name + ChatColor.AQUA + " until " + ChatColor.RED + until);
+			
 			return true;
 		}
 		else{
