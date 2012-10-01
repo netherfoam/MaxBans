@@ -58,7 +58,7 @@ public class IPBanCommand implements CommandExecutor{
 			plugin.getBanManager().ipban(ip, reason, banner);
 			
 			//Kick them
-			Player player = Bukkit.getPlayer(name);
+			Player player = Bukkit.getPlayerExact(name);
 			if(player != null && player.isOnline()){
 				player.kickPlayer("You have been IP Banned for: \n" + reason);
 			}

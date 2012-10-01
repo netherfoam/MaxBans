@@ -49,7 +49,7 @@ public class BanCommand implements CommandExecutor{
 			plugin.getBanManager().ban(name, reason, banner);
 			
 			//Kick them
-			Player player = Bukkit.getPlayer(name);
+			Player player = Bukkit.getPlayerExact(name);
 			if(player != null && player.isOnline()){
 				player.kickPlayer("You have been banned for: \n" + reason);
 			}

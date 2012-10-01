@@ -84,7 +84,7 @@ public class TempIPBanCommand implements CommandExecutor{
 			plugin.getBanManager().tempipban(ip, reason, banner, time);
 			
 			//Kick them
-			Player player = Bukkit.getPlayer(name);
+			Player player = Bukkit.getPlayerExact(name);
 			if(player != null && player.isOnline()){
 				player.kickPlayer("You have been Temporarily IP Banned for: \n"+reason);
 			}
