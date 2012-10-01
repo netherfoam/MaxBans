@@ -38,8 +38,9 @@ public class WarnCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			plugin.getBanManager().warn(name, reason, banner);
 			plugin.getBanManager().announce(ChatColor.RED + name + ChatColor.AQUA + " has been warned for " + ChatColor.RED + reason + ChatColor.AQUA + " by " + ChatColor.RED + banner + ChatColor.AQUA + ".");
+			plugin.getBanManager().warn(name, reason, banner);
+			
 			return true;
 		}
 		else{

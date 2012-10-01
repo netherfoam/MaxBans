@@ -531,8 +531,13 @@ public class BanManager{
     		plugin.getLogger().severe("Could not save warning for " + name + "!");
     	}
     	
-    	if(warns.size() > 3){
-    		//TODO: Tempban them
+    	if(warns.size() >= plugin.getConfig().getInt("max-warnings")){
+    		this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
+    		Player p = Bukkit.getPlayerExact(name);
+    		if(p != null){
+    			p.kickPlayer("Reached Max Warnings:\n" + reason);
+    		}
+    		announce(ChatColor.RED + name + ChatColor.AQUA + " has reached max warnings.  One hour ban.");
     	}
     }
     

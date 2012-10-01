@@ -6,3 +6,5 @@ spawn:
     x: 298.5
     y: 66
     z: -300.5
+    
+max-warnings: 3
