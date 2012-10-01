@@ -38,6 +38,8 @@ public class TempIPBan implements CommandExecutor{
 			if(sb.length() < 1){
 				sb.append("Misconduct.");
 			}
+			//TODO: Consistency with messages!
+			sb.insert(0, "You have been Temporarily IP Banned for: \n");
 			
 			String reason = sb.toString();
 			String banner;
@@ -64,7 +66,7 @@ public class TempIPBan implements CommandExecutor{
 			//Notify online players
 			if(!silent){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					p.sendMessage(ChatColor.RED + name + " has been banned by " + banner + ". reason: " + sb.toString());
+					p.sendMessage(ChatColor.RED + name + " has been temp ip banned ("+plugin.getBanManager().getTimeUntil(time)+") by " + banner + ". reason: " + sb.toString());
 				}
 			}
 			
