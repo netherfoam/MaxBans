@@ -559,23 +559,23 @@ public class BanManager{
     	
     	if(epoch / 604800 > 0){
     		//Days
-    		sb.append(epoch % 604800 + " weeks, ");
+    		sb.append(epoch / 604800 + " weeks, ");
     		epoch = (long) (epoch / 604800.0);
     	}
     	if(epoch / 86400 > 0){
     		//Days
-    		sb.append(epoch % 86400 + " days, ");
+    		sb.append(epoch / 86400 + " days, ");
     		epoch = (long) (epoch / 86400.0);
     	}
     	
     	if(epoch / 3600 > 0){
     		//More than one hour
-    		sb.append((epoch % 3600) + " hours,");
+    		sb.append((epoch / 3600) + " hours,");
     		epoch = (long) (epoch / 3600.0);
     	}
     	
     	if(epoch / 60 > 0){
-    		sb.append((epoch % 60) + " minutes,");
+    		sb.append((epoch / 60) + " minutes,");
     		epoch = (long) (epoch / 60.0);
     	}
     	
@@ -584,7 +584,7 @@ public class BanManager{
     	}
     	
     	if(sb.length() > 0 && sb.charAt(sb.length() - 1) == ','){
-    		sb.replace(sb.length(), sb.length(), ",");
+    		sb.replace(sb.length(), sb.length(), "");
     	}
     	return sb.toString();
     }
