@@ -209,6 +209,25 @@ public class Database {
 				this.dbFile.createNewFile();
 				Class.forName("org.sqlite.JDBC");
 				Connection dbCon = DriverManager.getConnection("jdbc:sqlite:" + this.dbFile);
+				
+				//Creates the database tables
+				//May cause a freeze on boot, Idk lol.
+				if(!this.hasTable("bans")){
+					this.createBanTable();
+				}
+				if(!this.hasTable("ipbans")){
+					this.createIPBanTable();
+				}
+				if(!this.hasTable("mutes")){
+					this.createMuteTable();
+				}
+				if(!this.hasTable("iphistory")){
+					this.createIPHistoryTable();
+				}
+				if(!this.hasTable("warnings")){
+					this.createWarningsTable();
+				}
+				
 				return dbCon;
 			} 
 			catch (IOException e) {
