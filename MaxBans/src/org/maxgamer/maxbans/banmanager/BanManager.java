@@ -294,6 +294,16 @@ public class BanManager{
     }
     
     /**
+     * Fetches a list of all warnings the player currently has to their name.
+     * @param name The name of the player to fetch. Case insensitive.
+     * @return a list of all warnings the player currently has to their name.
+     */
+    public List<Warn> getWarnings(String name){
+    	name = name.toLowerCase();
+    	return this.warnings.get(name);
+    }
+    
+    /**
      * Creates a new ban and stores it in the database
      * @param name The name of the player who is banned
      * @param reason The reason they were banned
