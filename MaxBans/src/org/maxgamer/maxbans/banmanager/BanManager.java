@@ -315,8 +315,10 @@ public class BanManager{
     		this.tempbans.remove(name);
     		query += "DELETE FROM bans WHERE name = '"+name+"'; ";
     	}
+    	if(!query.isEmpty()){
+	    	plugin.getDB().getBuffer().addString(query);
+    	}
     	unbanip(ip);
-    	plugin.getDB().getBuffer().addString(query);
     }
     
     /**
@@ -336,7 +338,9 @@ public class BanManager{
     		this.tempipbans.remove(ip);
     		query += "DELETE FROM bans WHERE name = '"+ip+"'; ";
     	}
-    	plugin.getDB().getBuffer().addString(query);
+    	if(!query.isEmpty()){
+	    	plugin.getDB().getBuffer().addString(query);
+    	}
     }
     
     public void unmute(String name){
