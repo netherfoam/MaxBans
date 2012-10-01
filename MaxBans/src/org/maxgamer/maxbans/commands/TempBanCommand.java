@@ -20,7 +20,7 @@ public class TempBanCommand implements CommandExecutor{
 			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /ban <player> <time> <time form> [-s] <reason>";
+		String usage = ChatColor.RED + "Usage: /tempban <player> <time> <time form> [-s] <reason>";
 		
 		if(args.length < 3){
 			sender.sendMessage(usage);

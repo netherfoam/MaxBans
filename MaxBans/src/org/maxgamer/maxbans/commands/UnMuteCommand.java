@@ -17,7 +17,7 @@ public class UnMuteCommand implements CommandExecutor{
 			sender.sendMessage(ChatColor.RED + "You don't have permission to do that");
 			return true;
 		}
-		String usage = ChatColor.RED + "Usage: /mute <player> <reason>";
+		String usage = ChatColor.RED + "Usage: /unmute <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
