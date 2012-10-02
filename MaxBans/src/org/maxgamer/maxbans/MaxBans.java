@@ -149,7 +149,6 @@ public class MaxBans extends JavaPlugin{
 		this.joinListener = new JoinListener(this);
         
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
-        //Bukkit.getServer().getPluginManager().registerEvents(this.pluginListener, this);
     }
 	public void onDisable(){
 		this.getLogger().info("Disabling Maxbans...");
