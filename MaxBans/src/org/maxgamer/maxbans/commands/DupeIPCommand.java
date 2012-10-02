@@ -57,7 +57,7 @@ public class DupeIPCommand implements CommandExecutor{
 			}
 			
 			if(sb.length() > 0){
-				sb.replace(sb.length() - 1, sb.length(), "");
+				sb.replace(sb.length() - 2, sb.length(), "");
 				sender.sendMessage(sb.toString());
 			}
 			else{
