@@ -140,15 +140,14 @@ public class MaxBans extends JavaPlugin{
 		//Listeners for chat (mute) and join (Ban)
 		if(Bukkit.getPluginManager().getPlugin("HeroChat") != null){
 			this.herochatListener = new HeroChatListener(this);
+			Bukkit.getServer().getPluginManager().registerEvents(this.herochatListener, this);
 		}
 		else{
 			this.chatListener = new ChatListener(this);
+			Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
 		}
 		this.joinListener = new JoinListener(this);
-		//this.pluginListener = new PluginListener(this);
-	
-		//Register listeners
-        Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
+        
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
         //Bukkit.getServer().getPluginManager().registerEvents(this.pluginListener, this);
     }
