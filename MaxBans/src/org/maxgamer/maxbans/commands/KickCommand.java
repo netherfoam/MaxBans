@@ -36,6 +36,7 @@ public class KickCommand implements CommandExecutor{
 				for(Player p : Bukkit.getOnlinePlayers()){
 					p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
 				}
+				return true;
 			}
 			
 			Player p = Bukkit.getPlayer(name);
