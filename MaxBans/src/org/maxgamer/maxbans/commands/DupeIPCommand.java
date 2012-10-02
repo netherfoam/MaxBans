@@ -33,6 +33,7 @@ public class DupeIPCommand implements CommandExecutor{
 			
 			if(ip == null){
 				sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " has no IP history.");
+				return true;
 			}
 			
 			sender.sendMessage(plugin.color_primary + "Scanning " + plugin.color_secondary + name + plugin.color_primary + " on " + plugin.color_secondary + ip);
