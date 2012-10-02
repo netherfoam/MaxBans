@@ -20,7 +20,7 @@ public class ClearWarningsCommand implements CommandExecutor{
 			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /clearwarnings <player> <reason>";
+		String usage = plugin.color_secondary + "Usage: /clearwarnings <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
