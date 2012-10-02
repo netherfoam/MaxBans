@@ -39,7 +39,8 @@ public class MaxBans extends JavaPlugin{
         
         private ReloadCommand reloadCommand;
                 
-        private JoinListener joinListener; 
+        private JoinListener joinListener;
+        private HeroChatListener herochatListener; 
         private ChatListener chatListener;
         //private PluginListener pluginListener;
         
@@ -137,7 +138,12 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("mbreload").setExecutor(reloadCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
-		this.chatListener = new ChatListener(this);
+		if(Bukkit.getPluginManager().getPlugin("HeroChat") != null){
+			this.herochatListener = new HeroChatListener(this);
+		}
+		else{
+			this.chatListener = new ChatListener(this);
+		}
 		this.joinListener = new JoinListener(this);
 		//this.pluginListener = new PluginListener(this);
 	
