@@ -21,8 +21,8 @@ public class KickCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String name = args[0];
-			String reason = plugin.getBanManager().buildReason(args);
 			boolean silent = plugin.getBanManager().isSilent(args);
+			String reason = plugin.getBanManager().buildReason(args);
 			String banner;
 			
 			if(sender instanceof Player){
