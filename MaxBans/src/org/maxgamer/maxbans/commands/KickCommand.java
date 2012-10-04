@@ -46,7 +46,7 @@ public class KickCommand implements CommandExecutor{
 					plugin.getBanManager().announce(plugin.color_secondary + p.getName() + plugin.color_primary + " was kicked by " + plugin.color_secondary + banner + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + ".");
 				}
 				else{
-					sender.sendMessage(plugin.color_primary + "Kicked " + plugin.color_secondary + p.getName() + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + "silently.");
+					sender.sendMessage(plugin.color_primary + "Kicked " + plugin.color_secondary + p.getName() + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + " silently.");
 				}
 			}
 			else{
