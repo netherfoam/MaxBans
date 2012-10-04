@@ -58,7 +58,8 @@ public class IPBanCommand implements CommandExecutor{
 			}
 			
 			//Ban them
-			plugin.getBanManager().ipban(ip, reason, banner);
+			plugin.getBanManager().ipban(ip, reason, banner); //IP
+			plugin.getBanManager().ban(name, reason, banner); //User
 			
 			//Kick them
 			Player player = Bukkit.getPlayerExact(name);

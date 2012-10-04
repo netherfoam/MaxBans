@@ -84,7 +84,8 @@ public class TempIPBanCommand implements CommandExecutor{
 			
 			
 			//Ban them
-			plugin.getBanManager().tempipban(ip, reason, banner, time);
+			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
+			plugin.getBanManager().tempban(name, reason, banner, time); //User
 			
 			//Kick them
 			Player player = Bukkit.getPlayerExact(name);
