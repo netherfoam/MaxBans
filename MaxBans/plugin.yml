@@ -60,3 +60,6 @@ commands:
     mbreload:
         description: Reloads MaxBans from the DB and config
         usage: /mbreload
+    mb:
+        description: Displays MaxBans commands that you have access to
+        usage: /mb

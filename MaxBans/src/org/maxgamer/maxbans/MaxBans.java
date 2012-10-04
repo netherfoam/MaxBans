@@ -38,6 +38,7 @@ public class MaxBans extends JavaPlugin{
         private ForceSpawnCommand forceSpawnCommand;
         
         private ReloadCommand reloadCommand;
+        private MBCommand mbCommand;
                 
         private JoinListener joinListener;
         private HeroChatListener herochatListener; 
@@ -111,6 +112,7 @@ public class MaxBans extends JavaPlugin{
 		this.forceSpawnCommand = new ForceSpawnCommand(this, spawn);
 		
 		this.reloadCommand = new ReloadCommand(this);
+		this.mbCommand = new MBCommand(this);
 		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
@@ -136,6 +138,7 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("forcespawn").setExecutor(forceSpawnCommand);
 		
 		this.getCommand("mbreload").setExecutor(reloadCommand);
+		this.getCommand("mbhelp").setExecutor(mbCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
 		if(Bukkit.getPluginManager().getPlugin("HeroChat") != null){
