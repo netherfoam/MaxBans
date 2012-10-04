@@ -17,7 +17,7 @@ public class KickCommand implements CommandExecutor{
 			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /kick <player> [reason]";
+		String usage = plugin.color_secondary + "Usage: /kick <player> [-s] [reason]";
 		
 		if(args.length > 0){
 			String name = args[0];
