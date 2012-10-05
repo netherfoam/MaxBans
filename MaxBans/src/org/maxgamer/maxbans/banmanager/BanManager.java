@@ -263,7 +263,7 @@ public class BanManager{
     	
     	TempIPBan tempIPBan = tempipbans.get(ip);
     	if(tempIPBan != null){
-    		if(System.currentTimeMillis() < tempIPBan.getTime()){
+    		if(System.currentTimeMillis() < tempIPBan.getExpires()){
             	return tempIPBan;
     		}
     		else{
