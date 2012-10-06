@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -24,7 +25,8 @@ public class BanManager{
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
 	
 	//HashMap<Username, IP>();
-	private HashMap<String, String> recentips = new HashMap<String, String>();
+	//private HashMap<String, String> recentips = new HashMap<String, String>();
+	private TrieMap<String> recentips = new TrieMap<String>();
 	
 	public boolean lockdown = false;
 	public String lockdownReason = "None";
@@ -289,7 +291,7 @@ public class BanManager{
      * Fetches the IP history of everyone ever
      * @return the IP history of everyone ever. Format: HashMap<Username, IP Address>.
      */
-    public HashMap<String, String> getIPHistory(){
+    public TrieMap<String> getIPHistory(){
     	return this.recentips;
     }
     
@@ -566,7 +568,7 @@ public class BanManager{
     	name = name.toLowerCase();
     	String query;
     	
-    	if(this.recentips.containsKey(name)){
+    	if(this.recentips.contains(name)){
     		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+escape(name)+"'";
     	}
     	else{
@@ -742,17 +744,50 @@ public class BanManager{
 		}
 	}
 	
-	public String match(String name){
-		List<Player> targets = Bukkit.matchPlayer(name);
-		if(targets == null || targets.size() == 0){
-			return null;
+	public String match(String partial){
+		return match(partial, false);
+	}
+	
+	public String match(String partial, boolean excludeOnline){
+		partial = partial.toLowerCase();
+		//Check the name isn't already complete
+		String ip = this.recentips.get(partial);
+		if(ip != null) return partial; // it's already complete.
+		
+		//Check the player and if they're online
+		if(excludeOnline){
+			Player p = Bukkit.getPlayer(partial);
+			if(p != null) return p.getName();
 		}
-		else if(targets.size() > 1){
-			return null;
+		
+		//Scan the map for the match. Iff one is found, return it.
+		HashMap<String, String> results = recentips.matches(partial);
+		if(results.size() == 1){
+			for(String player : results.keySet()){
+				return player;
+			}
 		}
-		else{
-			return targets.get(0).getName();
+		
+		
+		if(results.size() > 1){
+			Iterator<String> it = results.keySet().iterator();
+			
+			String shortest = it.next();
+			int size = shortest.length();
+			
+			while(it.hasNext()){
+				String next = it.next();
+				if(next.length() < size){
+					shortest = next;
+					size = next.length();
+				}
+			}
+			
+			return shortest;
 		}
+		
+		//We can't help you. Maybe you can not be lazy.
+		return partial;
 	}
 	
 	/**
