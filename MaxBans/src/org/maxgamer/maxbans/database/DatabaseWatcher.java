@@ -3,6 +3,7 @@ package org.maxgamer.maxbans.database;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class DatabaseWatcher implements Runnable{
@@ -17,6 +18,13 @@ public class DatabaseWatcher implements Runnable{
 	 * - AKA, check buffer, run queries 
 	 */
 	public void run() {
+		while(db.getBuffer().locked){
+			//Nothing
+		}
+		db.getBuffer().locked = true;
+		
+		if(db.getBuffer().queries.size() <= 0) return;
+		
 		Statement st = null;
 		try {
 			st = db.getConnection().createStatement();
@@ -24,11 +32,6 @@ public class DatabaseWatcher implements Runnable{
 			e1.printStackTrace();
 			return;
 		}
-		
-		while(db.getBuffer().locked){
-			//Nothing
-		}
-		db.getBuffer().locked = true;
 		
 		while(db.getBuffer().queries.size() > 0){
 			try {
