@@ -32,6 +32,7 @@ public class TempBanCommand implements CommandExecutor{
 			if(name == null){
 				name = args[0]; //Use exact name then.
 			}
+			boolean silent = plugin.getBanManager().isSilent(args);
 			
 			long expires = plugin.getBanManager().getTime(args);
 			if(expires <= 0){
@@ -66,8 +67,6 @@ public class TempBanCommand implements CommandExecutor{
 			
 			Player player = Bukkit.getPlayerExact(name);
 			
-			boolean silent = plugin.getBanManager().isSilent(args);
-			
 			String reason = plugin.getBanManager().buildReason(args);
 			
 			String banner = "Console";
@@ -86,7 +85,7 @@ public class TempBanCommand implements CommandExecutor{
 				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			else{
-				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been temp banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp banned ("+plugin.getBanManager().getTimeUntil(expires)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			
 			return true;
