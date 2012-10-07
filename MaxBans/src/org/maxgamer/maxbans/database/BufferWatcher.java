@@ -14,7 +14,12 @@ public class BufferWatcher implements Runnable{
 	}
 	public void run() {
 		while(buffer.locked){
-			//Nothing
+			try {
+				//1 millisecond
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		buffer.locked = true;
 		buffer.queries.add(query);
