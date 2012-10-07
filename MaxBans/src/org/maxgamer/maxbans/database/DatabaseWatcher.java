@@ -3,7 +3,6 @@ package org.maxgamer.maxbans.database;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class DatabaseWatcher implements Runnable{

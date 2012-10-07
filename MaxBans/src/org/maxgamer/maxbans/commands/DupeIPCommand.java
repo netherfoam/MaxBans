@@ -1,6 +1,5 @@
 package org.maxgamer.maxbans.commands;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
