@@ -82,6 +82,10 @@ public class TrieNode<V>{
 		return values;
 	}
 	
+	public HashMap<Character, TrieNode<V>> getChildMap(){
+		return this.children;
+	}
+	
 	public void setValue(V value){
 		this.value = value;
 	}
