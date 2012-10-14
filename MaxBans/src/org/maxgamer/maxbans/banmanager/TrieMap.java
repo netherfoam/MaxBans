@@ -106,15 +106,44 @@ public class TrieMap<V>{
 	 * @return The old value of the key
 	 */
 	public V remove(String s){
-		//Fetch the node
-		TrieNode<V> node = this.getNode(s);
+		//the current working node
+		TrieNode<V> node = top;
+		//The last node that we cannot remove anything above
+		TrieNode<V> fork = node;
+		//The character of the node below the fork we CAN remove
+		Character forkChar = null;
+		
+		//Loop through the searched string
+		for(int i = 0; i < s.length(); i++){
+			//The next character in the string
+			Character c = s.charAt(i);
+			
+			//If the node has a value, or it has more than one child
+			if(node.getValue() != null || node.getChildMap().size() > 1){
+				fork = node;
+				forkChar = c;
+			}
+			
+			node = node.get(c);
+			if(node == null) return null;
+		}
+		
+		
 		//The key wasn't in the map anyway
 		if(node == null) return null;
 		
 		//The nodes current value
 		V value = node.getValue();
-		//New value
-		node.setValue(null);
+		
+		
+		if(node.getChildMap().size() == 0){
+			//We have no children, so it's okay to remove us at the last fork
+			fork.remove(forkChar);
+		}
+		else{
+			//We have children which we want to keep
+			node.setValue(null);
+		}
 		
 		//Return old value
 		return value;
