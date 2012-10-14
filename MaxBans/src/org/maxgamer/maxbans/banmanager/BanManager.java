@@ -761,30 +761,9 @@ public class BanManager{
 		}
 		
 		//Scan the map for the match. Iff one is found, return it.
-		HashMap<String, String> results = recentips.matches(partial);
-		if(results.size() == 1){
-			for(String player : results.keySet()){
-				return player;
-			}
-		}
+		String nearestMap = recentips.nearestKey(partial); // Note that checking the nearest match to an exact name will return the same exact name
 		
-		
-		if(results.size() > 1){
-			Iterator<String> it = results.keySet().iterator();
-			
-			String shortest = it.next();
-			int size = shortest.length();
-			
-			while(it.hasNext()){
-				String next = it.next();
-				if(next.length() < size){
-					shortest = next;
-					size = next.length();
-				}
-			}
-			
-			return shortest;
-		}
+		if(nearestMap != null) return nearestMap;
 		
 		//We can't help you. Maybe you can not be lazy.
 		return partial;
