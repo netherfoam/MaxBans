@@ -23,9 +23,6 @@ public class BanManager{
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
-	
-	//HashMap<Username, IP>();
-	//private HashMap<String, String> recentips = new HashMap<String, String>();
 	private TrieMap<String> recentips = new TrieMap<String>();
 	
 	public boolean lockdown = false;
@@ -375,6 +372,10 @@ public class BanManager{
     	}
     }
     
+    /**
+     * Unmutes the given player.
+     * @param name The name of the player. Case insensitive.
+     */
     public void unmute(String name){
     	name = name.toLowerCase();
     	
@@ -718,6 +719,11 @@ public class BanManager{
 		return (long) (modifier * time) * 1000;
 	}
 	
+	/**
+	 * Builds a reason out of an array of args from a command
+	 * @param args The String[] parsed from the command
+	 * @return The String reason.
+	 */
 	public String buildReason(String[] args){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 1; i < args.length; i++){
@@ -737,6 +743,11 @@ public class BanManager{
 		return sb.toString();
 	}
 	
+	/**
+	 * Announces a message to the whole server.
+	 * Also logs it to the console.
+	 * @param s The string
+	 */
 	public void announce(String s){
 		plugin.getLogger().info(s);
 		for(Player p : Bukkit.getOnlinePlayers()){
@@ -744,10 +755,28 @@ public class BanManager{
 		}
 	}
 	
+	/**
+	 * Finds the nearest known match to a given name.
+	 * Searches online players first, then any exact matches
+	 * for offline players, and then the nearest match for
+	 * offline players.
+	 * 
+	 * @param partial The partial name
+	 * @return The full name, or the same partial name if it can't find one
+	 */
 	public String match(String partial){
 		return match(partial, false);
 	}
-	
+	/**
+	 * Finds the nearest known match to a given name.
+	 * Searches online players first, then any exact matches
+	 * for offline players, and then the nearest match for
+	 * offline players.
+	 * 
+	 * @param partial The partial name
+	 * @param excludeOnline Avoids searching online players
+	 * @return The full name, or the same partial name if it can't find one
+	 */
 	public String match(String partial, boolean excludeOnline){
 		partial = partial.toLowerCase();
 		//Check the name isn't already complete
