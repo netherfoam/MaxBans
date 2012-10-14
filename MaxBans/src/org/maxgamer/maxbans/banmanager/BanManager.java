@@ -755,7 +755,7 @@ public class BanManager{
 		if(ip != null) return partial; // it's already complete.
 		
 		//Check the player and if they're online
-		if(excludeOnline){
+		if(!excludeOnline){
 			Player p = Bukkit.getPlayer(partial);
 			if(p != null) return p.getName();
 		}
