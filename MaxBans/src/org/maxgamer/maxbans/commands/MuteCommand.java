@@ -51,7 +51,7 @@ public class MuteCommand implements CommandExecutor{
 			if(p != null){
 				p.sendMessage(plugin.color_secondary + " You have been muted.");
 			}
-			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_primary + name);
+			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_secondary + name);
 			
 			return true;
 		}
