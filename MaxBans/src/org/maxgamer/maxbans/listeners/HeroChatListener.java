@@ -26,8 +26,6 @@ public class HeroChatListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onHeroChat(ChannelChatEvent e){
-		//plugin.getLogger().info(e.toString() + "...." + e.getChannel() + "...." + e.getResult() + "...." + e.getSender() + "....." + e.getMessage());
-		
 		Player p = e.getSender().getPlayer();
         
         Mute mute = plugin.getBanManager().getMute(p.getName());
