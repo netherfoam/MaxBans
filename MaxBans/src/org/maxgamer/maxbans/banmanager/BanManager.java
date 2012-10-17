@@ -184,6 +184,13 @@ public class BanManager{
 				}
 				warns.add(warn);
 			}
+			
+			//Phase 6 loading: Load Chat Commands
+			plugin.getLogger().info("Loading chat commands...");
+			List<String> cmds = plugin.getConfig().getStringList("chat-commands");
+			for(String s : cmds){
+				this.addChatCommand(s);
+			}
 		}
 		catch(SQLException e){
 			plugin.getLogger().severe(plugin.color_secondary + "Could not load database history using: " + query);

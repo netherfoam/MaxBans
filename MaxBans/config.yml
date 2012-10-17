@@ -12,3 +12,7 @@ max-warnings: 3
 color:
     primary: f
     secondary: a
+
+chat-commands:
+    - me
+    - say
