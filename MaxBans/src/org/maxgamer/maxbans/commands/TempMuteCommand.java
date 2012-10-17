@@ -64,12 +64,12 @@ public class TempMuteCommand implements CommandExecutor{
 			
 			plugin.getBanManager().tempmute(name, banner, time);
 			
-			String until = plugin.getBanManager().getTimeUntil(time);
+			String until = plugin.getBanManager().getTimeUntil(time/1000*1000);
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
-				p.sendMessage(plugin.color_secondary + " You have been muted for " + until);
+				p.sendMessage(plugin.color_secondary + "You have been muted for " + until);
 			}
-			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_primary + name + plugin.color_primary + " until " + plugin.color_secondary + until);
+			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_primary + name + plugin.color_primary + " for " + plugin.color_secondary + until);
 			
 			return true;
 		}
