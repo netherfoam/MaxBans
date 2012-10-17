@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
@@ -17,17 +18,21 @@ import com.dthielke.herochat.Chatter.Result;
  * @author Netherfoam
  *
  */
-public class HeroChatListener implements Listener{
+public class ChatCommandListener implements Listener{
 	MaxBans plugin;
 	
-	public HeroChatListener(MaxBans plugin){
+	public ChatCommandListener(MaxBans plugin){
 		this.plugin = plugin;
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onHeroChat(ChannelChatEvent e){
-		Player p = e.getSender().getPlayer();
-        
+	public void onCommand(PlayerCommandPreprocessEvent e){
+		if(e.isCancelled()) return;
+		
+		Player p = e.getPlayer();
+		String cmd = e.getMessage().split(" ")[0].replaceFirst("/", "");
+		System.out.println(cmd);
+		
         Mute mute = plugin.getBanManager().getMute(p.getName());
         if (mute != null) {
         	if(mute instanceof TempMute){
@@ -38,7 +43,7 @@ public class HeroChatListener implements Listener{
         		p.sendMessage(ChatColor.RED+"You're muted!");
         	}
         	
-            e.setResult(Result.BAD_PASSWORD);
+            e.setCancelled(true);
         }
 	}
 }

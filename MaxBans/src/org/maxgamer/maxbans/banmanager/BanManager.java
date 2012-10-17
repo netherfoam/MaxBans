@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -23,6 +24,8 @@ public class BanManager{
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
 	private TrieMap<String> recentips = new TrieMap<String>();
+	
+	private HashSet<String> chatCommands = new HashSet<String>();
 	
 	public boolean lockdown = false;
 	public String lockdownReason = "None";
@@ -815,5 +818,14 @@ public class BanManager{
 			}
 		}
 		return sb.toString();
+	}
+	
+	public void addChatCommand(String s){
+		s = s.toLowerCase();
+		this.chatCommands.add(s);
+	}
+	public boolean isChatCommand(String s){
+		s = s.toLowerCase();
+		return this.chatCommands.contains(s);
 	}
 }
