@@ -69,7 +69,7 @@ public class TempMuteCommand implements CommandExecutor{
 			if(p != null){
 				p.sendMessage(plugin.color_secondary + "You have been muted for " + until);
 			}
-			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_primary + name + plugin.color_primary + " for " + plugin.color_secondary + until);
+			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_secondary + name + plugin.color_primary + " for " + plugin.color_secondary + until);
 			
 			return true;
 		}
