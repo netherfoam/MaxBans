@@ -141,7 +141,7 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("mb").setExecutor(mbCommand);
 		
 		//Listeners for chat (mute) and join (Ban)
-		if(Bukkit.getPluginManager().getPlugin("HeroChat") != null){
+		if(Bukkit.getPluginManager().getPlugin("Herochat") != null){
 			this.herochatListener = new HeroChatListener(this);
 			Bukkit.getServer().getPluginManager().registerEvents(this.herochatListener, this);
 		}
