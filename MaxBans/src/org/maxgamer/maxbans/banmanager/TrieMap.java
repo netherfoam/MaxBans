@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans.banmanager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -290,5 +291,13 @@ public class TrieMap<V>{
 		public Character getChar(){
 			return this.c;
 		}
+	}
+	
+	/**
+	 * Returns all values in the map
+	 * @return All values in the map
+	 */
+	public Collection<V> values(){
+		return this.matches("").values();
 	}
 }
