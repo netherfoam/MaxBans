@@ -24,8 +24,10 @@ public class HeroChatListener implements Listener{
 		this.plugin = plugin;
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onHeroChat(ChannelChatEvent e){
+		//plugin.getLogger().info(e.toString() + "...." + e.getChannel() + "...." + e.getResult() + "...." + e.getSender() + "....." + e.getMessage());
+		
 		Player p = e.getSender().getPlayer();
         
         Mute mute = plugin.getBanManager().getMute(p.getName());
@@ -38,7 +40,7 @@ public class HeroChatListener implements Listener{
         		p.sendMessage(ChatColor.RED+"You're muted!");
         	}
         	
-            e.setResult(Result.MUTED);
+            e.setResult(Result.INVALID);
         }
 	}
 }
