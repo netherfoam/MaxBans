@@ -15,7 +15,7 @@ public class ChatListener implements Listener {
     public ChatListener(MaxBans mb){
             plugin = mb;
     }
-    @EventHandler(priority = EventPriority.HIGH) //High, we dont want to interfere with QUICKSHOP, like the retard making GP, do we?
+    @EventHandler(priority = EventPriority.NORMAL) //NORMAL, we dont want to interfere with QUICKSHOP, like the retard making GP, do we?
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player p = event.getPlayer();
         
