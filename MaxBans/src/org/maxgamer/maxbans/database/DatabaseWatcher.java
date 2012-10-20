@@ -30,31 +30,32 @@ public class DatabaseWatcher implements Runnable{
 		if(db.getBuffer().queries.size() <= 0){
 			 db.getBuffer().locked = false;
 		}
-		
-		Statement st;
-		try {
-			st = db.getConnection().createStatement();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			return;
-		}
-		
-		while(db.getBuffer().queries.size() > 0){
+		else{
+			Statement st;
 			try {
-				st.addBatch(db.getBuffer().queries.get(0));
-			} catch (SQLException e2) {
-				e2.printStackTrace();
+				st = db.getConnection().createStatement();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				return;
 			}
-			db.getBuffer().queries.remove(0);
+			
+			while(db.getBuffer().queries.size() > 0){
+				try {
+					st.addBatch(db.getBuffer().queries.get(0));
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+				db.getBuffer().queries.remove(0);
+			}
+			try {
+				st.executeBatch();
+			} catch (SQLException e3) {
+				e3.printStackTrace();
+				this.db.getPlugin().getLogger().severe(ChatColor.RED + "Could not execute SQL query.");
+			}
+			
+			db.getBuffer().locked = false;
 		}
-		try {
-			st.executeBatch();
-		} catch (SQLException e3) {
-			e3.printStackTrace();
-			this.db.getPlugin().getLogger().severe(ChatColor.RED + "Could not execute SQL query.");
-		}
-		
-		db.getBuffer().locked = false;
 		
 		//Schedule the next run of this.
 		if(!this.run) return; 
