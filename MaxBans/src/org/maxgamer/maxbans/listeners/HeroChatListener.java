@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
+import org.maxgamer.maxbans.util.Util;
 
 import com.dthielke.herochat.ChannelChatEvent;
 import com.dthielke.herochat.Chatter.Result;
@@ -32,7 +33,7 @@ public class HeroChatListener implements Listener{
         if (mute != null) {
         	if(mute instanceof TempMute){
         		TempMute tMute = (TempMute) mute;
-        		p.sendMessage(ChatColor.RED+"You're muted for another " + plugin.getBanManager().getTimeUntil(tMute.getExpires()));
+        		p.sendMessage(ChatColor.RED+"You're muted for another " + Util.getTimeUntil(tMute.getExpires()));
         	}
         	else{
         		p.sendMessage(ChatColor.RED+"You're muted!");

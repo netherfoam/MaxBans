@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Util;
 
 public class WarnCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -28,7 +29,7 @@ public class WarnCommand implements CommandExecutor{
 			
 			String banner;
 			
-			String reason = plugin.getBanManager().buildReason(args);
+			String reason = Util.buildReason(args);
 			
 			if(sender instanceof Player){
 				banner = ((Player) sender).getName();

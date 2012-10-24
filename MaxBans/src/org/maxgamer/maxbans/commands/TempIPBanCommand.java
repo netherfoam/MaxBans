@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.util.Util;
 
 public class TempIPBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -22,29 +23,57 @@ public class TempIPBanCommand implements CommandExecutor{
 		String usage = plugin.color_secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
 		
 		if(args.length > 2){
-			String name = args[0];
-			
-			name = plugin.getBanManager().match(name);
-			if(name == null){
-				name = args[0]; //Use exact name then.
-			}
+			boolean silent = Util.isSilent(args);
 			
 			//Get expirey time
-			long time = plugin.getBanManager().getTime(args);
+			long time = Util.getTime(args);
 			if(time <= 0){
 				sender.sendMessage(usage);
 				return true;
 			}
 			time += System.currentTimeMillis();
 			
-			//Fetch their IP address from history
-			String ip = plugin.getBanManager().getIP(name);
-			
-			if(ip == null){
-				sender.sendMessage(plugin.color_secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
-				return true;
+			//Build the reason
+			String reason = Util.buildReason(args);
+		
+			String banner;			
+			//Get the banners name
+			if(sender instanceof Player){
+				banner = ((Player) sender).getName();
+			}
+			else{
+				banner = "Console";
 			}
 			
+			String name = args[0];
+			
+			String ip;
+			if(!Util.isIP(name)){
+				name = plugin.getBanManager().match(name);
+				if(name == null){
+					name = args[0]; //Use exact name then.
+				}
+				//Fetch their IP address from history
+				ip = plugin.getBanManager().getIP(name);
+				
+				if(ip == null){
+					sender.sendMessage(plugin.color_secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
+					return true;
+				}
+				
+				plugin.getBanManager().tempban(name, reason, banner, time); //User
+				
+				//Kick them
+				Player player = Bukkit.getPlayerExact(name);
+				if(player != null && player.isOnline()){
+					player.kickPlayer("You have been Temporarily IP Banned for: \n"+reason);
+				}
+			}
+			else{
+				ip = name;
+			}
+			
+			//Make sure the ban isnt redundant
 			IPBan ban = plugin.getBanManager().getIPBan(ip);
 			if(ban != null){
 				if(ban instanceof TempIPBan){
@@ -68,39 +97,17 @@ public class TempIPBanCommand implements CommandExecutor{
 				}
 			}
 			
-			boolean silent = plugin.getBanManager().isSilent(args);
-			
-			//Build the reason
-			String reason = plugin.getBanManager().buildReason(args);
-		
-			String banner;			
-			//Get the banners name
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
-			
-			
 			//Ban them
 			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
-			plugin.getBanManager().tempban(name, reason, banner, time); //User
-			
-			//Kick them
-			Player player = Bukkit.getPlayerExact(name);
-			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been Temporarily IP Banned for: \n"+reason);
-			}
 			
 			//Notify online players
 			if(!silent){
 				//Announce
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp IP banned ("+plugin.getBanManager().getTimeUntil(time/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			else{
 				//Silent
-				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp IP banned ("+plugin.getBanManager().getTimeUntil(time/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			
 			return true;

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.util.Util;
 
 public class UnbanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -24,7 +25,17 @@ public class UnbanCommand implements CommandExecutor{
 		if(args.length > 0){
 			String name = args[0];
 			
-			name = plugin.getBanManager().match(name, true);
+			Ban ban = null;
+			IPBan ipBan = null;
+			
+			if(!Util.isIP(name)){
+				name = plugin.getBanManager().match(name, true);
+				ban = plugin.getBanManager().getBan(name);
+				ipBan = plugin.getBanManager().getIPBan(plugin.getBanManager().getIP(name));
+			}
+			else{
+				ipBan = plugin.getBanManager().getIPBan(name);
+			}
 			
 			String banner;
 
@@ -35,10 +46,9 @@ public class UnbanCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			Ban ban = plugin.getBanManager().getBan(name);
-			IPBan ipBan = plugin.getBanManager().getIPBan(plugin.getBanManager().getIP(name));
 			if(ban != null || ipBan != null){
 				plugin.getBanManager().unban(name);
+				plugin.getBanManager().unbanip(name);
 				sender.sendMessage(ChatColor.GREEN + "Unbanned " + name);
 			}
 			else{

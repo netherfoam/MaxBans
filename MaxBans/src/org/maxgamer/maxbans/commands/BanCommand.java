@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.TempBan;
+import org.maxgamer.maxbans.util.Util;
 
 public class BanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -36,10 +37,10 @@ public class BanCommand implements CommandExecutor{
 				return true;
 			}
 			
-			boolean silent = plugin.getBanManager().isSilent(args);
+			boolean silent = Util.isSilent(args);
 			
 			//Build reason
-			String reason = plugin.getBanManager().buildReason(args);
+			String reason = Util.buildReason(args);
 			
 			//Build banner
 			String banner;

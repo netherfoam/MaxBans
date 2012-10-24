@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.TempBan;
+import org.maxgamer.maxbans.util.Util;
 
 public class TempBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -32,9 +33,9 @@ public class TempBanCommand implements CommandExecutor{
 			if(name == null){
 				name = args[0]; //Use exact name then.
 			}
-			boolean silent = plugin.getBanManager().isSilent(args);
+			boolean silent = Util.isSilent(args);
 			
-			long expires = plugin.getBanManager().getTime(args);
+			long expires = Util.getTime(args);
 			if(expires <= 0){
 				sender.sendMessage(usage);
 				return true;
@@ -67,7 +68,7 @@ public class TempBanCommand implements CommandExecutor{
 			
 			Player player = Bukkit.getPlayerExact(name);
 			
-			String reason = plugin.getBanManager().buildReason(args);
+			String reason = Util.buildReason(args);
 			
 			String banner = "Console";
 			
@@ -83,11 +84,11 @@ public class TempBanCommand implements CommandExecutor{
 			
 			if(!silent){
 				//Announce
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp banned ("+plugin.getBanManager().getTimeUntil(expires/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp banned ("+Util.getTimeUntil(expires/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			else{
 				//Tell sender
-				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp banned ("+plugin.getBanManager().getTimeUntil(expires/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp banned ("+Util.getTimeUntil(expires/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			
 			return true;

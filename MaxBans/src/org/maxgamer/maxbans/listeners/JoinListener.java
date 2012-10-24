@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.*;
+import org.maxgamer.maxbans.util.Util;
 
 public class JoinListener implements Listener{
     private MaxBans plugin;
@@ -86,16 +87,7 @@ public class JoinListener implements Listener{
         					// It's more info, it shouldnt be an issue. We can use \n now too!
         					// ThankYou patch notes!
         if (expires > 0) {
-        	km.append("Expires in " + plugin.getBanManager().getTimeUntil(expires));
-        	/*
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm");
-            km.append(". Expires on: ");
-            km.append(sdf.format(expires));
-            km.append(" server time."); //we'll add timezone support later
-            							//Suggestion => Wouldn't it be easier
-            							// To tell them how long til their
-            							// Ban is lifted instead? E.g. 3 days 2 hours
-            							// Is easier than GEO IP'ing them and everything*/
+        	km.append("Expires in " + Util.getTimeUntil(expires));
         }
         event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         event.setKickMessage(km.toString());

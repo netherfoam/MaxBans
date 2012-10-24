@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
+import org.maxgamer.maxbans.util.Util;
 
 public class TempMuteCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -37,7 +38,7 @@ public class TempMuteCommand implements CommandExecutor{
 				banner = "Console";
 			}
 			
-			long time = plugin.getBanManager().getTime(args);
+			long time = Util.getTime(args);
 			
 			if(time <= 0){
 				sender.sendMessage(usage);
@@ -64,7 +65,7 @@ public class TempMuteCommand implements CommandExecutor{
 			
 			plugin.getBanManager().tempmute(name, banner, time);
 			
-			String until = plugin.getBanManager().getTimeUntil(time/1000*1000);
+			String until = Util.getTimeUntil(time/1000*1000);
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
 				p.sendMessage(plugin.color_secondary + "You have been muted for " + until);

@@ -10,6 +10,7 @@ import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.banmanager.TempMute;
+import org.maxgamer.maxbans.util.Util;
 
 public class CheckBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -27,30 +28,35 @@ public class CheckBanCommand implements CommandExecutor{
 		if(args.length > 0){
 			String name = args[0];
 			
-			name = plugin.getBanManager().match(name);
-			if(name == null){
-				name = args[0]; //Use exact name then.
+			Ban ban = null;
+			IPBan ipBan = null;
+			
+			if(!Util.isIP(name)){
+				name = plugin.getBanManager().match(name);
+				if(name == null){
+					name = args[0]; //Use exact name then.
+				}
+				ban = plugin.getBanManager().getBan(name);
+				String ip = plugin.getBanManager().getIP(name);
+				ipBan = plugin.getBanManager().getIPBan(ip);
 			}
-			
-			Ban ban = plugin.getBanManager().getBan(name);
-			
+			else{
+				ipBan = plugin.getBanManager().getIPBan(name);
+			}
 			if(ban != null){
 				if(ban instanceof TempBan){
 					TempBan tBan = (TempBan) ban;
-					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp banned for " + plugin.color_secondary + tBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary +  tBan.getBanner() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + plugin.getBanManager().getTimeUntil(tBan.getExpires())+ plugin.color_primary + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp banned for " + plugin.color_secondary + tBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary +  tBan.getBanner() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + Util.getTimeUntil(tBan.getExpires())+ plugin.color_primary + ".");
 				}
 				else{
 					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary +  " is banned for " + plugin.color_secondary + ban.getReason() + plugin.color_primary + " by " + plugin.color_secondary + ban.getBanner() + plugin.color_primary + ".");
 				}
 			}
 			
-			String ip = plugin.getBanManager().getIP(name);
-			IPBan ipBan = plugin.getBanManager().getIPBan(ip);
-			
 			if(ipBan != null){
 				if(ipBan instanceof TempIPBan){
 					TempIPBan tipBan = (TempIPBan) ipBan;
-					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp IP banned for " + plugin.color_secondary + tipBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary + tipBan.getBanner() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + plugin.getBanManager().getTimeUntil(tipBan.getExpires())+ plugin.color_primary + ".");
+					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is temp IP banned for " + plugin.color_secondary + tipBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary + tipBan.getBanner() + plugin.color_primary + ". Remaining: " + plugin.color_secondary + Util.getTimeUntil(tipBan.getExpires())+ plugin.color_primary + ".");
 				}
 				else{
 					sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " is IP banned for " + plugin.color_secondary + ipBan.getReason() + plugin.color_primary + " by " + plugin.color_secondary +  ipBan.getBanner() + plugin.color_primary + ".");

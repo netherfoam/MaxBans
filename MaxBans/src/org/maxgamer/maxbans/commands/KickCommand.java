@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Util;
 
 public class KickCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -21,8 +22,8 @@ public class KickCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			String name = args[0];
-			boolean silent = plugin.getBanManager().isSilent(args);
-			String reason = plugin.getBanManager().buildReason(args);
+			boolean silent = Util.isSilent(args);
+			String reason = Util.buildReason(args);
 			String banner;
 			
 			if(sender instanceof Player){

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.util.Util;
 
 public class IPBanCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -21,20 +22,47 @@ public class IPBanCommand implements CommandExecutor{
 		}
 		String usage = plugin.color_secondary + "Usage: /ipban <player> [-s] <reason>";
 		
+		boolean silent = Util.isSilent(args);
+		
+		//Build the reason
+		String reason = Util.buildReason(args);
+		String banner;
+		
+		//Get the banners name
+		if(sender instanceof Player){
+			banner = ((Player) sender).getName();
+		}
+		else{
+			banner = "Console";
+		}
+		
 		if(args.length > 0){
+			String ip;
 			String name = args[0];
 			
-			name = plugin.getBanManager().match(name);
-			if(name == null){
-				name = args[0]; //Use exact name then.
+			if(!Util.isIP(name)){
+				name = plugin.getBanManager().match(name);
+				if(name == null){
+					name = args[0]; //Use exact name then.
+				}
+				
+				//Fetch their IP address from history
+				ip = plugin.getBanManager().getIP(name);
+				
+				if(ip == null){
+					sender.sendMessage(plugin.color_secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
+					return true;
+				}
+				
+				plugin.getBanManager().ban(name, reason, banner); //User
+				//Kick them
+				Player player = Bukkit.getPlayerExact(name);
+				if(player != null && player.isOnline()){
+					player.kickPlayer("You have been IP Banned for: \n" + reason);
+				}
 			}
-			
-			//Fetch their IP address from history
-			String ip = plugin.getBanManager().getIP(name);
-			
-			if(ip == null){
-				sender.sendMessage(plugin.color_secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
-				return true;
+			else{
+				ip = name;
 			}
 			
 			IPBan ban = plugin.getBanManager().getIPBan(ip);
@@ -43,29 +71,8 @@ public class IPBanCommand implements CommandExecutor{
 				return true;
 			}
 			
-			boolean silent = plugin.getBanManager().isSilent(args);
-			
-			//Build the reason
-			String reason = plugin.getBanManager().buildReason(args);
-			String banner;
-			
-			//Get the banners name
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
-			
 			//Ban them
 			plugin.getBanManager().ipban(ip, reason, banner); //IP
-			plugin.getBanManager().ban(name, reason, banner); //User
-			
-			//Kick them
-			Player player = Bukkit.getPlayerExact(name);
-			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been IP Banned for: \n" + reason);
-			}
 			
 			//Notify online players
 			if(!silent){
