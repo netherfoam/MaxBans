@@ -46,6 +46,7 @@ public class DatabaseWatcher implements Runnable{
 				}
 				db.getBuffer().queries.remove(0);
 			}
+			db.setWatcherId(0);
 			try {
 				st.executeBatch();
 			} catch (SQLException e3) {

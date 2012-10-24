@@ -97,6 +97,9 @@ public class Database {
 	public int getWatcherId(){
 		return this.dbwId;
 	}
+	public void setWatcherId(int id){
+		this.dbwId = id;
+	}
 	
 	public DatabaseWatcher getDatabaseWatcher(){
 		return this.dbw;
