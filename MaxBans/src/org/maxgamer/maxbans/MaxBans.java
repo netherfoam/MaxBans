@@ -83,7 +83,52 @@ public class MaxBans extends JavaPlugin{
 		banManager = new BanManager(this);
 		
 		//Commands
-		this.banCommand = new BanCommand(this);
+		registerCommands();
+		
+		//Listeners for chat (mute) and join (Ban)
+		if(Bukkit.getPluginManager().getPlugin("Herochat") != null){
+			this.getLogger().info("Found Herochat... Hooking!");
+			this.herochatListener = new HeroChatListener(this);
+			Bukkit.getServer().getPluginManager().registerEvents(this.herochatListener, this);
+		}
+		else{
+			this.chatListener = new ChatListener(this);
+			Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
+		}
+		this.joinListener = new JoinListener(this);
+		this.chatCommandListener = new ChatCommandListener(this);
+        
+        Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
+        Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
+    }
+	
+	public void onDisable(){
+		this.getLogger().info("Disabling Maxbans...");
+		this.db.getDatabaseWatcher().run(); //Empties buffer
+		this.getLogger().info("Cleared buffer...");
+	}
+	/**
+	 * Returns the ban manager for banning and checking bans and mutes.
+	 * @return the ban manager for banning and checking bans and mutes.
+	 */
+    public BanManager getBanManager() {
+        return banManager;
+    }
+        
+    /**
+     * Returns the raw database for storing data and loading into the cache.
+     * @return the raw database for storing data and loading into the cache.
+     */
+    public Database getDB(){
+    	return db;
+    }
+    
+    /**
+     * Creates a new instance of each command and registers it
+     */
+    public void registerCommands(){
+    	//Instances
+    	this.banCommand = new BanCommand(this);
 		this.ipBanCommand = new IPBanCommand(this);
 		this.muteCommand = new MuteCommand(this);
 		
@@ -135,42 +180,5 @@ public class MaxBans extends JavaPlugin{
 		
 		this.getCommand("mbreload").setExecutor(reloadCommand);
 		this.getCommand("mb").setExecutor(mbCommand);
-		
-		//Listeners for chat (mute) and join (Ban)
-		if(Bukkit.getPluginManager().getPlugin("Herochat") != null){
-			this.getLogger().info("Found Herochat... Hooking!");
-			this.herochatListener = new HeroChatListener(this);
-			Bukkit.getServer().getPluginManager().registerEvents(this.herochatListener, this);
-		}
-		else{
-			this.chatListener = new ChatListener(this);
-			Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
-		}
-		this.joinListener = new JoinListener(this);
-		this.chatCommandListener = new ChatCommandListener(this);
-        
-        Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
-        Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
-    }
-	
-	public void onDisable(){
-		this.getLogger().info("Disabling Maxbans...");
-		this.db.getDatabaseWatcher().run(); //Empties buffer
-		this.getLogger().info("Cleared buffer...");
-	}
-	/**
-	 * Returns the ban manager for banning and checking bans and mutes.
-	 * @return the ban manager for banning and checking bans and mutes.
-	 */
-    public BanManager getBanManager() {
-        return banManager;
-    }
-        
-    /**
-     * Returns the raw database for storing data and loading into the cache.
-     * @return the raw database for storing data and loading into the cache.
-     */
-    public Database getDB(){
-    	return db;
     }
 }
