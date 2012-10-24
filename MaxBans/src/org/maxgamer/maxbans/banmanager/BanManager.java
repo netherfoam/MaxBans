@@ -45,7 +45,6 @@ public class BanManager{
 	 * Don't use this except when starting up.
 	 */
 	public void reload(){
-		plugin.getDB().getDatabaseWatcher().stop();
 		plugin.getDB().getDatabaseWatcher().run(); //Clears it. Does not restart it.
 		
 		//Check the database is the same instance
@@ -197,7 +196,6 @@ public class BanManager{
 			e.printStackTrace();
 		}
 
-		db.getDatabaseWatcher().start(); //Unpauses it
 		db.scheduleWatcher(); //Actually starts it.
 	}
     

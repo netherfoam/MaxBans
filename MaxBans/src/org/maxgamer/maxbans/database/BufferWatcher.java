@@ -7,10 +7,12 @@ package org.maxgamer.maxbans.database;
 public class BufferWatcher implements Runnable{
 	private Buffer buffer;
 	private String query;
+	private Database db;
 	
-	public BufferWatcher(Buffer buffer, String query){
+	public BufferWatcher(Database db, Buffer buffer, String query){
 		this.buffer = buffer;
 		this.query = query;
+		this.db = db;
 	}
 	public void run() {
 		while(buffer.locked){
@@ -24,5 +26,9 @@ public class BufferWatcher implements Runnable{
 		buffer.locked = true;
 		buffer.queries.add(query);
 		buffer.locked = false;
+		
+		if(db.getWatcherId() == 0){
+			db.scheduleWatcher();
+		}
 	}
 }

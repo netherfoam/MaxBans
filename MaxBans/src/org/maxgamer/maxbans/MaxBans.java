@@ -1,4 +1,3 @@
-//Push test by Darek
 package org.maxgamer.maxbans;
 
 import java.io.File;
@@ -44,7 +43,6 @@ public class MaxBans extends JavaPlugin{
         private HeroChatListener herochatListener; 
         private ChatListener chatListener;
         private ChatCommandListener chatCommandListener;
-        //private PluginListener pluginListener;
         
         private Database db;
         
@@ -72,9 +70,6 @@ public class MaxBans extends JavaPlugin{
 		 */
 		this.reloadConfig();
 		this.getConfig().options().copyDefaults();
-		
-		//this.color_primary = ChatColor.GREEN;
-		//this.color_secondary = ChatColor.WHITE;
 		
 		this.color_primary = ChatColor.getByChar(getConfig().getString("color.primary"));
 		this.color_secondary = ChatColor.getByChar(getConfig().getString("color.secondary"));
@@ -157,9 +152,9 @@ public class MaxBans extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
     }
+	
 	public void onDisable(){
 		this.getLogger().info("Disabling Maxbans...");
-		this.db.getDatabaseWatcher().stop(); //Pauses
 		this.db.getDatabaseWatcher().run(); //Empties buffer
 		this.getLogger().info("Cleared buffer...");
 	}

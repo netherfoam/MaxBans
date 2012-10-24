@@ -20,6 +20,6 @@ public class Buffer {
 	 * @param q The query to add.  This should be sanitized beforehand.
 	 */
 	public void addString(String q){
-		Bukkit.getScheduler().scheduleAsyncDelayedTask(db.getPlugin(), new BufferWatcher(this, q));
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(db.getPlugin(), new BufferWatcher(db, this, q));
 	}
 }

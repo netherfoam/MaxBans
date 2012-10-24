@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 
 public class DatabaseWatcher implements Runnable{
 	private Database db;
-	private boolean run = true;
 	public DatabaseWatcher(Database db){
 		this.db = db;
 	}
@@ -56,15 +55,7 @@ public class DatabaseWatcher implements Runnable{
 			
 			db.getBuffer().locked = false;
 		}
-		
-		//Schedule the next run of this.
-		if(!this.run) return; 
-		db.scheduleWatcher();
-	}
-	public void stop(){
-		this.run = false;
-	}
-	public void start(){
-		this.run = true;
+		//Dont schedule the next one
+		//This will be scheduled by bufferWatcher when a query is added.
 	}
 }
