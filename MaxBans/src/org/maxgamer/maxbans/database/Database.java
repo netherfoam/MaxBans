@@ -84,7 +84,6 @@ public class Database {
 		this.dbFile = file;
 		this.buffer = new Buffer(this);
 		this.dbw = new DatabaseWatcher(this);
-		this.scheduleWatcher();
 	}
 	
 	/**

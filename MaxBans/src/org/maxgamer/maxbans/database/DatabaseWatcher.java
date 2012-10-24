@@ -56,6 +56,7 @@ public class DatabaseWatcher implements Runnable{
 			
 			db.getBuffer().locked = false;
 		}
+		db.setWatcherId(0);
 		//Dont schedule the next one
 		//This will be scheduled by bufferWatcher when a query is added.
 	}
