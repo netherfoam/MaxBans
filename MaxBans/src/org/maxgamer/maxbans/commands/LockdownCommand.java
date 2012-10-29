@@ -18,8 +18,9 @@ public class LockdownCommand implements CommandExecutor{
 		if(args.length > 0){
 			StringBuilder sb = new StringBuilder();
 			for(String s : args){
-				sb.append(s);
+				sb.append(s + " ");
 			}
+			sb.deleteCharAt(sb.length() - 1);
 			String reason = sb.toString();
 			
 			plugin.getBanManager().lockdown = true;
