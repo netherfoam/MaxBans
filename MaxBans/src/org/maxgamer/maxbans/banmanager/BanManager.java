@@ -657,18 +657,7 @@ public class BanManager{
 	 * @return The escaped string. E.g. can\'t do that :\\
 	 */
 	public String escape(String s){
-		StringBuilder sb = new StringBuilder(s);
-		
-		char[] chars = s.toCharArray();
-		
-		for(int i = 0; i < chars.length; i++){
-			//If char == ', make it a double.
-			if(chars[i] == '\''/* || chars[i] == '\\'*/){
-				sb.insert(i, '\'');
-				//i++; //Don't want to get stuck
-			}
-		}
-		return sb.toString();
+		return s.replace("'", "''");
 	}
 	
 	public void addChatCommand(String s){
