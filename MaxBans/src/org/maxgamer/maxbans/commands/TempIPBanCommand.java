@@ -23,6 +23,8 @@ public class TempIPBanCommand implements CommandExecutor{
 		String usage = plugin.color_secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
 		
 		if(args.length > 2){
+			String name = args[0];
+			
 			boolean silent = Util.isSilent(args);
 			
 			//Get expirey time
@@ -44,8 +46,6 @@ public class TempIPBanCommand implements CommandExecutor{
 			else{
 				banner = "Console";
 			}
-			
-			String name = args[0];
 			
 			String ip;
 			if(!Util.isIP(name)){
