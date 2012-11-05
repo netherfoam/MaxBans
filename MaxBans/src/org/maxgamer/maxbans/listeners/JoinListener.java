@@ -24,26 +24,6 @@ public class JoinListener implements Listener{
     public void onJoinHandler(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         
-        if(plugin.getBanManager().lockdown){
-	        if(!player.hasPermission("maxbans.lockdown.bypass")){
-	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().lockdownReason);
-	    		event.setResult(Result.KICK_OTHER);
-	    		return;
-	    	}
-	        else{ //Delay this, because it's fucken more important than essentials
-	        	final String name = player.getName();
-	        	Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
-					public void run() {
-						Player p = Bukkit.getPlayerExact(name);
-						if(p != null){
-							p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
-						}
-					}
-	        		
-	        	}, 40);
-	        }
-        }
-        
         InetAddress address = event.getAddress();
         
         //Ban
@@ -55,6 +35,27 @@ public class JoinListener implements Listener{
         //If they havent been banned or IP banned, they can join.
         if(ipban == null && ban == null){
         	plugin.getBanManager().logIP(player.getName(), address.getHostAddress());
+        	
+        	if(plugin.getBanManager().lockdown){
+    	        if(!player.hasPermission("maxbans.lockdown.bypass")){
+    	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().lockdownReason);
+    	    		event.setResult(Result.KICK_OTHER);
+    	    		return;
+    	    	}
+    	        else{ //Delay this, because it's fucken more important than essentials
+    	        	final String name = player.getName();
+    	        	Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+    					public void run() {
+    						Player p = Bukkit.getPlayerExact(name);
+    						if(p != null){
+    							p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
+    						}
+    					}
+    	        		
+    	        	}, 40);
+    	        }
+            }
+        	
         	return;
         }
         
