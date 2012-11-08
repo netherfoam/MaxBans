@@ -78,6 +78,7 @@ public class Database {
 	private File dbFile;
 	private DatabaseWatcher dbw;
 	private int dbwId;
+	private Connection connection;
 	
 	public Database(MaxBans plugin, File file){
 		this.plugin = plugin;
@@ -232,40 +233,47 @@ public class Database {
 	 * @return The database connection
 	 */
 	public Connection getConnection(){
-		if(!this.dbFile.exists()){
-			plugin.getLogger().info("CRITICAL: Database does not exist");
-			try {
-				this.dbFile.createNewFile();
-				Class.forName("org.sqlite.JDBC");
-				Connection dbCon = DriverManager.getConnection("jdbc:sqlite:" + this.dbFile);
-				this.createTables();
-				return dbCon;
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
-				plugin.getLogger().info("Could not create file " + this.dbFile.toString());
-			} 
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				plugin.getLogger().info("You need the SQLite JBDC library.  Put it in MinecraftServer/lib folder.");
-			} catch (SQLException e) {
-				e.printStackTrace();
-				plugin.getLogger().info("SQLite exception on initialize " + e);
-			}
-		}
 		try{
-			Class.forName("org.sqlite.JDBC");
-			return DriverManager.getConnection("jdbc:sqlite:" + this.dbFile);
+			//If we have a current connection, fetch it
+			//TODO: Will this ever expire? :/
+			if(this.connection != null && !this.connection.isClosed()){
+				return this.connection;
+			}
 		}
 		catch(SQLException e){
 			e.printStackTrace();
-			plugin.getLogger().info("SQLite exception on initialize.");
+			plugin.getLogger().severe("Could not retrieve SQLite connection!");
 		}
-		catch(ClassNotFoundException e){
-			e.printStackTrace();
-			plugin.getLogger().info("SQLite library not found, was it removed?");
+		
+		if(this.dbFile.exists()){
+			//So we need a new connection
+			try{
+				Class.forName("org.sqlite.JDBC");
+				this.connection = DriverManager.getConnection("jdbc:sqlite:" + this.dbFile);
+				return this.connection;
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
-		return null;
+		else{
+			//So we need a new file too.
+			try {
+				//Create the file
+				this.dbFile.createNewFile();
+				//Now we won't need a new file, just a connection.
+				//This will return that new connection.
+				return this.getConnection();
+			} catch (IOException e) {
+				e.printStackTrace();
+				plugin.getLogger().severe("Could not create database file!");
+				return null;
+			}
+		}
 	}
 	
 	
