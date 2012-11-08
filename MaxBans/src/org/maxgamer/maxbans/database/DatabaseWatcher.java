@@ -3,8 +3,6 @@ package org.maxgamer.maxbans.database;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.bukkit.ChatColor;
-
 public class DatabaseWatcher implements Runnable{
 	private Database db;
 	public DatabaseWatcher(Database db){
@@ -24,38 +22,29 @@ public class DatabaseWatcher implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		
+		//Lock it to see the size of it
 		db.getBuffer().locked = true;
 		
-		if(db.getBuffer().queries.size() <= 0){
-			 db.getBuffer().locked = false;
-		}
-		else{
-			Statement st;
-			try {
-				st = db.getConnection().createStatement();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-				return;
-			}
-			
-			while(db.getBuffer().queries.size() > 0){
-				try {
-					st.addBatch(db.getBuffer().queries.get(0));
-				} catch (SQLException e2) {
-					e2.printStackTrace();
+		if(db.getBuffer().queries.size() > 0){
+			try{
+				Statement st = db.getConnection().createStatement();
+				
+				while(db.getBuffer().queries.size() > 0){
+					st.addBatch(db.getBuffer().queries.remove(0));
 				}
-				db.getBuffer().queries.remove(0);
-			}
-			db.setWatcherId(0);
-			try {
+				//We can release this now
+				db.getBuffer().locked = false;
+				
 				st.executeBatch();
-			} catch (SQLException e3) {
-				e3.printStackTrace();
-				this.db.getPlugin().getLogger().severe(ChatColor.RED + "Could not execute SQL query.");
 			}
-			
-			db.getBuffer().locked = false;
+			catch(SQLException e){
+				e.printStackTrace();
+				db.getPlugin().getLogger().severe("Could not update database!");
+			}
 		}
+		//Ensure it's released
+		db.getBuffer().locked = false;
 		db.setWatcherId(0);
 		//Dont schedule the next one
 		//This will be scheduled by bufferWatcher when a query is added.
