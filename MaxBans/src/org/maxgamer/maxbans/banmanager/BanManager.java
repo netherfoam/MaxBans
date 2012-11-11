@@ -576,6 +576,8 @@ public class BanManager{
     	name = name.toLowerCase();
     	String query;
     	
+    	if(ip.equals(this.recentips.get(name))) return; //That's old news.
+    	
     	if(this.recentips.contains(name)){
     		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+escape(name)+"'";
     	}
