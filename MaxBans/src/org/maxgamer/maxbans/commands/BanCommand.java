@@ -42,14 +42,7 @@ public class BanCommand implements CommandExecutor{
 			//Build reason
 			String reason = Util.buildReason(args);
 			
-			//Build banner
-			String banner;
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
+			String banner = Util.getName(sender);
 			
 			plugin.getBanManager().ban(name, reason, banner);
 			

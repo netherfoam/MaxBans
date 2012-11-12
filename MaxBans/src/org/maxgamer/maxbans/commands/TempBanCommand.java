@@ -67,14 +67,8 @@ public class TempBanCommand implements CommandExecutor{
 			}
 			
 			Player player = Bukkit.getPlayerExact(name);
-			
 			String reason = Util.buildReason(args);
-			
-			String banner = "Console";
-			
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
+			String banner = Util.getName(sender);
 			
 			plugin.getBanManager().tempban(name, reason, banner, expires);
 			

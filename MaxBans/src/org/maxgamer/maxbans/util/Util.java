@@ -2,6 +2,9 @@ package org.maxgamer.maxbans.util;
 
 import java.util.regex.Pattern;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 public class Util{
 	private static final String IP_REGEX = 
 	        "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -10,6 +13,11 @@ public class Util{
 	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	private static Pattern IP_PATTERN = Pattern.compile(IP_REGEX);
 	
+	/**
+	 * Returns true if the given string matches *.*.*.*
+	 * @param s The string which may or may not be an ip
+	 * @return true if the given string matches *.*.*.*
+	 */
 	public static boolean isIP(String s){
 		return IP_PATTERN.matcher(s).matches();
 	}
@@ -166,5 +174,14 @@ public class Util{
 		}
 		
 		return sb.toString();
+	}
+	
+	public static String getName(CommandSender s){
+		if(s instanceof Player){
+			return ((Player) s).getName();
+		}
+		else{
+			return "Console";
+		}
 	}
 }

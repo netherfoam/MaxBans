@@ -26,15 +26,8 @@ public class IPBanCommand implements CommandExecutor{
 		
 		//Build the reason
 		String reason = Util.buildReason(args);
-		String banner;
-		
-		//Get the banners name
-		if(sender instanceof Player){
-			banner = ((Player) sender).getName();
-		}
-		else{
-			banner = "Console";
-		}
+
+		String banner = Util.getName(sender);
 		
 		if(args.length > 0){
 			String ip;

@@ -27,16 +27,8 @@ public class WarnCommand implements CommandExecutor{
 				name = args[0]; //Use exact name then.
 			}
 			
-			String banner;
-			
 			String reason = Util.buildReason(args);
-			
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
+			String banner = Util.getName(sender);
 			
 			plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been warned for " + plugin.color_secondary + reason + plugin.color_primary + " by " + plugin.color_secondary + banner + plugin.color_primary + ".");
 			plugin.getBanManager().warn(name, reason, banner);

@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
+import org.maxgamer.maxbans.util.Util;
 
 public class MuteCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -29,8 +30,6 @@ public class MuteCommand implements CommandExecutor{
 				name = args[0]; //Use exact name then.
 			}
 			
-			String banner;
-			
 			Mute mute = plugin.getBanManager().getMute(name);
 			if(mute != null){
 				plugin.getBanManager().unmute(name);
@@ -38,12 +37,7 @@ public class MuteCommand implements CommandExecutor{
 				return true;
 			}
 			
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
+			String banner = Util.getName(sender);
 			
 			plugin.getBanManager().mute(name, banner);
 			

@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
@@ -37,14 +36,7 @@ public class UnbanCommand implements CommandExecutor{
 				ipBan = plugin.getBanManager().getIPBan(name);
 			}
 			
-			String banner;
-
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
+			String banner = Util.getName(sender);
 			
 			if(ban != null || ipBan != null){
 				plugin.getBanManager().unban(name);

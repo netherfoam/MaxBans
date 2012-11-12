@@ -29,14 +29,7 @@ public class TempMuteCommand implements CommandExecutor{
 				name = args[0]; //Use exact name then.
 			}
 			
-			String banner;
-			
-			if(sender instanceof Player){
-				banner = ((Player) sender).getName();
-			}
-			else{
-				banner = "Console";
-			}
+			String banner = Util.getName(sender);
 			
 			long time = Util.getTime(args);
 			
