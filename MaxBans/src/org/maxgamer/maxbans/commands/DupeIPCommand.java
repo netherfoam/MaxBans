@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
-import org.maxgamer.maxbans.banmanager.TrieMap;
 import org.maxgamer.maxbans.util.Util;
 
 public class DupeIPCommand implements CommandExecutor{
@@ -44,10 +43,9 @@ public class DupeIPCommand implements CommandExecutor{
 			
 			sender.sendMessage(plugin.color_primary + "Scanning " + plugin.color_secondary + name + plugin.color_primary + " on " + plugin.color_secondary + ip);
 			
-			TrieMap<String> ipHistory = plugin.getBanManager().getIPHistory();
 			StringBuilder sb = new StringBuilder();
 			
-			for(Entry<String, String> entry : ipHistory.matches("").entrySet()){
+			for(Entry<String, String> entry : plugin.getBanManager().getIPHistory().entrySet()){
 				if(entry.getValue().equals(ip) && !entry.getKey().equals(name.toLowerCase())){
 					String dupe = entry.getKey();
 					if(plugin.getBanManager().getBan(dupe) != null){

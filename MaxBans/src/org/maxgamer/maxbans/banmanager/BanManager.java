@@ -23,7 +23,8 @@ public class BanManager{
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
-	private TrieMap<String> recentips = new TrieMap<String>();
+	private HashMap<String, String> recentips = new HashMap<String, String>();
+	private TrieSet players = new TrieSet();
 	
 	private HashSet<String> chatCommands = new HashSet<String>();
 	
@@ -58,6 +59,7 @@ public class BanManager{
 		this.mutes.clear();
 		this.tempmutes.clear();
 		this.recentips.clear();
+		this.players.clear();
 		
 		plugin.reloadConfig();
 		
@@ -149,7 +151,7 @@ public class BanManager{
 				}
 			}
 			
-			//Phase 4 loading: Load IP history
+			//Phase 4 loading: Load IP history & Player history
 			plugin.getLogger().info("Loading IP History");
 			query = "SELECT * FROM iphistory";
 			ps = db.getConnection().prepareStatement(query);
@@ -160,6 +162,7 @@ public class BanManager{
 				String ip = rs.getString("ip");
 				
 				this.recentips.put(name, ip);
+				this.players.add(name);
 			}
 			
 			//Phase 5 loading: Load Warn history
@@ -295,7 +298,7 @@ public class BanManager{
      * Fetches the IP history of everyone ever
      * @return the IP history of everyone ever. Format: HashMap<Username, IP Address>.
      */
-    public TrieMap<String> getIPHistory(){
+    public HashMap<String, String> getIPHistory(){
     	return this.recentips;
     }
     
@@ -576,9 +579,15 @@ public class BanManager{
     	name = name.toLowerCase();
     	String query;
     	
+    	if(!this.recentips.containsKey(name)){
+    		//New player, add them to our set of names
+    		this.players.add(name);
+    	}
+    		
+    	//Will this work?
     	if(ip.equals(this.recentips.get(name))) return; //That's old news.
     	
-    	if(this.recentips.contains(name)){
+    	if(this.recentips.containsKey(name)){
     		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+escape(name)+"'";
     	}
     	else{
@@ -645,7 +654,7 @@ public class BanManager{
 		}
 		
 		//Scan the map for the match. Iff one is found, return it.
-		String nearestMap = recentips.nearestKey(partial); // Note that checking the nearest match to an exact name will return the same exact name
+		String nearestMap = players.nearestKey(partial); // Note that checking the nearest match to an exact name will return the same exact name
 		
 		if(nearestMap != null) return nearestMap;
 		
