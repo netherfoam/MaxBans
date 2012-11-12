@@ -28,8 +28,8 @@ public class BanManager{
 	
 	private HashSet<String> chatCommands = new HashSet<String>();
 	
-	public boolean lockdown = false;
-	public String lockdownReason = "None";
+	private boolean lockdown = false;
+	private String lockdownReason = "None";
 	
 	private Database db;
 	
@@ -660,6 +660,31 @@ public class BanManager{
 		
 		//We can't help you. Maybe you can not be lazy.
 		return partial;
+	}
+	
+	public boolean isLockdown(){
+		return this.lockdown;
+	}
+	public String getLockdownReason(){
+		return this.lockdownReason;
+	}
+	
+	public void setLockdown(boolean lockdown, String reason){
+		this.lockdown = lockdown;
+		if(lockdown){
+			plugin.getConfig().set("lockdown", true);
+			plugin.getConfig().set("lockdown-reason", reason);
+			this.lockdownReason = reason;
+		}
+		else{
+			plugin.getConfig().set("lockdown", false);
+			plugin.getConfig().set("lockdown-reason", "");
+			this.lockdownReason = "";
+		}
+		plugin.saveConfig();
+	}
+	public void setLockdown(boolean lockdown){
+		setLockdown(lockdown, "Maintenance");
 	}
 	
 	/**

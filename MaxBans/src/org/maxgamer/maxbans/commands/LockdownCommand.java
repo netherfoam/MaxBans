@@ -16,39 +16,52 @@ public class LockdownCommand implements CommandExecutor{
 			return true;
 		}
 		if(args.length > 0){
-			StringBuilder sb = new StringBuilder();
-			for(String s : args){
-				sb.append(s + " ");
-			}
-			sb.deleteCharAt(sb.length() - 1);
-			String reason = sb.toString();
-			
-			plugin.getBanManager().lockdown = true;
-			plugin.getBanManager().lockdownReason = reason;
-			sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + reason + plugin.color_primary + ".");
-			
-			plugin.getConfig().set("lockdown", true);
-			plugin.getConfig().set("lockdown-reason", reason);
-		}
-		else{
-			if(plugin.getBanManager().lockdown){
-				plugin.getBanManager().lockdown = false;
-				plugin.getBanManager().lockdownReason = "";
-				sender.sendMessage(plugin.color_primary + "Lockdown disabled.");
+			if(args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("enable")){
+				StringBuilder sb = new StringBuilder();
+				args[0] = "";
+				for(String s : args){
+					if(s.isEmpty()) continue;
+					sb.append(s + " ");
+				}
+				if(sb.length() > 0){
+					sb.deleteCharAt(sb.length() - 1);
+				}
+				String reason = sb.toString();
 				
-				plugin.getConfig().set("lockdown", false);
-				plugin.getConfig().set("lockdown-reason", "");
+				if(reason.isEmpty()){
+					reason = "Maintenance";
+				}
+				
+				plugin.getBanManager().setLockdown(true, reason);
+				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + reason + plugin.color_primary + ".");
+			}
+			else if(args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable")){
+				plugin.getBanManager().setLockdown(false);
+				sender.sendMessage(plugin.color_primary + "Lockdown disabled.");
 			}
 			else{
-				plugin.getBanManager().lockdown = true;
-				plugin.getBanManager().lockdownReason = "Maintenance";
-				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + "Maintenance" + plugin.color_primary + ".");
+				StringBuilder sb = new StringBuilder();
+				for(String s : args){
+					if(s.isEmpty()) continue;
+					sb.append(s + " ");
+				}
+				sb.deleteCharAt(sb.length() - 1);
+				String reason = sb.toString();
 				
-				plugin.getConfig().set("lockdown", true);
-				plugin.getConfig().set("lockdown-reason", "Maintenance");
+				plugin.getBanManager().setLockdown(true, reason);
+				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + reason + plugin.color_primary + ".");
 			}
 		}
-		plugin.saveConfig();
+		else{
+			if(plugin.getBanManager().isLockdown()){
+				plugin.getBanManager().setLockdown(false);
+				sender.sendMessage(plugin.color_primary + "Lockdown disabled.");
+			}
+			else{
+				plugin.getBanManager().setLockdown(true);
+				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + "Maintenance" + plugin.color_primary + ".");
+			}
+		}
 		return true;
 	}
 }

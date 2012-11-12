@@ -36,9 +36,9 @@ public class JoinListener implements Listener{
         if(ipban == null && ban == null){
         	plugin.getBanManager().logIP(player.getName(), address.getHostAddress());
         	
-        	if(plugin.getBanManager().lockdown){
+        	if(plugin.getBanManager().isLockdown()){
     	        if(!player.hasPermission("maxbans.lockdown.bypass")){
-    	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().lockdownReason);
+    	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().getLockdownReason());
     	    		event.setResult(Result.KICK_OTHER);
     	    		return;
     	    	}
