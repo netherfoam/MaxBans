@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
+import org.maxgamer.maxbans.util.Util;
 
 public class BanManager{
 	private MaxBans plugin;
@@ -326,9 +327,9 @@ public class BanManager{
     	this.bans.put(name, ban);
     	
     	//Now we can escape them
-    	name = escape(name);
-    	banner = escape(banner);
-    	reason = escape(reason);
+    	name = Util.escape(name);
+    	banner = Util.escape(banner);
+    	reason = Util.escape(reason);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
     }
@@ -344,7 +345,7 @@ public class BanManager{
     	String ip = this.getIP(name);
     	
     	//Now we can escape it
-    	name = escape(name);
+    	name = Util.escape(name);
     	String query = "";
     	if(ban != null){
     		this.bans.remove(name);
@@ -393,7 +394,7 @@ public class BanManager{
     	TempMute tMute = this.tempmutes.get(name);
     	
     	//Escape it
-    	name = escape(name);
+    	name = Util.escape(name);
     	String query = "";
     	if(mute != null){
     		this.mutes.remove(name);
@@ -422,9 +423,9 @@ public class BanManager{
     	this.tempbans.put(name, ban);
     	
     	//Safe to escape now
-    	name = escape(name);
-    	banner = escape(banner);
-    	reason = escape(reason);
+    	name = Util.escape(name);
+    	banner = Util.escape(banner);
+    	reason = Util.escape(reason);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time, expires) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
     }
@@ -443,8 +444,8 @@ public class BanManager{
     	this.ipbans.put(ip, ipban);
     	
     	//Safe to escape now
-    	banner = escape(banner);
-    	reason = escape(reason);
+    	banner = Util.escape(banner);
+    	reason = Util.escape(reason);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
     }
@@ -464,8 +465,8 @@ public class BanManager{
     	this.tempipbans.put(ip, tib);
     	
     	//Safe to escape now
-    	banner = escape(banner);
-    	reason = escape(reason);
+    	banner = Util.escape(banner);
+    	reason = Util.escape(reason);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
     }
@@ -482,8 +483,8 @@ public class BanManager{
     	
     	this.mutes.put(name, mute);
     	
-    	name = escape(name);
-    	banner = escape(banner);
+    	name = Util.escape(name);
+    	banner = Util.escape(banner);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"');");
     }
@@ -502,8 +503,8 @@ public class BanManager{
     	
     	this.tempmutes.put(name, tmute);
     	
-    	name = escape(name);
-    	banner = escape(banner);
+    	name = Util.escape(name);
+    	banner = Util.escape(banner);
     	
     	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
     }
@@ -527,9 +528,9 @@ public class BanManager{
     	//Adds it to warnings
     	warns.add(new Warn(reason, banner));
     	
-    	name = escape(name);
-    	banner = escape(banner);
-    	reason = escape(reason);
+    	name = Util.escape(name);
+    	banner = Util.escape(banner);
+    	reason = Util.escape(reason);
     	
     	db.getBuffer().addString("INSERT INTO warnings (name, reason, banner) VALUES ('"+name+"','"+reason+"','"+banner+"')");
     	
@@ -555,7 +556,7 @@ public class BanManager{
     	this.warnings.put(name, null);
     	
     	//Escape it
-    	name = escape(name);
+    	name = Util.escape(name);
 
     	db.getBuffer().addString("DELETE FROM warnings WHERE name = '"+name+"'");
     }
@@ -588,10 +589,10 @@ public class BanManager{
     	if(ip.equals(this.recentips.get(name))) return; //That's old news.
     	
     	if(this.recentips.containsKey(name)){
-    		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+escape(name)+"'";
+    		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+Util.escape(name)+"'";
     	}
     	else{
-    		query = "INSERT INTO iphistory (name, ip) VALUES ('"+escape(name)+"','"+ip+"')";
+    		query = "INSERT INTO iphistory (name, ip) VALUES ('"+Util.escape(name)+"','"+ip+"')";
     	}
     	
     	this.recentips.put(name, ip);
@@ -685,15 +686,6 @@ public class BanManager{
 	}
 	public void setLockdown(boolean lockdown){
 		setLockdown(lockdown, "Maintenance");
-	}
-	
-	/**
-	 * Prepares a query for the database by fixing \ and 's
-	 * @param s The string to escape E.g. can't do that :\
-	 * @return The escaped string. E.g. can\'t do that :\\
-	 */
-	public String escape(String s){
-		return s.replace("'", "''");
 	}
 	
 	public void addChatCommand(String s){

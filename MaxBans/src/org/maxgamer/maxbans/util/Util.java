@@ -176,6 +176,20 @@ public class Util{
 		return sb.toString();
 	}
 	
+	/**
+	 * Prepares a query for the database by fixing 's (Only works for SQLite)
+	 * @param s The string to escape E.g. can't do that :\
+	 * @return The escaped string. E.g. can''t do that :\
+	 */
+	public static String escape(String s){
+		return s.replace("'", "''");
+	}
+	
+	/**
+	 * Returns the name of the sender, whether it be the players name or "Console"
+	 * @param s The CommandSender
+	 * @return the name of the sender, whether it be the players name or "Console"
+	 */
 	public static String getName(CommandSender s){
 		if(s instanceof Player){
 			return ((Player) s).getName();
