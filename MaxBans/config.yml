@@ -2,6 +2,8 @@ lockdown: false
 lockdown-reason: ""
     
 max-warnings: 3
+#3 days
+warn-expirey-in-minutes: 4320 
 
 color:
     primary: f

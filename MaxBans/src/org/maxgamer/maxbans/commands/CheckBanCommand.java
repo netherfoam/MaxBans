@@ -1,5 +1,7 @@
 package org.maxgamer.maxbans.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,6 +12,7 @@ import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.banmanager.TempMute;
+import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.util.Util;
 
 public class CheckBanCommand implements CommandExecutor{
@@ -39,6 +42,16 @@ public class CheckBanCommand implements CommandExecutor{
 				ban = plugin.getBanManager().getBan(name);
 				String ip = plugin.getBanManager().getIP(name);
 				ipBan = plugin.getBanManager().getIPBan(ip);
+				
+				List<Warn> warnings = plugin.getBanManager().getWarnings(name);
+				
+				if(warnings != null){
+					int ttl = plugin.getConfig().getInt("warn-expirey-in-minutes") * 60000;
+					for(Warn warn : plugin.getBanManager().getWarnings(name)){
+						long amt = 2*System.currentTimeMillis() - warn.getExpires() + ttl; //2x system.now because util.getTimeUntil() subtracts it once.
+						sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " was warned for " + plugin.color_secondary + warn.getReason() + plugin.color_primary + " by " + plugin.color_secondary + warn.getBanner() + " " + Util.getTimeUntil(amt) + plugin.color_primary + " ago.");
+					}
+				}
 			}
 			else{
 				ipBan = plugin.getBanManager().getIPBan(name);

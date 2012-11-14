@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -167,9 +168,9 @@ public class BanManager{
 			}
 			
 			//Phase 5 loading: Load Warn history
-			
 			plugin.getLogger().info("Loading warn history...");
-			query = "SELECT * FROM warnings";
+			//We only want warns that haven't expired.
+			query = "SELECT * FROM warnings WHERE expires > '" + System.currentTimeMillis() + "'";
 			ps = db.getConnection().prepareStatement(query);
 			rs = ps.executeQuery();
 			
@@ -177,8 +178,9 @@ public class BanManager{
 				String name = rs.getString("name");
 				String reason = rs.getString("reason");
 				String banner = rs.getString("banner");
+				long expires = rs.getLong("expires");
 				
-				Warn warn = new Warn(reason,banner);
+				Warn warn = new Warn(reason,banner, expires);
 				
 				List<Warn> warns = this.warnings.get(name);
 				if(warns == null){
@@ -310,7 +312,20 @@ public class BanManager{
      */
     public List<Warn> getWarnings(String name){
     	name = name.toLowerCase();
-    	return this.warnings.get(name);
+    	List<Warn> warnings = this.warnings.get(name);
+    	
+    	if(warnings == null) return null; //No warnings, return an empty list.
+    	
+    	Iterator<Warn> it = warnings.iterator();
+    	while(it.hasNext()){
+    		//Expire old warnings
+    		Warn w = it.next();
+    		if(w.getExpires() < System.currentTimeMillis()){
+    			it.remove();
+    		}
+    	}
+    	
+    	return warnings;
     }
     
     /**
@@ -517,8 +532,9 @@ public class BanManager{
     public void warn(String name, String reason, String banner){
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
+    	long expires = System.currentTimeMillis() + plugin.getConfig().getInt("warn-expirey-in-minutes") * 60000;
     	
-    	List<Warn> warns = this.warnings.get(name);
+    	List<Warn> warns = this.getWarnings(name);
     	
     	if(warns == null){
     		warns = new ArrayList<Warn>();
@@ -526,15 +542,19 @@ public class BanManager{
     	}
     	
     	//Adds it to warnings
-    	warns.add(new Warn(reason, banner));
+    	warns.add(new Warn(reason, banner, expires));
     	
     	name = Util.escape(name);
     	banner = Util.escape(banner);
     	reason = Util.escape(reason);
     	
-    	db.getBuffer().addString("INSERT INTO warnings (name, reason, banner) VALUES ('"+name+"','"+reason+"','"+banner+"')");
+    	db.getBuffer().addString("INSERT INTO warnings (name, reason, banner, expires) VALUES ('"+name+"','"+reason+"','"+banner+"','"+expires+"')");
     	
-    	if(warns.size() >= plugin.getConfig().getInt("max-warnings")){
+    	int maxWarns = plugin.getConfig().getInt("max-warnings");
+    	if(maxWarns <= 0) return;
+    	
+    	int warnsSize = warns.size();
+    	if(warnsSize != 0 && warnsSize % maxWarns == 0){
     		this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
     		Player p = Bukkit.getPlayerExact(name);
     		if(p != null){
@@ -542,7 +562,8 @@ public class BanManager{
     		}
     		announce(plugin.color_secondary + name + plugin.color_primary + " has reached max warnings.  One hour ban.");
     		
-    		clearWarnings(name);
+    		//clearWarnings(name);
+    		//Preserve warnings
     	}
     }
     
@@ -553,7 +574,7 @@ public class BanManager{
     public void clearWarnings(String name){
     	name = name.toLowerCase();
     	
-    	this.warnings.put(name, null);
+    	this.warnings.remove(name);
     	
     	//Escape it
     	name = Util.escape(name);
@@ -564,8 +585,8 @@ public class BanManager{
     /**
      * Gets the IP address a player last used, even if offline
      * Will return null if no history for that IP address.
-     * @param ip The IP to lookup
-     * @return a hashset of users whose most recent IP is the given one
+     * @param user The player to look up
+     * @return The last IP they used to connect to the server, or null if they've never connected
      */
     public String getIP(String user){
     	return this.recentips.get(user.toLowerCase());

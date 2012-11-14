@@ -129,10 +129,27 @@ public class Database {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			this.plugin.getLogger().severe(ChatColor.RED + "Could not create bans table.");
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not verify table " + table);
 			return false;
 		}
 		return false;
+	}
+	
+	public boolean hasColumn(String table, String column){
+		String query = "SELECT * FROM " + table + " LIMIT 0,1";
+		try{
+			PreparedStatement ps = this.getConnection().prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				rs.getString(column); //Throws an exception if it can't find that column
+				return true;
+			}
+		}
+		catch(SQLException e){
+			return false;
+		}
+		return false; //Uh, wtf.
 	}
 	
 	/**
@@ -154,6 +171,13 @@ public class Database {
 		}
 		if(!this.hasTable("warnings")){
 			this.createWarningsTable();
+		}
+		else if(!this.hasColumn("warnings", "expires")){
+			try {
+				this.getConnection().prepareStatement(" ALTER TABLE warnings ADD expires long").execute();
+			} catch (SQLException e) {
+				System.out.println("WTF, couldnt add column!");
+			}
 		}
 	}
 	
@@ -217,7 +241,7 @@ public class Database {
 	 * Creates the warnings table
 	 */
 	public void createWarningsTable(){
-		String query = "CREATE TABLE 'warnings' ('name' TEXT(30) NOT NULL, 'reason' TEXT(100) NOT NULL, 'banner' TEXT(30) NOT NULL);";
+		String query = "CREATE TABLE 'warnings' ('name' TEXT(30) NOT NULL, 'reason' TEXT(100) NOT NULL, 'banner' TEXT(30) NOT NULL, 'expires' LONG(30));";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
