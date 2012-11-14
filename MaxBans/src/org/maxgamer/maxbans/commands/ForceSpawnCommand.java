@@ -6,14 +6,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.maxgamer.maxbans.MaxBans;
 
 public class ForceSpawnCommand implements CommandExecutor{
-    private Location spawn;
     private MaxBans plugin;
-    public ForceSpawnCommand(MaxBans plugin, Location spawn){
-        this.spawn = spawn;
+    public ForceSpawnCommand(MaxBans plugin){
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -36,6 +35,10 @@ public class ForceSpawnCommand implements CommandExecutor{
 			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
+				PlayerRespawnEvent e = new PlayerRespawnEvent(p,Bukkit.getWorlds().get(0).getSpawnLocation(), false);
+				Bukkit.getPluginManager().callEvent(e);
+				Location spawn = e.getRespawnLocation();
+				
 				//Double TP for /back'ers
 				p.teleport(spawn, TeleportCause.PLUGIN);
 				p.teleport(spawn, TeleportCause.PLUGIN);

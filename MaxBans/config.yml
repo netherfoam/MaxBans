@@ -1,11 +1,5 @@
 lockdown: false
 lockdown-reason: ""
-
-spawn:
-    world: challenge_7
-    x: 298.5
-    y: 66
-    z: -300.5
     
 max-warnings: 3
 
