@@ -1,9 +1,7 @@
 package org.maxgamer.maxbans.database;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,16 +71,20 @@ import org.maxgamer.maxbans.MaxBans;
  * 		Banner is the admin who warned them
  */
 public class Database {
+	private DatabaseCore dbCore;
+	
 	private Buffer buffer;
 	private MaxBans plugin;
-	private File dbFile;
 	private DatabaseWatcher dbw;
 	private int dbwId;
-	private Connection connection;
+	
 	
 	public Database(MaxBans plugin, File file){
 		this.plugin = plugin;
-		this.dbFile = file;
+		
+		this.dbCore = new SQLite(plugin, file);
+		
+		
 		this.buffer = new Buffer(this);
 		this.dbw = new DatabaseWatcher(this);
 	}
@@ -118,21 +120,19 @@ public class Database {
 	 * @return True if the table is found
 	 */
 	public boolean hasTable(String table){
-		String query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+table+"'";
+		//String query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+table+"'";
+		String query = "SELECT * FROM " + table + " LIMIT 0,1";
 		try {
 			PreparedStatement ps = this.getConnection().prepareStatement(query);
 			
-			ResultSet rs = ps.executeQuery();
+			ps.executeQuery();
 			
-			while(rs.next()){
-				return true;
-			}
+			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			this.plugin.getLogger().severe(ChatColor.RED + "Could not verify table " + table);
+			//e.printStackTrace();
+			//this.plugin.getLogger().severe(ChatColor.RED + "Could not verify table " + table);
 			return false;
 		}
-		return false;
 	}
 	
 	public boolean hasColumn(String table, String column){
@@ -185,7 +185,7 @@ public class Database {
 	 * Creates the bans table
 	 */
 	public void createBanTable(){
-		String query = "CREATE TABLE 'bans' ( 'name'  TEXT(30) NOT NULL, 'reason'  TEXT(100), 'banner'  TEXT(30), 'time'  INTEGER NOT NULL DEFAULT 0, 'expires'  INTEGER NOT NULL DEFAULT 0 );";
+		String query = "CREATE TABLE bans ( name  TEXT(30) NOT NULL, reason  TEXT(100), banner  TEXT(30), time  INTEGER NOT NULL DEFAULT 0, expires  INTEGER NOT NULL DEFAULT 0 );";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -199,7 +199,7 @@ public class Database {
 	 * Creates the IPBan table
 	 */
 	public void createIPBanTable(){
-		String query = "CREATE TABLE 'ipbans' ( 'ip'  TEXT(20) NOT NULL, 'reason'  TEXT(100), 'banner'  TEXT(30), 'time'  INTEGER NOT NULL DEFAULT 0, 'expires'  INTEGER NOT NULL DEFAULT 0 );";
+		String query = "CREATE TABLE ipbans ( ip  TEXT(20) NOT NULL, reason  TEXT(100), banner  TEXT(30), time  INTEGER NOT NULL DEFAULT 0, expires  INTEGER NOT NULL DEFAULT 0 );";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -213,7 +213,7 @@ public class Database {
 	 * Creates the mutes table
 	 */
 	public void createMuteTable(){
-		String query = "CREATE TABLE 'mutes' ( 'name'  TEXT(30) NOT NULL, 'muter'  TEXT(30), 'time'  INTEGER DEFAULT 0, 'expires'  INTEGER DEFAULT 0 );";
+		String query = "CREATE TABLE mutes ( name  TEXT(30) NOT NULL, muter  TEXT(30), time  INTEGER DEFAULT 0, expires  INTEGER DEFAULT 0 );";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -227,7 +227,7 @@ public class Database {
 	 * Creates the iphistory table
 	 */
 	public void createIPHistoryTable(){
-		String query = "CREATE TABLE 'iphistory' ( 'name'  TEXT(30) NOT NULL, 'ip'  TEXT(20) NOT NULL, PRIMARY KEY ('name', 'ip') );";
+		String query = "CREATE TABLE iphistory ( name  TEXT(30) NOT NULL, ip  TEXT(20) NOT NULL);";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -241,7 +241,7 @@ public class Database {
 	 * Creates the warnings table
 	 */
 	public void createWarningsTable(){
-		String query = "CREATE TABLE 'warnings' ('name' TEXT(30) NOT NULL, 'reason' TEXT(100) NOT NULL, 'banner' TEXT(30) NOT NULL, 'expires' LONG(30));";
+		String query = "CREATE TABLE warnings (name TEXT(30) NOT NULL, reason TEXT(100) NOT NULL, banner TEXT(30) NOT NULL, expires BIGINT(30));";
 		try {
 			Statement st = this.getConnection().createStatement();
 			st.execute(query);
@@ -257,48 +257,11 @@ public class Database {
 	 * @return The database connection
 	 */
 	public Connection getConnection(){
-		try{
-			//If we have a current connection, fetch it
-			//TODO: Will this ever expire? :/
-			if(this.connection != null && !this.connection.isClosed()){
-				return this.connection;
-			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-			plugin.getLogger().severe("Could not retrieve SQLite connection!");
-		}
-		
-		if(this.dbFile.exists()){
-			//So we need a new connection
-			try{
-				Class.forName("org.sqlite.JDBC");
-				this.connection = DriverManager.getConnection("jdbc:sqlite:" + this.dbFile);
-				return this.connection;
-			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				return null;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		else{
-			//So we need a new file too.
-			try {
-				//Create the file
-				this.dbFile.createNewFile();
-				//Now we won't need a new file, just a connection.
-				//This will return that new connection.
-				return this.getConnection();
-			} catch (IOException e) {
-				e.printStackTrace();
-				plugin.getLogger().severe("Could not create database file!");
-				return null;
-			}
-		}
+		return this.dbCore.getConnection();
 	}
 	
+	public String escape(String s){
+		return this.dbCore.escape(s);
+	}
 	
 }
