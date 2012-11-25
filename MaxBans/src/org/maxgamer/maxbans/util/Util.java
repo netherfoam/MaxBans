@@ -12,6 +12,7 @@ public class Util{
 	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	private static Pattern IP_PATTERN = Pattern.compile(IP_REGEX);
+	private static Pattern VALID_CHARS_PATTERN = Pattern.compile("[A-Za-z0-9_]");
 	
 	/**
 	 * Returns true if the given string matches *.*.*.*
@@ -23,58 +24,85 @@ public class Util{
 	}
 	
 	/**
+	 * Returns a string containing all characters that aren't A-Z, a-z, 0-9 or _. 
+	 * Never returns a null string.
+	 * @param s The string to check
+	 * @return The string of invalid characters or an empty string if it is valid.
+	 */
+	public static String getInvalidChars(String s){
+		return VALID_CHARS_PATTERN.matcher(s).replaceAll("");
+	}
+	
+	/**
      * Finds the time until a specific epoch.
      * @param epoch the epoch (Milliseconds) time to check
      * @return The time (String format) until the epoch ends in the format X weeks, Y days, Z hours, M minutes, S seconds. If values are 0 (X,Y,Z,M,S), it will ignore that segment. E.g. Mins = 0 so output will be [...] Z hours, S seconds [...]
      */
     public static String getTimeUntil(long epoch){
     	epoch -= System.currentTimeMillis();
-    	epoch =  epoch / 1000 + 1; //Work in seconds.
+    	
+    	return getTime(epoch);
+    }
+    
+    /**
+     * Finds the time until a specific epoch.
+     * @param epoch the epoch (Milliseconds) time to check
+     * @return The time (String format) of an epoch. Eg 3661 = 1 hours 1 minutes 1 seconds
+     */
+    public static String getTime(long epoch){
+    	epoch =  (long) Math.ceil(epoch / 1000.0); //Work in seconds.
     	StringBuilder sb = new StringBuilder(40);
     	
     	if(epoch / 31449600 > 0){
-    		//Days
-    		long weeks = epoch / 31449600;
-    		sb.append(weeks + " years ");
-    		epoch -= weeks * 31449600;
+    		//Years
+    		long years = epoch / 31449600;
+    		sb.append(years + (years == 1 ? " year " : " years "));
+    		epoch -= years * 31449600;
     	}
     	if(epoch / 2620800 > 0){
-    		//Days
-    		long weeks = epoch / 2620800;
-    		sb.append(weeks + " months ");
-    		epoch -= weeks * 2620800;
+    		//Months
+    		long months = epoch / 2620800;
+    		sb.append(months + (months == 1 ? " month " : " months "));
+    		epoch -= months * 2620800;
     	}
     	if(epoch / 604800 > 0){
-    		//Days
+    		//Weeks
     		long weeks = epoch / 604800;
-    		sb.append(weeks + " weeks ");
+    		sb.append(weeks + (weeks == 1 ? " week " : " weeks "));
     		epoch -= weeks * 604800;
     	}
     	if(epoch / 86400 > 0){
     		//Days
     		long days = epoch / 86400;
-    		sb.append(days + " days ");
+    		sb.append(days + (days == 1 ? " day " : " days "));
     		epoch -= days * 86400;
     	}
     	
     	if(epoch / 3600 > 0){
-    		//More than one hour
+    		//Hours
     		long hours = epoch / 3600;
-    		sb.append(hours + " hours ");
+    		sb.append(hours + (hours == 1 ? " hour " : " hours "));
     		epoch -= hours * 3600;
     	}
     	
     	if(epoch / 60 > 0){
+    		//Minutes
     		long minutes = epoch / 60;
-    		sb.append(minutes + " minutes ");
+    		sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));
     		epoch -= minutes * 60;
     	}
     	
     	if(epoch > 0){
-    		sb.append(epoch + " seconds ");
+    		//Seconds
+    		sb.append(epoch + (epoch == 1 ? " second " : " seconds "));
     	}
     	
-		sb.replace(sb.length() - 1, sb.length(), "");
+    	if(sb.length() > 1){
+    		sb.replace(sb.length() - 1, sb.length(), "");
+    	}
+    	else{
+    		sb = new StringBuilder("N/A");
+    	}
     	return sb.toString();
     }
     

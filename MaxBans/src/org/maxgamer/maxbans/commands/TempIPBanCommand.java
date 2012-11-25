@@ -58,7 +58,7 @@ public class TempIPBanCommand implements CommandExecutor{
 				//Kick them
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null && player.isOnline()){
-					player.kickPlayer("You have been Temporarily IP Banned for: \n"+reason);
+					player.kickPlayer("You have been Temporarily IP Banned for: \n"+reason+"\nBy " + banner + ". Expires in " + Util.getTimeUntil(time));
 				}
 			}
 			else{
@@ -95,7 +95,7 @@ public class TempIPBanCommand implements CommandExecutor{
 			//Notify online players
 			if(!silent){
 				//Announce
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			else{
 				//Silent

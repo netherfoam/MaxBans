@@ -49,7 +49,7 @@ public class BanCommand implements CommandExecutor{
 			//Kick them
 			Player player = Bukkit.getPlayerExact(name);
 			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been banned for: \n" + reason);
+				player.kickPlayer("You have been permanently banned for: \n" + reason);
 			}
 			
 			//Notify online players

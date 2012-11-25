@@ -24,12 +24,23 @@ public class JoinListener implements Listener{
     public void onJoinHandler(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         
-        InetAddress address = event.getAddress();
+        String invalidChars = Util.getInvalidChars(player.getName());
+        if(!invalidChars.isEmpty()){
+        	event.setKickMessage("Kicked by MaxBans.\nYour name contains invalid characters:\n'" + invalidChars + "'");
+        	event.setResult(Result.KICK_OTHER);
+        	return;
+        }
+        else if(player.getName().isEmpty()){
+        	event.setKickMessage("Kicked by MaxBans.\nYour name is invalid!");
+        	event.setResult(Result.KICK_OTHER);
+        	return;
+        }
         
         //Ban
         Ban ban = plugin.getBanManager().getBan(player.getName());
         
         //IP Ban
+        InetAddress address = event.getAddress();
         IPBan ipban= plugin.getBanManager().getIPBan(address);
         
         //If they havent been banned or IP banned, they can join.

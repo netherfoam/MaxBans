@@ -51,7 +51,7 @@ public class IPBanCommand implements CommandExecutor{
 				//Kick them
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null && player.isOnline()){
-					player.kickPlayer("You have been IP Banned for: \n" + reason);
+					player.kickPlayer("You have been permanently IP Banned for: \n" + reason);
 				}
 			}
 			else{

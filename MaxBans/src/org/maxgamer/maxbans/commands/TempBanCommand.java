@@ -73,16 +73,16 @@ public class TempBanCommand implements CommandExecutor{
 			plugin.getBanManager().tempban(name, reason, banner, expires);
 			
 			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been Temporarily Banned for: \n"+reason);
+				player.kickPlayer("You have been Temporarily Banned for: \n"+reason+"\nBy " + banner + ". Expires in " + Util.getTimeUntil(expires));
 			}
 			
 			if(!silent){
 				//Announce
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp banned ("+Util.getTimeUntil(expires/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp banned ("+Util.getTimeUntil(expires)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			else{
 				//Tell sender
-				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp banned ("+Util.getTimeUntil(expires/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been silently temp banned ("+Util.getTimeUntil(expires)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			
 			return true;
