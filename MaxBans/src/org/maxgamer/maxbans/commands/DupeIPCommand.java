@@ -2,6 +2,7 @@ package org.maxgamer.maxbans.commands;
 
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +42,7 @@ public class DupeIPCommand implements CommandExecutor{
 				ip = name;
 			}
 			
-			sender.sendMessage(plugin.color_primary + "Scanning " + plugin.color_secondary + name + plugin.color_primary + " on " + plugin.color_secondary + ip);
+			sender.sendMessage(plugin.color_primary + "Scanning " + plugin.color_secondary + name + plugin.color_primary + " on " + plugin.color_secondary + ip + ".  [" + ChatColor.RED + "Banned" + ChatColor.WHITE + "]" + ChatColor.WHITE + " [" + ChatColor.LIGHT_PURPLE + "Online" + ChatColor.WHITE + "]" + ChatColor.WHITE + " [" + ChatColor.GREEN + "Offline" + ChatColor.WHITE + "]");
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -50,6 +51,11 @@ public class DupeIPCommand implements CommandExecutor{
 					String dupe = entry.getKey();
 					if(plugin.getBanManager().getBan(dupe) != null){
 						sb.append(ChatColor.RED);
+						sb.append(dupe);
+						sb.append(", ");
+					}
+					else if(Bukkit.getPlayerExact(dupe) != null){
+						sb.append(ChatColor.LIGHT_PURPLE);
 						sb.append(dupe);
 						sb.append(", ");
 					}
