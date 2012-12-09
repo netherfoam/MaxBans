@@ -54,7 +54,7 @@ public class KickCommand implements CommandExecutor{
 				sender.sendMessage(plugin.color_primary + "No player found: " + plugin.color_secondary + name);
 			}
 			
-			
+			plugin.getBanManager().announce(plugin.color_secondary + banner + plugin.color_primary + " has kicked everyone.");
 			
 			return true;
 		}
