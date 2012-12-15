@@ -27,7 +27,7 @@ public class BufferWatcher implements Runnable{
 		buffer.queries.add(query);
 		buffer.locked = false;
 		
-		if(db.getWatcherId() == 0){
+		if(db.getTask() == null){
 			db.scheduleWatcher();
 		}
 	}

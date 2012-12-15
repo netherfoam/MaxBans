@@ -10,6 +10,7 @@ import java.sql.Statement;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.maxgamer.maxbans.MaxBans;
 
 /**
@@ -76,7 +77,8 @@ public class Database {
 	private Buffer buffer;
 	private MaxBans plugin;
 	private DatabaseWatcher dbw;
-	private int dbwId;
+
+	private BukkitTask task;
 	
 	
 	public Database(MaxBans plugin, File file){
@@ -93,14 +95,14 @@ public class Database {
 	 * Reschedules the db watcher
 	 */
 	public void scheduleWatcher(){
-		this.dbwId = Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, this.dbw, 300);
+		this.task = Bukkit.getScheduler().runTaskLater(plugin, this.dbw, 300);
 	}
 	
-	public int getWatcherId(){
-		return this.dbwId;
+	public BukkitTask getTask(){
+		return task;
 	}
-	public void setWatcherId(int id){
-		this.dbwId = id;
+	public void setTask(BukkitTask task){
+		this.task = task; 
 	}
 	
 	public DatabaseWatcher getDatabaseWatcher(){

@@ -55,7 +55,7 @@ public class JoinListener implements Listener{
     	    	}
     	        else{ //Delay this, because it's fucken more important than essentials
     	        	final String name = player.getName();
-    	        	Bukkit.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable(){
+    	        	Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable(){
     					public void run() {
     						Player p = Bukkit.getPlayerExact(name);
     						if(p != null){

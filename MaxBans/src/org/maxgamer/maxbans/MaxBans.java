@@ -61,6 +61,8 @@ public class MaxBans extends JavaPlugin{
 			this.saveResource("config.yml", false);
 		}
 		
+		
+		
 		/*
 		 * Reloads the config from disk.
 		 * Normally this is done before onEnable()

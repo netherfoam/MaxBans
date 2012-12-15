@@ -27,6 +27,8 @@ public class UnbanCommand implements CommandExecutor{
 			Ban ban = null;
 			IPBan ipBan = null;
 			
+			boolean silent = Util.isSilent(args);
+			
 			if(!Util.isIP(name)){
 				name = plugin.getBanManager().match(name, true);
 				ban = plugin.getBanManager().getBan(name);
@@ -48,8 +50,12 @@ public class UnbanCommand implements CommandExecutor{
 				return true;
 			}
 			
-			plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been unbanned by " + plugin.color_secondary + banner + plugin.color_primary + ".");
-			
+			if(silent){
+				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silenty unbanned.");
+			}
+			else{
+				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been unbanned by " + plugin.color_secondary + banner + plugin.color_primary + ".");
+			}
 			return true;
 		}
 		else{

@@ -22,7 +22,6 @@ public class Util{
 	public static boolean isIP(String s){
 		return IP_PATTERN.matcher(s).matches();
 	}
-	
 	/**
 	 * Returns a string containing all characters that aren't A-Z, a-z, 0-9 or _. 
 	 * Never returns a null string.
@@ -32,6 +31,7 @@ public class Util{
 	public static String getInvalidChars(String s){
 		return VALID_CHARS_PATTERN.matcher(s).replaceAll("");
 	}
+	
 	
 	/**
      * Finds the time until a specific epoch.

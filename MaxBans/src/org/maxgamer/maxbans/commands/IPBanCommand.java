@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -72,7 +73,7 @@ public class IPBanCommand implements CommandExecutor{
 				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			else{
-				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has been banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silently banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
 			}
 			
 			return true;
