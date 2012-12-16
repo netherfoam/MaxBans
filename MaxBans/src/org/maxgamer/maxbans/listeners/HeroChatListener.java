@@ -39,7 +39,7 @@ public class HeroChatListener implements Listener{
         		p.sendMessage(ChatColor.RED+"You're muted!");
         	}
         	
-            e.setResult(Result.BAD_PASSWORD);
+            e.setResult(Result.FAIL);
         }
 	}
 }
