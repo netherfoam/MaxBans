@@ -25,8 +25,13 @@ public class BanCommand implements CommandExecutor{
 		String usage = plugin.color_secondary + "Usage: /ban <player> [-s] <reason>";
 		
 		if(args.length > 0){
-			String name = args[0];
+			boolean silent = Util.isSilent(args);
 			
+			String name = args[0];
+			if(name.isEmpty()){
+				sender.sendMessage(plugin.color_primary + " No name given.");
+				return true;
+			}
 			name = plugin.getBanManager().match(name);
 			if(name == null){
 				name = args[0]; //Use exact name then.
@@ -37,8 +42,6 @@ public class BanCommand implements CommandExecutor{
 				sender.sendMessage(plugin.color_secondary + "That player is already banned.");
 				return true;
 			}
-			
-			boolean silent = Util.isSilent(args);
 			
 			//Build reason
 			String reason = Util.buildReason(args);

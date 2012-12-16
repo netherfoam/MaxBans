@@ -28,13 +28,16 @@ public class TempBanCommand implements CommandExecutor{
 			return true;
 		}
 		else{
+			boolean silent = Util.isSilent(args);
 			String name = args[0];
-			
+			if(name.isEmpty()){
+				sender.sendMessage(plugin.color_primary + " No name given.");
+				return true;
+			}
 			name = plugin.getBanManager().match(name);
 			if(name == null){
 				name = args[0]; //Use exact name then.
 			}
-			boolean silent = Util.isSilent(args);
 			
 			long expires = Util.getTime(args);
 			if(expires <= 0){

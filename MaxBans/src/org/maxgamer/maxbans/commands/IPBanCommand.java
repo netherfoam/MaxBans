@@ -33,6 +33,10 @@ public class IPBanCommand implements CommandExecutor{
 		if(args.length > 0){
 			String ip;
 			String name = args[0];
+			if(name.isEmpty()){
+				sender.sendMessage(plugin.color_primary + " No name/IP given.");
+				return true;
+			}
 			
 			if(!Util.isIP(name)){
 				name = plugin.getBanManager().match(name);

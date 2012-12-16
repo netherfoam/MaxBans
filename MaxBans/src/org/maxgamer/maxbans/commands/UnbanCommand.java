@@ -22,13 +22,16 @@ public class UnbanCommand implements CommandExecutor{
 		String usage = plugin.color_secondary + "Usage: /unban <player>";
 		
 		if(args.length > 0){
+			boolean silent = Util.isSilent(args);
 			String name = args[0];
+			if(name.isEmpty()){
+				sender.sendMessage(plugin.color_primary + " No name given.");
+				return true;
+			}
 			
 			Ban ban = null;
 			IPBan ipBan = null;
-			
-			boolean silent = Util.isSilent(args);
-			
+						
 			if(!Util.isIP(name)){
 				name = plugin.getBanManager().match(name, true);
 				ban = plugin.getBanManager().getBan(name);

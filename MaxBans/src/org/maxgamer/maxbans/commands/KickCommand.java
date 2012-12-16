@@ -22,8 +22,12 @@ public class KickCommand implements CommandExecutor{
 		String usage = plugin.color_secondary + "Usage: /kick <player> [-s] [reason]";
 		
 		if(args.length > 0){
-			String name = args[0];
 			boolean silent = Util.isSilent(args);
+			String name = args[0];
+			if(name.isEmpty()){
+				sender.sendMessage(plugin.color_primary + " No name given.");
+				return true;
+			}
 			String reason = Util.buildReason(args);
 			String banner;
 			
