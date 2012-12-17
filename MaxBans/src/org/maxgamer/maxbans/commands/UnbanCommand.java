@@ -46,7 +46,6 @@ public class UnbanCommand implements CommandExecutor{
 			if(ban != null || ipBan != null){
 				plugin.getBanManager().unban(name);
 				plugin.getBanManager().unbanip(name);
-				sender.sendMessage(ChatColor.GREEN + "Unbanned " + name);
 			}
 			else{
 				sender.sendMessage(plugin.color_primary + "Could not find a ban for " + plugin.color_secondary + name + plugin.color_primary + ".");

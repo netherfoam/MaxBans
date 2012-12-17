@@ -12,6 +12,10 @@ import org.maxgamer.maxbans.util.Util;
 
 public class DupeIPCommand implements CommandExecutor{
     private MaxBans plugin;
+	ChatColor banned = ChatColor.RED;
+	ChatColor online = ChatColor.GREEN;
+	ChatColor offline = ChatColor.GRAY;
+    
     public DupeIPCommand(MaxBans plugin){
         this.plugin = plugin;
     }
@@ -42,28 +46,16 @@ public class DupeIPCommand implements CommandExecutor{
 				ip = name;
 			}
 			
-			sender.sendMessage(plugin.color_primary + "Scanning " + plugin.color_secondary + name + plugin.color_primary + " on " + plugin.color_secondary + ip + ".  [" + ChatColor.RED + "Banned" + ChatColor.WHITE + "]" + ChatColor.WHITE + " [" + ChatColor.LIGHT_PURPLE + "Online" + ChatColor.WHITE + "]" + ChatColor.WHITE + " [" + ChatColor.GREEN + "Offline" + ChatColor.WHITE + "]");
+
+			
+			sender.sendMessage(plugin.color_primary + "Scanning " + getChatColor(name) + name + plugin.color_primary + " on " + plugin.color_secondary + ip + ChatColor.WHITE + ".  [" + banned + "Banned" + ChatColor.WHITE + "] [" + online + "Online" + ChatColor.WHITE + "] [" + offline + "Offline" + ChatColor.WHITE + "]");
 			
 			StringBuilder sb = new StringBuilder();
 			
 			for(Entry<String, String> entry : plugin.getBanManager().getIPHistory().entrySet()){
 				if(entry.getValue().equals(ip) && !entry.getKey().equals(name.toLowerCase())){
 					String dupe = entry.getKey();
-					if(plugin.getBanManager().getBan(dupe) != null){
-						sb.append(ChatColor.RED);
-						sb.append(dupe);
-						sb.append(", ");
-					}
-					else if(Bukkit.getPlayerExact(dupe) != null){
-						sb.append(ChatColor.LIGHT_PURPLE);
-						sb.append(dupe);
-						sb.append(", ");
-					}
-					else{
-						sb.append(ChatColor.GREEN);
-						sb.append(dupe);
-						sb.append(", ");
-					}
+					sb.append(getChatColor(dupe).toString()+ dupe + ", ");
 				}
 			}
 			
@@ -79,6 +71,18 @@ public class DupeIPCommand implements CommandExecutor{
 		else{
 			sender.sendMessage(usage);
 			return true;
+		}
+	}
+	
+	public ChatColor getChatColor(String name){
+		if(Util.isIP(name)){
+			if(plugin.getBanManager().getIPBan(name) != null) return banned;
+			else return offline; //Well...
+		}
+		else{
+			if(plugin.getBanManager().getBan(name) != null) return banned;
+			if(Bukkit.getPlayerExact(name) != null) return online;
+			return offline;
 		}
 	}
 }
