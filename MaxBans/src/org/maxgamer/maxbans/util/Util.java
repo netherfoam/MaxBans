@@ -188,7 +188,6 @@ public class Util{
 	public static String buildReason(String[] args){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 1; i < args.length; i++){
-			if(args[i].equals("")) break; //This is the end.
 			sb.append(args[i]);
 			sb.append(" ");
 		}
