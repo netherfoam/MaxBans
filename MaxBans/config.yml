@@ -12,3 +12,5 @@ color:
 chat-commands:
     - me
     - say
+
+notify: true

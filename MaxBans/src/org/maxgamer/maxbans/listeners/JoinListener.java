@@ -92,7 +92,7 @@ public class JoinListener implements Listener{
         }
         
         StringBuilder km = new StringBuilder(25); //kickmessage
-        km.append("You\'re banned!\n Reason: ");
+        km.append("You\'re "+(ipban == null ? "" : "IP ")+"banned!\n Reason: ");
         km.append(reason);
         km.append("\n By ");
         km.append(banner + ". ");  //this is probably going to make the length too long
@@ -103,5 +103,13 @@ public class JoinListener implements Listener{
         }
         event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         event.setKickMessage(km.toString());
+        
+        if(plugin.getConfig().getBoolean("notify", true)){
+	        for(Player p : Bukkit.getOnlinePlayers()){
+	        	if(p.hasPermission("maxbans.notify")){
+	        		p.sendMessage(plugin.color_primary + player.getName() + plugin.color_secondary + " (" + plugin.color_primary + address.getHostAddress() + plugin.color_secondary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!");
+	        	}
+	        }
+        }
     }
 }
