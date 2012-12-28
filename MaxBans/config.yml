@@ -13,4 +13,7 @@ chat-commands:
     - me
     - say
 
+#Should we notify players with maxbans.notify whenever a banned player tries (fails) to join?
 notify: true
+#Should we verify names have the letters (A-Z,a-z,0-9 and _) only and are valid?
+filter-names: true

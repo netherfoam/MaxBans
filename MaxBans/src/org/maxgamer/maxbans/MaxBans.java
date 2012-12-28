@@ -11,42 +11,45 @@ import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
 
 public class MaxBans extends JavaPlugin{
-        private BanManager banManager;
-        
-        private BanCommand banCommand;
-        private IPBanCommand ipBanCommand;
-        private MuteCommand muteCommand;
-        
-        private TempBanCommand tempBanCommand;
-        private TempIPBanCommand tempIPBanCommand;
-        private TempMuteCommand tempMuteCommand;
-        
-        private UnbanCommand unbanCommand;
-        private UnMuteCommand unMuteCommand;
-        
-        private CheckIPCommand checkIPCommand;
-        private CheckBanCommand checkBanCommand;
-        private DupeIPCommand dupeIPCommand;
-        
-        private WarnCommand warnCommand;
-        private ClearWarningsCommand clearWarningsCommand;
-        
-        private LockdownCommand lockdownCommand;
-        private KickCommand kickCommand;
-        private ForceSpawnCommand forceSpawnCommand;
-        
-        private ReloadCommand reloadCommand;
-        private MBCommand mbCommand;
-                
-        private JoinListener joinListener;
-        private HeroChatListener herochatListener; 
-        private ChatListener chatListener;
-        private ChatCommandListener chatCommandListener;
-        
-        private Database db;
-        
-        public ChatColor color_primary;
-        public ChatColor color_secondary;
+    private BanManager banManager;
+    
+    private BanCommand banCommand;
+    private IPBanCommand ipBanCommand;
+    private MuteCommand muteCommand;
+    
+    private TempBanCommand tempBanCommand;
+    private TempIPBanCommand tempIPBanCommand;
+    private TempMuteCommand tempMuteCommand;
+    
+    private UnbanCommand unbanCommand;
+    private UnMuteCommand unMuteCommand;
+    
+    private CheckIPCommand checkIPCommand;
+    private CheckBanCommand checkBanCommand;
+    private DupeIPCommand dupeIPCommand;
+    
+    private WarnCommand warnCommand;
+    private ClearWarningsCommand clearWarningsCommand;
+    
+    private LockdownCommand lockdownCommand;
+    private KickCommand kickCommand;
+    private ForceSpawnCommand forceSpawnCommand;
+    
+    private ReloadCommand reloadCommand;
+    private MBCommand mbCommand;
+            
+    private JoinListener joinListener;
+    private HeroChatListener herochatListener; 
+    private ChatListener chatListener;
+    private ChatCommandListener chatCommandListener;
+    
+    private Database db;
+    
+    public ChatColor color_primary;
+    public ChatColor color_secondary;
+    
+    /** Should we filter players names onJoin? */
+    public boolean filter_names;
         
 	public void onEnable(){
 		/* Generates files for the first run */
@@ -61,8 +64,6 @@ public class MaxBans extends JavaPlugin{
 			this.saveResource("config.yml", false);
 		}
 		
-		
-		
 		/*
 		 * Reloads the config from disk.
 		 * Normally this is done before onEnable()
@@ -71,6 +72,8 @@ public class MaxBans extends JavaPlugin{
 		 */
 		this.reloadConfig();
 		this.getConfig().options().copyDefaults();
+		
+		this.filter_names = getConfig().getBoolean("filter-names");
 		
 		this.color_primary = ChatColor.getByChar(getConfig().getString("color.primary"));
 		this.color_secondary = ChatColor.getByChar(getConfig().getString("color.secondary"));

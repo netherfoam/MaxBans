@@ -16,6 +16,7 @@ import org.maxgamer.maxbans.util.Util;
 
 public class JoinListener implements Listener{
     private MaxBans plugin;
+    
     public JoinListener(MaxBans plugin){
         this.plugin = plugin;
     }
@@ -24,16 +25,18 @@ public class JoinListener implements Listener{
     public void onJoinHandler(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         
-        String invalidChars = Util.getInvalidChars(player.getName());
-        if(!invalidChars.isEmpty()){
-        	event.setKickMessage("Kicked by MaxBans.\nYour name contains invalid characters:\n'" + invalidChars + "'");
-        	event.setResult(Result.KICK_OTHER);
-        	return;
-        }
-        else if(player.getName().isEmpty()){
-        	event.setKickMessage("Kicked by MaxBans.\nYour name is invalid!");
-        	event.setResult(Result.KICK_OTHER);
-        	return;
+        if(plugin.filter_names){
+	        String invalidChars = Util.getInvalidChars(player.getName());
+	        if(!invalidChars.isEmpty()){
+	        	event.setKickMessage("Kicked by MaxBans.\nYour name contains invalid characters:\n'" + invalidChars + "'");
+	        	event.setResult(Result.KICK_OTHER);
+	        	return;
+	        }
+	        else if(player.getName().isEmpty()){
+	        	event.setKickMessage("Kicked by MaxBans.\nYour name is invalid!");
+	        	event.setResult(Result.KICK_OTHER);
+	        	return;
+	        }
         }
         
         //Ban
