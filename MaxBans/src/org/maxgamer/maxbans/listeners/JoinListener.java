@@ -108,9 +108,10 @@ public class JoinListener implements Listener{
         event.setKickMessage(km.toString());
         
         if(plugin.getConfig().getBoolean("notify", true)){
+        	String msg = (ban == null ? plugin.color_secondary : ChatColor.RED) + player.getName() + plugin.color_primary + " (" + (ipban == null ? plugin.color_secondary : ChatColor.RED) + address.getHostAddress() + plugin.color_primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 
 	        for(Player p : Bukkit.getOnlinePlayers()){
 	        	if(p.hasPermission("maxbans.notify")){
-	        		p.sendMessage(plugin.color_secondary + player.getName() + plugin.color_primary + " (" + plugin.color_secondary + address.getHostAddress() + plugin.color_primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!");
+	        		p.sendMessage(msg);
 	        	}
 	        }
         }
