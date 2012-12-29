@@ -17,3 +17,11 @@ chat-commands:
 notify: true
 #Should we verify names have the letters (A-Z,a-z,0-9 and _) only and are valid?
 filter-names: true
+
+database:
+    mysql: false
+    user: root
+    pass: passwd
+    host: localhost
+    port: 3306
+    name: maxbans

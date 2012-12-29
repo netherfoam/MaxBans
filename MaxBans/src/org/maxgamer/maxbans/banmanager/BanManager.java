@@ -52,10 +52,11 @@ public class BanManager{
 	 * Don't use this except when starting up.  It is very resource intensive.
 	 */
 	public void reload(){
-		plugin.getDB().getDatabaseWatcher().run(); //Clears it. Does not restart it.
-		
 		//Check the database is the same instance
 		this.db = plugin.getDB();
+		if(db.getDatabaseWatcher() != null){
+			db.getDatabaseWatcher().run(); //Clears it. Does not restart it.
+		}
 		
 		//Clear the memory cache
 		this.bans.clear();

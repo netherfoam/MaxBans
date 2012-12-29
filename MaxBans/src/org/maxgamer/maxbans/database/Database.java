@@ -83,11 +83,25 @@ public class Database {
 	
 	
 	public Database(MaxBans plugin, File file){
-		this.plugin = plugin;
-		
+		this(plugin);
 		this.dbCore = new SQLite(plugin, file);
-		
-		
+	}
+	/**
+	 * Untested.
+	 * @param plugin
+	 * @param host
+	 * @param dbName
+	 * @param user
+	 * @param pass
+	 * @param port
+	 */
+	public Database(MaxBans plugin, String host, String dbName, String user, String pass, String port){
+		this(plugin);
+		String url = "jdbc:mysql://"+host+":"+port+"/"+dbName;
+		this.dbCore = new MySQL(plugin, url, user, pass);
+	}
+	private Database(MaxBans plugin){
+		this.plugin = plugin;
 		this.buffer = new Buffer(this);
 		this.dbw = new DatabaseWatcher(this);
 	}

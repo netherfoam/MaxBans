@@ -78,8 +78,20 @@ public class MaxBans extends JavaPlugin{
 		this.color_primary = ChatColor.getByChar(getConfig().getString("color.primary"));
 		this.color_secondary = ChatColor.getByChar(getConfig().getString("color.secondary"));
 		
-		//The database for bans
-		db = new Database(this, new File(this.getDataFolder(), "bans.db"));
+		if(getConfig().getBoolean("database.mysql", false)){
+			getLogger().info("Using MySQL");
+			String user = getConfig().getString("database.user");
+			String pass = getConfig().getString("database.pass");
+			String host = getConfig().getString("database.host");
+			String name = getConfig().getString("database.name");
+			String port = getConfig().getString("database.port");
+			db = new Database(this, host, name, user, pass, port);
+		}
+		else{
+			getLogger().info("Using SQLite");
+			//The database for bans
+			db = new Database(this, new File(this.getDataFolder(), "bans.db"));
+		}
 		//Creates the tables if they don't exist
 		db.createTables();
 		
