@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -114,6 +115,24 @@ public class Database {
 	}
 	public Buffer getBuffer(){
 		return this.buffer;
+	}
+	
+	/**
+	 * Just like java.sql.PreparedStatement, except this query will be executed later in a different thread.
+	 * @param query The query to execute
+	 * @param objs The Strings to replace ?'s with in the query supplied above
+	 */
+	public void execute(String query, Object...objs){
+		try {
+			PreparedStatement ps = this.getConnection().prepareStatement(query);
+			for(int i = 0; i < objs.length; i++){
+				ps.setString(i + 1, objs[i].toString());
+			}
+			this.getBuffer().addString(ps);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Could not add query: " + query + ", values: " + Arrays.toString(objs));
+		}
 	}
 	
 	/**

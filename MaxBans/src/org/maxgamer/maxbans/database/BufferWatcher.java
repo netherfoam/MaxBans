@@ -1,17 +1,19 @@
 package org.maxgamer.maxbans.database;
 
+import java.sql.PreparedStatement;
+
 /**
  * This class is used for running queries in another thread on the database.
  * This class cannot be used to read data.
  */
 public class BufferWatcher implements Runnable{
 	private Buffer buffer;
-	private String query;
+	private PreparedStatement ps;
 	private Database db;
 	
-	public BufferWatcher(Database db, Buffer buffer, String query){
+	public BufferWatcher(Database db, Buffer buffer, PreparedStatement ps){
 		this.buffer = buffer;
-		this.query = query;
+		this.ps = ps;
 		this.db = db;
 	}
 	public void run() {
@@ -24,7 +26,7 @@ public class BufferWatcher implements Runnable{
 			}
 		}
 		buffer.locked = true;
-		buffer.queries.add(query);
+		buffer.queries.add(ps);
 		buffer.locked = false;
 		
 		if(db.getTask() == null){

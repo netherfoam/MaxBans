@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.database;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DatabaseWatcher implements Runnable{
 	private Database db;
@@ -28,15 +27,11 @@ public class DatabaseWatcher implements Runnable{
 		
 		if(db.getBuffer().queries.size() > 0){
 			try{
-				Statement st = db.getConnection().createStatement();
-				
-				while(db.getBuffer().queries.size() > 0){
-					st.addBatch(db.getBuffer().queries.remove(0));
+				while(!db.getBuffer().queries.isEmpty()){
+					db.getBuffer().queries.remove(0).execute();
 				}
 				//We can release this now
 				db.getBuffer().locked = false;
-				
-				st.executeBatch();
 			}
 			catch(SQLException e){
 				e.printStackTrace();

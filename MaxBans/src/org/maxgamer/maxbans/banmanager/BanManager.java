@@ -116,7 +116,8 @@ public class BanManager{
 				
 				if(expires != 0){
 					if(expires < System.currentTimeMillis()){
-						db.getBuffer().addString("DELETE FROM ipbans WHERE ip = '"+ip+"' AND time <> 0");
+						//db.getBuffer().addString("DELETE FROM ipbans WHERE ip = '"+ip+"' AND time <> 0");
+						db.execute("DELETE FROM ipbans WHERE ip = ? AND TIME <> 0", ip);
 					}
 					else{
 						TempIPBan tib = new TempIPBan(reason, banner, time, expires);
@@ -144,7 +145,8 @@ public class BanManager{
 				
 				if(expires != 0){
 					if(expires < System.currentTimeMillis()){
-						db.getBuffer().addString("DELETE FROM mutes WHERE name = '"+name+"' AND time <> 0");
+						//db.getBuffer().addString("DELETE FROM mutes WHERE name = '"+name+"' AND time <> 0");
+						db.execute("DELETE FROM mutes WHERE name = ? AND time <> 0", name);
 					}
 					else{
 						TempMute tmute = new TempMute(banner, time, expires);
@@ -236,9 +238,8 @@ public class BanManager{
             }
             else{
             	tempmutes.remove(name);
-            	//TODO: Shouldnt I be escaping here?
-            	String query = "DELETE FROM mutes WHERE name = '"+name+"' AND expires <> 0";
-            	db.getBuffer().addString(query);
+            	
+            	db.execute("DELETE FROM mutes WHERE name = ? AND expires <> 0", name);
             }
         }
         return null;
@@ -265,8 +266,7 @@ public class BanManager{
     		}
     		else{
     			tempbans.remove(name);
-    			String query = "DELETE FROM bans WHERE name = '"+name+"' AND expires <> 0";
-            	db.getBuffer().addString(query);
+    			db.execute("DELETE FROM bans WHERE name = ? AND expires <> 0", name);
     		}
     	}
     	
@@ -292,8 +292,7 @@ public class BanManager{
     		}
     		else{
     			ipbans.remove(ip);
-    			String query = "DELETE FROM ipbans WHERE ip = '"+ip+"' AND expires <> 0";
-            	db.getBuffer().addString(query);
+    			db.execute("DELETE FROM ipbans WHERE ip = ? AND expires <> 0", ip);
     		}
     	}
     	return null;
@@ -367,7 +366,8 @@ public class BanManager{
     	banner = db.escape(banner);
     	reason = db.escape(reason);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
+    	//plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
+    	db.execute("INSERT INTO bans (name, reason, banner, time) VALUES (?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis());
     }
     
     /**
@@ -382,17 +382,16 @@ public class BanManager{
     	
     	//Now we can escape it
     	name = db.escape(name);
-    	String query = "";
     	if(ban != null){
     		this.bans.remove(name);
-    		query += "DELETE FROM bans WHERE name = '"+name+"'; ";
+    		db.execute("DELETE FROM bans WHERE name = ?", name);
     	}
     	if(tBan != null){
     		this.tempbans.remove(name);
-    		query += "DELETE FROM bans WHERE name = '"+name+"'; ";
-    	}
-    	if(!query.isEmpty()){
-	    	plugin.getDB().getBuffer().addString(query);
+    		if(ban == null){
+    			//We still need to run this query then.
+    			db.execute("DELETE FROM bans WHERE name = ?", name);
+    		}
     	}
     	unbanip(ip);
     }
@@ -405,17 +404,16 @@ public class BanManager{
     	IPBan ipBan = this.ipbans.get(ip);
     	TempIPBan tipBan = this.tempipbans.get(ip);
     	
-    	String query = "";
     	if(ipBan != null){
     		this.ipbans.remove(ip);
-    		query += "DELETE FROM ipbans WHERE ip = '"+ip+"'; ";
+    		db.execute("DELETE FROM ipbans WHERE ip = ?", ip);
     	}
     	if(tipBan != null){
     		this.tempipbans.remove(ip);
-    		query += "DELETE FROM ipbans WHERE ip = '"+ip+"'; ";
-    	}
-    	if(!query.isEmpty()){
-	    	plugin.getDB().getBuffer().addString(query);
+    		if(ipBan == null){
+    			//We still need to delete it from the database
+    			db.execute("DELETE FROM ipbans WHERE ip = ?", ip);
+    		}
     	}
     }
     
@@ -431,17 +429,17 @@ public class BanManager{
     	
     	//Escape it
     	name = db.escape(name);
-    	String query = "";
     	if(mute != null){
     		this.mutes.remove(name);
-    		query = "DELETE FROM mutes WHERE name = '"+name+"';";
+    		db.execute("DELETE FROM mutes WHERE name = ?", name);
     	}
     	if(tMute != null){
     		this.tempmutes.remove(name);
-    		query = "DELETE FROM mutes WHERE name = '"+name+"';";
+    		if(mute == null){
+    			//We still need to delete the mute from the database
+    			db.execute("DELETE FROM mutes WHERE name = ?", name);
+    		}
     	}
-    	
-    	plugin.getDB().getBuffer().addString(query);
     }
     
     /**
@@ -463,7 +461,7 @@ public class BanManager{
     	banner = db.escape(banner);
     	reason = db.escape(reason);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time, expires) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
+    	db.execute("INSERT INTO bans (name, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis(), expires);
     }
     
     /**
@@ -483,7 +481,7 @@ public class BanManager{
     	banner = db.escape(banner);
     	reason = db.escape(reason);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
+    	db.execute("INSERT INTO ipbans (ip, reason, banner, time) VALUES (?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis());
     }
     
     /**
@@ -504,7 +502,7 @@ public class BanManager{
     	banner = db.escape(banner);
     	reason = db.escape(reason);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES ('"+ip+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"','" + expires+"');");
+    	db.execute("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis(), expires);
     }
     
     /**
@@ -522,7 +520,7 @@ public class BanManager{
     	name = db.escape(name);
     	banner = db.escape(banner);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"');");
+    	db.execute("INSERT INTO mutes (name, muter, time) VALUES (?, ?, ?)", name, banner, System.currentTimeMillis());
     }
     
     /**
@@ -542,7 +540,7 @@ public class BanManager{
     	name = db.escape(name);
     	banner = db.escape(banner);
     	
-    	plugin.getDB().getBuffer().addString("INSERT INTO mutes (name, muter, time, expires) VALUES ('"+name+"','" + banner+"','"+System.currentTimeMillis()+"','"+expires+"');");
+    	db.execute("INSERT INTO mutes (name, muter, time, expires) VALUES (?, ?, ?, ?)", name, banner, System.currentTimeMillis(), expires);
     }
     
     /**
@@ -569,7 +567,8 @@ public class BanManager{
     	banner = db.escape(banner);
     	reason = db.escape(reason);
     	
-    	db.getBuffer().addString("INSERT INTO warnings (name, reason, banner, expires) VALUES ('"+name+"','"+reason+"','"+banner+"','"+expires+"')");
+    	//db.getBuffer().addString("INSERT INTO warnings (name, reason, banner, expires) VALUES ('"+name+"','"+reason+"','"+banner+"','"+expires+"')");
+    	db.execute("INSERT INTO warnings (name, reason, banner, expires) VALUES (?, ?, ?, ?)", name, reason, banner, expires);
     	
     	int maxWarns = plugin.getConfig().getInt("max-warnings");
     	if(maxWarns <= 0) return;
@@ -599,8 +598,9 @@ public class BanManager{
     	
     	//Escape it
     	name = db.escape(name);
-
-    	db.getBuffer().addString("DELETE FROM warnings WHERE name = '"+name+"'");
+    	
+    	//db.getBuffer().addString("DELETE FROM warnings WHERE name = '"+name+"'");
+    	db.execute("DELETE FROM warnings WHERE name = ?", name);
     }
     
     /**
@@ -643,17 +643,15 @@ public class BanManager{
     	//Add them to the new or old history
     	list.add(name);
     	
-    	String query;
     	if(this.recentips.containsKey(name)){
-    		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+db.escape(name)+"'";
+    		//query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+db.escape(name)+"'";
+    		db.execute("UPDATE iphistory SET ip = ? WHERE name = ?", ip, name);
     	}
     	else{
-    		query = "INSERT INTO iphistory (name, ip) VALUES ('"+db.escape(name)+"','"+ip+"')";
+    		db.execute("INSERT INTO iphistory (name, ip) VALUES (?, ?)", name, ip);
     	}
     	
     	this.recentips.put(name, ip);
-    	
-    	this.db.getBuffer().addString(query);
     }
     
     /**

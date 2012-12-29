@@ -1,7 +1,7 @@
 package org.maxgamer.maxbans.database;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 
@@ -9,7 +9,7 @@ public class Buffer {
 	private Database db;
 	public boolean locked = false;
 	
-	public List<String> queries = new ArrayList<String>(3);
+	public ArrayList<PreparedStatement> queries = new ArrayList<PreparedStatement>(3);
 	
 	public Buffer(Database db){
 		this.db = db;
@@ -19,7 +19,7 @@ public class Buffer {
 	 * Adds a query to the buffer
 	 * @param q The query to add.  This should be sanitized beforehand.
 	 */
-	public void addString(String q){
-		Bukkit.getScheduler().runTaskAsynchronously(db.getPlugin(), new BufferWatcher(db, this, q));
+	public void addString(PreparedStatement ps){
+		Bukkit.getScheduler().runTaskAsynchronously(db.getPlugin(), new BufferWatcher(db, this, ps));
 	}
 }
