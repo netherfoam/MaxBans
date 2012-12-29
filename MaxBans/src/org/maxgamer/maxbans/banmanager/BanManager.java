@@ -24,7 +24,12 @@ public class BanManager{
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
+	
+	//				Username, IP address
 	private HashMap<String, String> recentips = new HashMap<String, String>();
+	//				IP Address, Usernames
+	private HashMap<String, HashSet<String>> iplookup = new HashMap<String, HashSet<String>>(); 
+	
 	private TrieSet players = new TrieSet();
 	
 	private HashSet<String> chatCommands = new HashSet<String>();
@@ -44,7 +49,7 @@ public class BanManager{
 	
 	/**
 	 * Reloads from the database.
-	 * Don't use this except when starting up.
+	 * Don't use this except when starting up.  It is very resource intensive.
 	 */
 	public void reload(){
 		plugin.getDB().getDatabaseWatcher().run(); //Clears it. Does not restart it.
@@ -163,6 +168,13 @@ public class BanManager{
 				String ip = rs.getString("ip");
 				
 				this.recentips.put(name, ip);
+				HashSet<String> list = this.iplookup.get(ip);
+				if(list == null){
+					list = new HashSet<String>(8);
+					this.iplookup.put(ip, list);
+				}
+				list.add(name);
+				
 				this.players.add(name);
 			}
 			
@@ -303,6 +315,15 @@ public class BanManager{
      */
     public HashMap<String, String> getIPHistory(){
     	return this.recentips;
+    }
+    
+    /**
+     * Returns a HashSet of lower case users which have joined from the given IP address
+     * @param ip The IP to lookup
+     * @return a HashSet of lower case users which have joined from the given IP address
+     */
+    public HashSet<String> getUsers(String ip){
+    	return this.iplookup.get(ip);
     }
     
     /**
@@ -599,16 +620,30 @@ public class BanManager{
      */
     public void logIP(String name, String ip){
     	name = name.toLowerCase();
-    	String query;
+    	String oldIP = this.recentips.get(name);
+    	if(ip.equals(oldIP)) return; //Nothing has changed.
     	
     	if(!this.recentips.containsKey(name)){
-    		//New player, add them to our set of names
+    		//First time we've seen this player! Add them to the autocomplete list
     		this.players.add(name);
     	}
-    		
-    	//Will this work?
-    	if(ip.equals(this.recentips.get(name))) return; //That's old news.
+    	else{
+    		//List shouldn't be null, because they've been recorded already
+    		HashSet<String> list = this.iplookup.get(oldIP);
+    		list.remove(name);
+    	}
     	
+    	//Get the list of users on their ip
+    	HashSet<String> list = this.iplookup.get(ip);
+    	if(list == null){
+    		//No history, so add the history object
+    		list = new HashSet<String>();
+    		this.iplookup.put(ip, list);
+    	}
+    	//Add them to the new or old history
+    	list.add(name);
+    	
+    	String query;
     	if(this.recentips.containsKey(name)){
     		query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+db.escape(name)+"'";
     	}

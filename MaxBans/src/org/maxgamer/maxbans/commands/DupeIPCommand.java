@@ -1,5 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
+import java.util.HashSet;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -52,9 +53,10 @@ public class DupeIPCommand implements CommandExecutor{
 			
 			StringBuilder sb = new StringBuilder();
 			
-			for(Entry<String, String> entry : plugin.getBanManager().getIPHistory().entrySet()){
-				if(entry.getValue().equals(ip) && !entry.getKey().equals(name.toLowerCase())){
-					String dupe = entry.getKey();
+			HashSet<String> ips = plugin.getBanManager().getUsers(ip);
+			if(ips != null){ //Could be null if we're looking up an invalid IP
+				for(String dupe : ips){
+					if(dupe.equalsIgnoreCase(name)) continue; //Same guy is not a duplicate of himself.
 					sb.append(getChatColor(dupe).toString()+ dupe + ", ");
 				}
 			}
