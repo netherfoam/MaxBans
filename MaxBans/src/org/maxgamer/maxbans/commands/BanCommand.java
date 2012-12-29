@@ -8,7 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
+import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
+import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class BanCommand implements CommandExecutor{
@@ -32,28 +34,40 @@ public class BanCommand implements CommandExecutor{
 				sender.sendMessage(plugin.color_primary + " No name given.");
 				return true;
 			}
-			name = plugin.getBanManager().match(name);
-			if(name == null){
-				name = args[0]; //Use exact name then.
-			}
-			
-			Ban ban = plugin.getBanManager().getBan(name);
-			if(ban != null && !(ban instanceof TempBan)){
-				sender.sendMessage(plugin.color_secondary + "That player is already banned.");
-				return true;
-			}
 			
 			//Build reason
 			String reason = Util.buildReason(args);
 			
 			String banner = Util.getName(sender);
 			
-			plugin.getBanManager().ban(name, reason, banner);
-			
-			//Kick them
-			Player player = Bukkit.getPlayerExact(name);
-			if(player != null && player.isOnline()){
-				player.kickPlayer("You have been permanently banned for: \n" + reason + "\nBy " + banner);
+			if(!Util.isIP(name)){
+				name = plugin.getBanManager().match(name);
+				if(name == null){
+					name = args[0]; //Use exact name then.
+				}
+				
+				Ban ban = plugin.getBanManager().getBan(name);
+				if(ban != null && !(ban instanceof TempBan)){
+					sender.sendMessage(plugin.color_secondary + "That player is already banned.");
+					return true;
+				}
+				
+				plugin.getBanManager().ban(name, reason, banner);
+				
+				//Kick them
+				Player player = Bukkit.getPlayerExact(name);
+				if(player != null){
+					player.kickPlayer("You have been permanently banned for: \n" + reason + "\nBy " + banner);
+				}
+			}
+			else{
+				IPBan ipban = plugin.getBanManager().getIPBan(name);
+				if(ipban != null && !(ipban instanceof TempIPBan)){
+					sender.sendMessage(plugin.color_secondary + "That IP is already banned.");
+					return true;
+				}
+				
+				plugin.getBanManager().ipban(name, reason, banner);
 			}
 			
 			//Notify online players
