@@ -25,10 +25,12 @@ public class DatabaseWatcher implements Runnable{
 		//Lock it to see the size of it
 		db.getBuffer().locked = true;
 		
-		if(db.getBuffer().queries.size() > 0){
+		if(!db.getBuffer().queries.isEmpty()){
 			try{
 				while(!db.getBuffer().queries.isEmpty()){
-					db.getBuffer().queries.remove(0).execute();
+					//db.getBuffer().queries.remove(0).execute();
+					BufferStatement bs = db.getBuffer().queries.remove(0);
+					bs.prepareStatement(db.getConnection()).execute();
 				}
 				//We can release this now
 				db.getBuffer().locked = false;

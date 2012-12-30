@@ -74,7 +74,7 @@ public class BanManager{
 		this.lockdownReason = plugin.getConfig().getString("lockdown-reason");
 		
 		//Reload the cache from the database.
-		String query = "none";
+		String query = "";
 		plugin.getLogger().info("Loading from DB...");
 		try{
 			//Phase 1: Load bans
