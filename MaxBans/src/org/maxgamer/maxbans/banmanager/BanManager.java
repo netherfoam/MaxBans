@@ -54,9 +54,14 @@ public class BanManager{
 	public void reload(){
 		//Check the database is the same instance
 		this.db = plugin.getDB();
+		
+		if(db.getTask() != null){
+			db.getTask().cancel();
+		}
 		if(db.getDatabaseWatcher() != null){
 			db.getDatabaseWatcher().run(); //Clears it. Does not restart it.
 		}
+		
 		
 		//Clear the memory cache
 		this.bans.clear();
