@@ -184,6 +184,8 @@ public class Util{
 	 * Builds a reason out of an array of args from a command
 	 * @param args The String[] parsed from the command
 	 * @return The String reason.
+	 * 
+	 * Trims trailing spaces.
 	 */
 	public static String buildReason(String[] args){
 		StringBuilder sb = new StringBuilder();
@@ -193,12 +195,19 @@ public class Util{
 		}
 		
 		if(sb.length() < 1){
-			sb = new StringBuilder("Misconduct");
+			return "Misconduct";
 		}
 		else{
 			//Remove that space char.
 			sb.replace(sb.length() - 1, sb.length(), "");
 		}
+		
+		//Trim off trailing spaces
+		int i = sb.length() - 1;
+		while(sb.charAt(i) == ' '){
+			i--;
+		}
+		sb.replace(i + 1, sb.length(), "");
 		
 		return sb.toString();
 	}
