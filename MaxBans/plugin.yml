@@ -1,7 +1,7 @@
 name: MaxBans
 version: 0.9
 main: org.maxgamer.maxbans.MaxBans
-author: [Darekfive, Netherfoam]
+authors: [Darekfive, Netherfoam]
 
 soft-depend: [HeroChat]
 
