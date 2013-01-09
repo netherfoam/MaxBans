@@ -80,19 +80,24 @@ public class Database {
 
 	private BukkitTask task;
 	
-	
+	/**
+	 * Creates a new database connection, using SQLite flatfile.
+	 * The Database object handles file creation.
+	 * @param plugin The MaxBans plugin instance
+	 * @param file The File object to use for SQL storage.
+	 */
 	public Database(MaxBans plugin, File file){
 		this(plugin);
 		this.dbCore = new SQLite(plugin, file);
 	}
 	/**
-	 * Untested.
-	 * @param plugin
-	 * @param host
-	 * @param dbName
-	 * @param user
-	 * @param pass
-	 * @param port
+	 * Still experimental.
+	 * @param plugin The MaxBans plugin
+	 * @param host The host address (Eg 127.0.0.1 or maxgamer.org)
+	 * @param dbName The name of the MySQL database (Eg maxbans). This object does NOT handle creating the database.
+	 * @param user The username to connect as - E.g. root
+	 * @param pass The password for the given user
+	 * @param port The port to connect on.
 	 */
 	public Database(MaxBans plugin, String host, String dbName, String user, String pass, String port){
 		this(plugin);
@@ -146,7 +151,6 @@ public class Database {
 	 * @return True if the table is found
 	 */
 	public boolean hasTable(String table){
-		//String query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+table+"'";
 		String query = "SELECT * FROM " + table + " LIMIT 0,1";
 		try {
 			PreparedStatement ps = this.getConnection().prepareStatement(query);
@@ -155,8 +159,6 @@ public class Database {
 			
 			return true;
 		} catch (SQLException e) {
-			//e.printStackTrace();
-			//this.plugin.getLogger().severe(ChatColor.RED + "Could not verify table " + table);
 			return false;
 		}
 	}

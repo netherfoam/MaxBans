@@ -34,9 +34,12 @@ public class BanManager{
 	
 	private HashSet<String> chatCommands = new HashSet<String>();
 	
+	/** Whether the server is in lockdown mode or not */
 	private boolean lockdown = false;
-	private String lockdownReason = "None";
+	/** The resaon the server is in lockdown - Defaults to Maintenance */
+	private String lockdownReason = "Maintenance";
 	
+	/** The database that we should use */
 	private Database db;
 	
 	public BanManager(MaxBans plugin){
@@ -45,6 +48,11 @@ public class BanManager{
 		
 		this.reload();
 	}
+	
+	/** Returns a hashmap of bans.  Do not edit these. */
+	public HashMap<String, Ban> getBans(){ return bans; }
+	/** Returns a hashmap of ip bans. Do not edit these. */
+	public HashMap<String, IPBan> getIPBans(){ return ipbans; }
 	
 	
 	/**
