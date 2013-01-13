@@ -30,13 +30,12 @@ public class DNSBL{
 	private DirContext ictx;
 	private ArrayList<String> lookupServices = new ArrayList<String>();
 	private static String[] RECORD_TYPES = {"A"};
-	
-	private Database db;
+
 	private MaxBans plugin;
 	
 	public DNSBL(MaxBans plugin) throws NamingException{
 		this.plugin = plugin;
-		this.db = plugin.getDB();
+		Database db = plugin.getDB();
 		
 		StringBuilder sb = new StringBuilder();
 		
@@ -118,7 +117,7 @@ public class DNSBL{
     	CacheRecord r = this.history.get(ip);
     	if(r == null) return null;
     	if(r.hasExpired()){
-    		db.execute("DELETE FROM proxys WHERE ip = ?", ip);
+    		plugin.getDB().execute("DELETE FROM proxys WHERE ip = ?", ip);
     		return null;
     	}
     	
@@ -166,16 +165,20 @@ public class DNSBL{
             catch (NamingException e){} //Crap... Our lookup failed?
         }
     	if(getRecord(ip) == null){ //Do we have an old record?
-    		db.execute("INSERT INTO proxys (ip, status, created) VALUES (?, ?, ?)", ip, r.getStatus().toString(), r.getCreated()); //No old records
+    		plugin.getDB().execute("INSERT INTO proxys (ip, status, created) VALUES (?, ?, ?)", ip, r.getStatus().toString(), r.getCreated()); //No old records
     	}
     	else{
-    		db.execute("UPDATE proxys SET status = ?, created = ? WHERE ip = ?", r.getStatus().toString(), r.getCreated(), ip); //New record
+    		plugin.getDB().execute("UPDATE proxys SET status = ?, created = ? WHERE ip = ?", r.getStatus().toString(), r.getCreated(), ip); //New record
     	}
     	
         this.history.put(ip, r);
         return r.status;
     }
     
+    /**
+     * Represents a DNS status, and the time it was acquired.
+     * Used for caching, as DNS lookups are incredibly slow.
+     */
     public class CacheRecord{
     	private DNSStatus status;
     	private long created;
@@ -189,10 +192,13 @@ public class DNSBL{
     		this.status = status;
     		this.created = created;
     	}
+    	/**
+    	 * Creates a cache record at the current time.
+    	 * @param status The status type (Allowed, denied, unknown)
+    	 */
     	public CacheRecord(DNSStatus status){
     		this(status, System.currentTimeMillis());
     	}
-    	
     	public DNSStatus getStatus(){
     		return status;
     	}
