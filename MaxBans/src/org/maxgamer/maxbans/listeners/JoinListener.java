@@ -1,7 +1,5 @@
 package org.maxgamer.maxbans.listeners;
 
-import java.net.InetAddress;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,6 +10,9 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.*;
+import org.maxgamer.maxbans.util.DNSBL;
+import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
+import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 import org.maxgamer.maxbans.util.Util;
 
 public class JoinListener implements Listener{
@@ -23,7 +24,8 @@ public class JoinListener implements Listener{
     
     @EventHandler (priority = EventPriority.LOWEST)
     public void onJoinHandler(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+        final String address = event.getAddress().getHostAddress();
         
         if(plugin.filter_names){
 	        String invalidChars = Util.getInvalidChars(player.getName());
@@ -43,12 +45,54 @@ public class JoinListener implements Listener{
         Ban ban = plugin.getBanManager().getBan(player.getName());
         
         //IP Ban
-        InetAddress address = event.getAddress();
         IPBan ipban= plugin.getBanManager().getIPBan(address);
         
         //If they havent been banned or IP banned, they can join.
         if(ipban == null && ban == null){
-        	plugin.getBanManager().logIP(player.getName(), address.getHostAddress());
+            if(plugin.getBanManager().getDNSBL() != null){
+            	DNSBL dnsbl = plugin.getBanManager().getDNSBL();
+            	CacheRecord r = dnsbl.getRecord(address);
+            	
+            	if(r == null){
+            		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+						public void run() {
+							DNSStatus status = plugin.getBanManager().getDNSBL().reload(address);
+							if(status == DNSStatus.DENIED){
+								Bukkit.getScheduler().runTask(plugin, new Runnable(){
+									public void run(){
+										//TODO: Swap over to this.
+										//player.kickPlayer("Kicked by MaxBans:\nYour IP ("+address+") is listed as a proxy.");
+				                    	Bukkit.getLogger().info(player.getName() + " is connecting from an IP listed as a proxy.");
+				                    	String msg = plugin.color_secondary + player.getName() + plugin.color_primary + " (" + plugin.color_secondary + address + plugin.color_primary + ") is joining from a proxy IP!"; 
+				            	        for(Player p : Bukkit.getOnlinePlayers()){
+				            	        	if(p.hasPermission("maxbans.notify")){
+				            	        		p.sendMessage(msg);
+				            	        	}
+				            	        }
+									}
+								});
+								Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
+							}
+						}
+            		});
+            	}
+            	else if(r.getStatus() == DNSStatus.DENIED){
+            		//event.disallow(Result.KICK_OTHER, "Kicked By MaxBans:\nYour IP ("+address+") is listed as a proxy.");
+            		//return;
+            		//TODO: Swap over to this
+                    if(plugin.getConfig().getBoolean("notify", true)){
+                    	Bukkit.getLogger().info(player.getName() + " is connecting from an IP listed as a proxy.");
+                    	String msg = plugin.color_secondary + player.getName() + plugin.color_primary + " (" + plugin.color_secondary + address + plugin.color_primary + ") is joining from a proxy IP!"; 
+            	        for(Player p : Bukkit.getOnlinePlayers()){
+            	        	if(p.hasPermission("maxbans.notify")){
+            	        		p.sendMessage(msg);
+            	        	}
+            	        }
+                    }
+            	}
+            }
+        	
+        	plugin.getBanManager().logIP(player.getName(), address);
         	
         	if(plugin.getBanManager().isLockdown()){
     	        if(!player.hasPermission("maxbans.lockdown.bypass")){
@@ -108,7 +152,7 @@ public class JoinListener implements Listener{
         event.setKickMessage(km.toString());
         
         if(plugin.getConfig().getBoolean("notify", true)){
-        	String msg = (ban == null ? plugin.color_secondary : ChatColor.RED) + player.getName() + plugin.color_primary + " (" + (ipban == null ? plugin.color_secondary : ChatColor.RED) + address.getHostAddress() + plugin.color_primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 
+        	String msg = (ban == null ? plugin.color_secondary : ChatColor.RED) + player.getName() + plugin.color_primary + " (" + (ipban == null ? plugin.color_secondary : ChatColor.RED) + address + plugin.color_primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 
 	        for(Player p : Bukkit.getOnlinePlayers()){
 	        	if(p.hasPermission("maxbans.notify")){
 	        		p.sendMessage(msg);

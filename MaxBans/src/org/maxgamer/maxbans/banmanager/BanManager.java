@@ -10,10 +10,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
+import org.maxgamer.maxbans.util.DNSBL;
 
 public class BanManager{
 	private MaxBans plugin;
@@ -25,13 +28,13 @@ public class BanManager{
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
 	
-	//				Username, IP address
+	/** Hashmap of Usernamep, IP address */
 	private HashMap<String, String> recentips = new HashMap<String, String>();
-	//				IP Address, Usernames
+	/** Hashmap of IP Address, users from that IP address */
 	private HashMap<String, HashSet<String>> iplookup = new HashMap<String, HashSet<String>>(); 
-	
+	/** Player names */
 	private TrieSet players = new TrieSet();
-	
+	/** Commands that send chat messages - Such as /me, /action and /say */
 	private HashSet<String> chatCommands = new HashSet<String>();
 	
 	/** Whether the server is in lockdown mode or not */
@@ -41,6 +44,9 @@ public class BanManager{
 	
 	/** The database that we should use */
 	private Database db;
+	
+	/** The DNS Blacklist */
+	private DNSBL dnsbl; 
 	
 	public BanManager(MaxBans plugin){
 		this.plugin = plugin;
@@ -228,8 +234,22 @@ public class BanManager{
 			plugin.getLogger().severe(plugin.color_secondary + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
+		
+		if(plugin.getConfig().getBoolean("dnsbl.use", true)){
+			plugin.getLogger().info("Starting DNS blacklist");
+			try {
+				this.dnsbl = new DNSBL(plugin);
+			} catch (NamingException e) {
+				e.printStackTrace();
+				System.out.println("Could not load DNS Blacklist!");
+			}
+		}
 
 		db.scheduleWatcher(); //Actually starts it.
+	}
+	
+	public DNSBL getDNSBL(){
+		return this.dnsbl;
 	}
     
 	/**

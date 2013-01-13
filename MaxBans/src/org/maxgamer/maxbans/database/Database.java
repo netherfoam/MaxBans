@@ -224,6 +224,20 @@ public class Database {
 	}
 	
 	/**
+	 * Creates the proxys table
+	 */
+	public void createProxysTable(){
+		String query = "CREATE TABLE proxys (ip TEXT(30) NOT NULL, status TEXT(30), created BIGINT NOT NULL)";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create proxys table.");
+		}
+	}
+	
+	/**
 	 * Creates the IPBan table
 	 */
 	public void createIPBanTable(){

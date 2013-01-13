@@ -18,6 +18,13 @@ notify: true
 #Should we verify names have the letters (A-Z,a-z,0-9 and _) only and are valid?
 filter-names: true
 
+#Should we use the DNS blacklist?
+dnsbl:
+    use: true
+    servers:
+    - bl.spamcop.net
+    - sbl.spamhaus.org
+
 database:
     mysql: false
     user: root
