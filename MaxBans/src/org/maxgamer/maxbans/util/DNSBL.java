@@ -1,5 +1,7 @@
 package org.maxgamer.maxbans.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,50 +9,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.naming.Context;
-import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
 
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
-
-import java.util.Hashtable;
-
-import sun.net.dns.ResolverConfiguration;
 
 public class DNSBL{
 	private HashMap<String, CacheRecord> history = new HashMap<String, CacheRecord>();
 	/** How long it takes cache records to expire */
 	private static long cache_timeout = 604800000L;
 	
-	private DirContext ictx;
 	private ArrayList<String> lookupServices = new ArrayList<String>();
-	private static String[] RECORD_TYPES = {"A"};
 
 	private MaxBans plugin;
+	
+	/** Should we kick players who have proxy IPs? */
+	public boolean kick = false;
+	/** Should we notify online players with maxbans.notify perms when a DNSBL ip connects? */
+	public boolean notify = true;
 	
 	public DNSBL(MaxBans plugin) throws NamingException{
 		this.plugin = plugin;
 		Database db = plugin.getDB();
 		
-		StringBuilder sb = new StringBuilder();
-		
-		List<?> nameservers = ResolverConfiguration.open().nameservers();
-		for(Object dns : nameservers){
-			sb.append("dns://" + dns + " ");
-		}
-		
-		Hashtable<Object, Object> env = new Hashtable<Object, Object>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
-        env.put("com.sun.jndi.dns.timeout.initial", "4000");
-        env.put("com.sun.jndi.dns.timeout.retries", "1");
-        env.put(Context.PROVIDER_URL, sb.toString());
-        
-        ictx = new InitialDirContext(env);
+		kick = plugin.getConfig().getBoolean("dnsbl.kick");
+		notify = plugin.getConfig().getBoolean("dnsbl.notify");
         
         List<String> cfgServers = this.plugin.getConfig().getStringList("dnsbl.servers");
         
@@ -139,30 +122,20 @@ public class DNSBL{
             buffer.insert(0, '.');
             buffer.insert(0, parts[i]);
         }
-        String reverse = buffer.toString();
+        String reverse = buffer.toString(); //Note, this also puts a trailling . on the end.
         //End of reversal
-        
-        Attribute attribute;
-        Attributes attributes;
-        
-        String lookupHost;
         
         //By default, allow
         CacheRecord r = new CacheRecord(DNSStatus.ALLOWED);
         
         for (String service : lookupServices){
-            lookupHost = reverse + service;
             try{
-                attributes = ictx.getAttributes(lookupHost, RECORD_TYPES);
-                attribute = attributes.get("A");
-                
-                if (attribute != null ){
+            	if(InetAddress.getByName(reverse + service) != null){
                 	r = new CacheRecord(DNSStatus.DENIED);
                 	break;
                 }
             }
-            catch (NameNotFoundException e){} //Host has never heard of that IP.
-            catch (NamingException e){} //Crap... Our lookup failed?
+            catch (UnknownHostException e){} //Host has never heard of that IP...Safe.
         }
     	if(getRecord(ip) == null){ //Do we have an old record?
     		plugin.getDB().execute("INSERT INTO proxys (ip, status, created) VALUES (?, ?, ?)", ip, r.getStatus().toString(), r.getCreated()); //No old records
