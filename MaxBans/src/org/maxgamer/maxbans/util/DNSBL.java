@@ -82,7 +82,7 @@ public class DNSBL{
 	 * Returns the lookup services array list.  You may edit this safely.
 	 * @return the lookup services array list.
 	 */
-    public ArrayList<String> getLookupServices(){
+    public ArrayList<String> getServers(){
     	return this.servers;
     }
     
