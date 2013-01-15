@@ -20,10 +20,24 @@ filter-names: true
 
 #Should we use the DNS blacklist?
 dnsbl:
+    #Should we use this? Setting it to false disables DNSBL entirely.
     use: true
+    #The DNSBL servers we should use to look up.  More servers = Slower results.
+    #Each server takes approx 4 seconds to respond.  Use http://dnsbl.info to find
+    #More servers, if you like.
+    #DNSBL results are cached for 1 week, then expire (Are deleted).
+    #This is how MaxBans checks for proxied IPs
+    # 1.  Have we looked the IP up on DNSBL before, and has it not expired? If so go to 3
+    # 2.  Start IP lookup, this takes a few seconds...
+    # 3.  If the IP is not a proxy, stop checking, they're allowed, do not proceed to step 4.
+    # 4.  Take appropriate action (Kick, notify) if any.
     servers:
     - bl.spamcop.net
     - sbl.spamhaus.org
+    #Should we notify players with maxbans.notify when a player is joining with a proxy IP?
+    notify: true
+    #Should we kick players who are discovered to have proxy IPs?
+    kick: false
 
 database:
     mysql: false
