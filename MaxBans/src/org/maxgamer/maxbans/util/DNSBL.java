@@ -16,13 +16,13 @@ import org.maxgamer.maxbans.database.Database;
 
 public class DNSBL{
 	private HashMap<String, CacheRecord> history = new HashMap<String, CacheRecord>();
-	/** How long it takes cache records to expire */
-	private static long cache_timeout = 604800000L;
-	
-	private ArrayList<String> lookupServices = new ArrayList<String>();
-
 	private MaxBans plugin;
 	
+	/** How long it takes cache records to expire */
+	private static long cache_timeout = 604800000L;
+	/** The DNSBL servers to contact */
+	private ArrayList<String> servers = new ArrayList<String>();
+
 	/** Should we kick players who have proxy IPs? */
 	public boolean kick = false;
 	/** Should we notify online players with maxbans.notify perms when a DNSBL ip connects? */
@@ -38,7 +38,7 @@ public class DNSBL{
         List<String> cfgServers = this.plugin.getConfig().getStringList("dnsbl.servers");
         
         if(cfgServers != null){
-        	this.lookupServices.addAll(cfgServers);
+        	this.servers.addAll(cfgServers);
         }
         
         if(!db.hasTable("proxys")){
@@ -83,7 +83,7 @@ public class DNSBL{
 	 * @return the lookup services array list.
 	 */
     public ArrayList<String> getLookupServices(){
-    	return this.lookupServices;
+    	return this.servers;
     }
     
     /**
@@ -128,9 +128,9 @@ public class DNSBL{
         //By default, allow
         CacheRecord r = new CacheRecord(DNSStatus.ALLOWED);
         
-        for (String service : lookupServices){
+        for (String server : servers){
             try{
-            	if(InetAddress.getByName(reverse + service) != null){
+            	if(InetAddress.getByName(reverse + server) != null){
                 	r = new CacheRecord(DNSStatus.DENIED);
                 	break;
                 }
