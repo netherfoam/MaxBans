@@ -194,14 +194,6 @@ public class Util{
 			sb.append(" ");
 		}
 		
-		if(sb.length() < 1){
-			return "Misconduct";
-		}
-		else{
-			//Remove that space char.
-			sb.replace(sb.length() - 1, sb.length(), "");
-		}
-		
 		//Trim off trailing spaces
 		int i = sb.length() - 1;
 		if(i >= 0){
@@ -209,6 +201,14 @@ public class Util{
 				i--;
 			}
 			sb.replace(i + 1, sb.length(), "");
+		}
+		
+		if(sb.length() < 1){
+			return "Misconduct";
+		}
+		else{
+			//Remove that space char.
+			sb.replace(sb.length() - 1, sb.length(), "");
 		}
 		
 		return sb.toString();
