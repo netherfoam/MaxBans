@@ -5,6 +5,8 @@ max-warnings: 3
 #3 days
 warn-expirey-in-minutes: 4320 
 
+default-reason: "Misconduct"
+
 color:
     primary: f
     secondary: a

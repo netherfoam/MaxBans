@@ -54,6 +54,9 @@ public class BanManager{
 	/** The resaon the server is in lockdown - Defaults to Maintenance */
 	private String lockdownReason = "Maintenance";
 	
+	/** Default reason for punishments */
+	public String defaultReason = "Misconduct";
+	
 	/** The database that we should use */
 	private Database db;
 	
@@ -251,6 +254,11 @@ public class BanManager{
 			plugin.getLogger().info("Starting DNS blacklist");
 			this.dnsbl = new DNSBL(plugin);
 		}
+		
+		//Load the default ban reason - Default to Misconduct if none given
+		String defaultReason = plugin.getConfig().getString("default-reason");
+		if(defaultReason == null || defaultReason.isEmpty()) defaultReason = "Misconduct";
+		this.defaultReason = defaultReason;
 
 		db.scheduleWatcher(); //Actually starts it.
 	}

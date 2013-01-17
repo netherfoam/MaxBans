@@ -53,8 +53,12 @@ public class MaxBans extends JavaPlugin{
     
     /** Should we filter players names onJoin? */
     public boolean filter_names;
+    
+    public static MaxBans instance;
         
 	public void onEnable(){
+		instance = this;
+		
 		/* Generates files for the first run */
 		if(!this.getDataFolder().exists()){
 			this.getDataFolder().mkdir();
@@ -125,6 +129,7 @@ public class MaxBans extends JavaPlugin{
 		this.getLogger().info("Disabling Maxbans...");
 		this.db.getDatabaseWatcher().run(); //Empties buffer
 		this.getLogger().info("Cleared buffer...");
+		instance = null;
 	}
 	/**
 	 * Returns the ban manager for banning and checking bans and mutes.

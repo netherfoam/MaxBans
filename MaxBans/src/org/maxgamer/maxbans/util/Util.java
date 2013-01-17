@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.MaxBans;
 
 public class Util{
 	private static final String IP_REGEX = 
@@ -202,7 +203,7 @@ public class Util{
 		sb.replace(i + 1, sb.length(), "");
 		
 		if(sb.length() < 1){
-			return "Misconduct";
+			return MaxBans.instance.getBanManager().defaultReason;
 		}
 		
 		return "'" + sb.toString() + "'";
