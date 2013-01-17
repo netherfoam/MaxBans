@@ -28,7 +28,6 @@ public class MBExportCommand implements CommandExecutor{
 				//Import vanilla.
 				for(Entry<String, Ban> entry : plugin.getBanManager().getBans().entrySet()){
 					if(entry.getValue() instanceof TempBan){
-						//TODO: Vanilla can't tempban players.
 						//So we skip it in good faith.
 						continue;
 					}
@@ -39,7 +38,6 @@ public class MBExportCommand implements CommandExecutor{
 				
 				for(Entry<String, IPBan> entry : plugin.getBanManager().getIPBans().entrySet()){
 					if(entry.getValue() instanceof TempIPBan){
-						//TODO: Vanilla can't tempban players.
 						//So we skip it in good faith.
 						continue;
 					}

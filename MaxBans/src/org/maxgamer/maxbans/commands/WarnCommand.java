@@ -26,9 +26,6 @@ public class WarnCommand implements CommandExecutor{
 				name = args[0]; //Use exact name then.
 			}
 			
-			//TODO: Stop warnings being created if they've been warned in the last 3 seconds?
-			
-			
 			String reason = Util.buildReason(args);
 			String banner = Util.getName(sender);
 			
