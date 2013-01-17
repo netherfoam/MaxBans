@@ -10,6 +10,15 @@ default-reason: "Misconduct"
 color:
     primary: f
     secondary: a
+    
+    
+#This applies to kick, ban, and anything else.
+kick-colors:
+    regular: f
+    banner: a
+    reason: a
+    time: c
+    message: b
 
 chat-commands:
     - me

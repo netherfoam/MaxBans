@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.util.DNSBL;
+import org.maxgamer.maxbans.util.Formatter;
 
 /**
  * The ban manager class.
@@ -246,7 +247,7 @@ public class BanManager{
 			}
 		}
 		catch(SQLException e){
-			plugin.getLogger().severe(plugin.color_secondary + "Could not load database history using: " + query);
+			plugin.getLogger().severe(Formatter.secondary + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
 		
@@ -633,7 +634,7 @@ public class BanManager{
     		if(p != null){
     			p.kickPlayer("Reached Max Warnings:\n" + reason);
     		}
-    		announce(plugin.color_secondary + name + plugin.color_primary + " has reached max warnings.  One hour ban.");
+    		announce(Formatter.secondary + name + Formatter.primary + " has reached max warnings.  One hour ban.");
     		
     		//clearWarnings(name);
     		//Preserve warnings

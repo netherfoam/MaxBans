@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempMuteCommand implements CommandExecutor{
@@ -17,10 +18,10 @@ public class TempMuteCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.tempmute")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /tempmute <player> <time> <timeform>";
+		String usage = Formatter.secondary + "Usage: /tempmute <player> <time> <timeform>";
 		
 		if(args.length > 2){
 			String name = args[0];
@@ -45,13 +46,13 @@ public class TempMuteCommand implements CommandExecutor{
 				if(mute instanceof TempMute){
 					TempMute tMute = (TempMute) mute;
 					if(tMute.getExpires() > time){
-						sender.sendMessage(plugin.color_primary + "That player already has a mute which lasts longer than the one you tried to give.");
+						sender.sendMessage(Formatter.primary + "That player already has a mute which lasts longer than the one you tried to give.");
 						return true;
 					}
 					//else: Continue normally.
 				}
 				else{
-					sender.sendMessage(plugin.color_primary + "That player is already permantly muted.");
+					sender.sendMessage(Formatter.primary + "That player is already permantly muted.");
 					return true;
 				}
 			}
@@ -61,9 +62,9 @@ public class TempMuteCommand implements CommandExecutor{
 			String until = Util.getTimeUntil(time/1000*1000);
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
-				p.sendMessage(plugin.color_secondary + "You have been muted for " + until);
+				p.sendMessage(Formatter.secondary + "You have been muted for " + until);
 			}
-			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_secondary + name + plugin.color_primary + " for " + plugin.color_secondary + until);
+			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until);
 			
 			return true;
 		}

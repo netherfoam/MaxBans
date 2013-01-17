@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class DupeIPCommand implements CommandExecutor{
@@ -21,10 +22,10 @@ public class DupeIPCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.dupeip")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /dupeip <player>";
+		String usage = Formatter.secondary + "Usage: /dupeip <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -38,7 +39,7 @@ public class DupeIPCommand implements CommandExecutor{
 				ip = plugin.getBanManager().getIP(name);
 				
 				if(ip == null){
-					sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " has no IP history.");
+					sender.sendMessage(Formatter.primary + "Player " + Formatter.secondary + name + Formatter.primary + " has no IP history.");
 					return true;
 				}
 			}
@@ -48,7 +49,7 @@ public class DupeIPCommand implements CommandExecutor{
 			
 
 			
-			sender.sendMessage(plugin.color_primary + "Scanning " + getChatColor(name) + name + plugin.color_primary + " on " + plugin.color_secondary + ip + ChatColor.WHITE + ".  [" + banned + "Banned" + ChatColor.WHITE + "] [" + online + "Online" + ChatColor.WHITE + "] [" + offline + "Offline" + ChatColor.WHITE + "]");
+			sender.sendMessage(Formatter.primary + "Scanning " + getChatColor(name) + name + Formatter.primary + " on " + Formatter.secondary + ip + ChatColor.WHITE + ".  [" + banned + "Banned" + ChatColor.WHITE + "] [" + online + "Online" + ChatColor.WHITE + "] [" + offline + "Offline" + ChatColor.WHITE + "]");
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -65,7 +66,7 @@ public class DupeIPCommand implements CommandExecutor{
 				sender.sendMessage(sb.toString());
 			}
 			else{
-				sender.sendMessage(plugin.color_primary + "No duplicates!");
+				sender.sendMessage(Formatter.primary + "No duplicates!");
 			}
 			return true;
 		}

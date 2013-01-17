@@ -3,12 +3,12 @@ package org.maxgamer.maxbans;
 import java.io.File;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
 import org.maxgamer.maxbans.commands.*;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
+import org.maxgamer.maxbans.util.Formatter;
 
 public class MaxBans extends JavaPlugin{
     private BanManager banManager;
@@ -48,9 +48,6 @@ public class MaxBans extends JavaPlugin{
     
     private Database db;
     
-    public ChatColor color_primary;
-    public ChatColor color_secondary;
-    
     /** Should we filter players names onJoin? */
     public boolean filter_names;
     
@@ -82,8 +79,7 @@ public class MaxBans extends JavaPlugin{
 		
 		this.filter_names = getConfig().getBoolean("filter-names");
 		
-		this.color_primary = ChatColor.getByChar(getConfig().getString("color.primary"));
-		this.color_secondary = ChatColor.getByChar(getConfig().getString("color.secondary"));
+		Formatter.load(this);
 		
 		if(getConfig().getBoolean("database.mysql", false)){
 			getLogger().info("Using MySQL");
@@ -173,10 +169,10 @@ public class MaxBans extends JavaPlugin{
 		this.lockdownCommand = new LockdownCommand(this);
 		this.kickCommand = new KickCommand(this);
 		
-		this.forceSpawnCommand = new ForceSpawnCommand(this);
+		this.forceSpawnCommand = new ForceSpawnCommand();
 		
 		this.reloadCommand = new ReloadCommand(this);
-		this.mbCommand = new MBCommand(this);
+		this.mbCommand = new MBCommand();
 		
 		this.importCommand = new MBImportCommand(this);
 		this.exportCommand = new MBExportCommand(this);

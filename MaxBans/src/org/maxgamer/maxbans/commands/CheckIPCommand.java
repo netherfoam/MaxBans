@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
 
 public class CheckIPCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -12,11 +13,11 @@ public class CheckIPCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.checkip")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
 		
-		String usage = plugin.color_secondary + "Usage: /checkip <player>";
+		String usage = Formatter.secondary + "Usage: /checkip <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -29,10 +30,10 @@ public class CheckIPCommand implements CommandExecutor{
 			String ip = plugin.getBanManager().getIP(name);
 			
 			if(ip == null){
-				sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " has no recorded IP history.");
+				sender.sendMessage(Formatter.primary + "Player " + Formatter.secondary + name + Formatter.primary + " has no recorded IP history.");
 			}
 			else{
-				sender.sendMessage(plugin.color_primary + "Player " + plugin.color_secondary + name + plugin.color_primary + " last used the IP " + plugin.color_secondary + ip);
+				sender.sendMessage(Formatter.primary + "Player " + Formatter.secondary + name + Formatter.primary + " last used the IP " + Formatter.secondary + ip);
 			}
 			
 			

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempIPBanCommand implements CommandExecutor{
@@ -18,16 +19,16 @@ public class TempIPBanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.tempipban")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
+		String usage = Formatter.secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
 		
 		if(args.length > 2){
 			boolean silent = Util.isSilent(args);
 			String name = args[0];
 			if(name.isEmpty()){
-				sender.sendMessage(plugin.color_primary + " No name given.");
+				sender.sendMessage(Formatter.primary + " No name given.");
 				return true;
 			}
 			
@@ -53,7 +54,7 @@ public class TempIPBanCommand implements CommandExecutor{
 				ip = plugin.getBanManager().getIP(name);
 				
 				if(ip == null){
-					sender.sendMessage(plugin.color_secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
+					sender.sendMessage(Formatter.secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
 					return true;
 				}
 				
@@ -78,7 +79,7 @@ public class TempIPBanCommand implements CommandExecutor{
 					TempIPBan tBan = (TempIPBan) ban;
 					if(tBan.getExpires() > time){
 						//Their old ban lasts longer than this one!
-						sender.sendMessage(plugin.color_secondary + "That player has a tempban which will last longer than the one you supplied!");
+						sender.sendMessage(Formatter.secondary + "That player has a tempban which will last longer than the one you supplied!");
 						return true;
 					}
 					else{
@@ -88,7 +89,7 @@ public class TempIPBanCommand implements CommandExecutor{
 				}
 				else{
 					//Already perma banned
-					sender.sendMessage(plugin.color_secondary + "That player is already banned.");
+					sender.sendMessage(Formatter.secondary + "That player is already banned.");
 					return true;
 				}
 			}
@@ -99,11 +100,11 @@ public class TempIPBanCommand implements CommandExecutor{
 			//Notify online players
 			if(!silent){
 				//Announce
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
 			}
 			else{
 				//Silent
-				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silently temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason + ".");
+				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
 			}
 			
 			return true;

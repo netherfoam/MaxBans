@@ -12,6 +12,7 @@ import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.util.Formatter;
 
 public class MBExportCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -20,8 +21,8 @@ public class MBExportCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0){
-			sender.sendMessage(plugin.color_primary + "MaxBans Exporter:");
-			sender.sendMessage(plugin.color_secondary + "/mbexport vanilla " + plugin.color_primary + " - Exports bans to vanilla bans.");
+			sender.sendMessage(Formatter.primary + "MaxBans Exporter:");
+			sender.sendMessage(Formatter.secondary + "/mbexport vanilla " + Formatter.primary + " - Exports bans to vanilla bans.");
 		}
 		else{
 			if(args[0].equalsIgnoreCase("vanilla")){
@@ -45,10 +46,10 @@ public class MBExportCommand implements CommandExecutor{
 					Bukkit.banIP(entry.getKey());
 				}
 				
-				sender.sendMessage(plugin.color_secondary + "Success.");
+				sender.sendMessage(Formatter.secondary + "Success.");
 			}
 			else{
-				sender.sendMessage(plugin.color_secondary + "Failed.  No known exporter: " + args[0]);
+				sender.sendMessage(Formatter.secondary + "Failed.  No known exporter: " + args[0]);
 			}
 		}
 		

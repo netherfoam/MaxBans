@@ -13,6 +13,7 @@ import org.maxgamer.maxbans.banmanager.*;
 import org.maxgamer.maxbans.util.DNSBL;
 import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class JoinListener implements Listener{
@@ -69,7 +70,7 @@ public class JoinListener implements Listener{
 											player.kickPlayer("Kicked by MaxBans:\nYour IP ("+address+") is listed as a proxy.");
 										}
 										if(dnsbl.notify){ 
-											String msg = plugin.color_secondary + player.getName() + plugin.color_primary + " (" + plugin.color_secondary + address + plugin.color_primary + ") is joining from a proxy IP!";
+											String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
 											for(Player p : Bukkit.getOnlinePlayers()){
 												if(p.hasPermission("maxbans.notify")){
 													p.sendMessage(msg);
@@ -85,7 +86,7 @@ public class JoinListener implements Listener{
             	}
             	else if(r.getStatus() == DNSStatus.DENIED){
             		if(dnsbl.notify){
-            			String msg = plugin.color_secondary + player.getName() + plugin.color_primary + " (" + plugin.color_secondary + address + plugin.color_primary + ") is joining from a proxy IP!";
+            			String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
 						for(Player p : Bukkit.getOnlinePlayers()){
 							if(p.hasPermission("maxbans.notify")){
 								p.sendMessage(msg);
@@ -160,7 +161,7 @@ public class JoinListener implements Listener{
         event.setKickMessage(km.toString());
         
         if(plugin.getConfig().getBoolean("notify", true)){
-        	String msg = (ban == null ? plugin.color_secondary : ChatColor.RED) + player.getName() + plugin.color_primary + " (" + (ipban == null ? plugin.color_secondary : ChatColor.RED) + address + plugin.color_primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 
+        	String msg = (ban == null ? Formatter.secondary : ChatColor.RED) + player.getName() + Formatter.primary + " (" + (ipban == null ? Formatter.secondary : ChatColor.RED) + address + Formatter.primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 
 	        for(Player p : Bukkit.getOnlinePlayers()){
 	        	if(p.hasPermission("maxbans.notify")){
 	        		p.sendMessage(msg);

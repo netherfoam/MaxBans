@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class UnbanCommand implements CommandExecutor{
@@ -16,16 +17,16 @@ public class UnbanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.unban")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /unban <player>";
+		String usage = Formatter.secondary + "Usage: /unban <player>";
 		
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);
 			String name = args[0];
 			if(name.isEmpty()){
-				sender.sendMessage(plugin.color_primary + " No name given.");
+				sender.sendMessage(Formatter.primary + " No name given.");
 				return true;
 			}
 			
@@ -48,15 +49,15 @@ public class UnbanCommand implements CommandExecutor{
 				plugin.getBanManager().unbanip(name);
 			}
 			else{
-				sender.sendMessage(plugin.color_primary + "Could not find a ban for " + plugin.color_secondary + name + plugin.color_primary + ".");
+				sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + name + Formatter.primary + ".");
 				return true;
 			}
 			
 			if(silent){
-				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silenty unbanned.");
+				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silenty unbanned.");
 			}
 			else{
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been unbanned by " + plugin.color_secondary + banner + plugin.color_primary + ".");
+				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".");
 			}
 			return true;
 		}

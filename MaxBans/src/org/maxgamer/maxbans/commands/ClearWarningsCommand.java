@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Warn;
+import org.maxgamer.maxbans.util.Formatter;
 
 public class ClearWarningsCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -17,10 +18,10 @@ public class ClearWarningsCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.clearwarnings")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /clearwarnings <player>";
+		String usage = Formatter.secondary + "Usage: /clearwarnings <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -42,16 +43,16 @@ public class ClearWarningsCommand implements CommandExecutor{
 			List<Warn> warnings = plugin.getBanManager().getWarnings(name);
 			
 			if(warnings == null || warnings.size() == 0){
-				sender.sendMessage(plugin.color_secondary + name + plugin.color_primary + " has no warnings to their name.");
+				sender.sendMessage(Formatter.secondary + name + Formatter.primary + " has no warnings to their name.");
 				return true;
 			}
 			
 			plugin.getBanManager().clearWarnings(name);
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
-				p.sendMessage(plugin.color_primary + "Your previous warnings have been pardoned by " + plugin.color_secondary + banner);
+				p.sendMessage(Formatter.primary + "Your previous warnings have been pardoned by " + Formatter.secondary + banner);
 			}
-			sender.sendMessage(plugin.color_primary + "Pardoned " + plugin.color_secondary + name + plugin.color_primary + "'s warnings.");
+			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s warnings.");
 			
 			return true;
 		}

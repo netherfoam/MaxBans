@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class MuteCommand implements CommandExecutor{
@@ -17,10 +18,10 @@ public class MuteCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.mute")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /mute <player>";
+		String usage = Formatter.secondary + "Usage: /mute <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -43,9 +44,9 @@ public class MuteCommand implements CommandExecutor{
 			
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
-				p.sendMessage(plugin.color_secondary + " You have been muted.");
+				p.sendMessage(Formatter.secondary + " You have been muted.");
 			}
-			sender.sendMessage(plugin.color_primary + "Muted " + plugin.color_secondary + name);
+			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name);
 			
 			return true;
 		}

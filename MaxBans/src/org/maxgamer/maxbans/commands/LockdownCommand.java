@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
 
 public class LockdownCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -12,7 +13,7 @@ public class LockdownCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.lockdown.use")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
 		if(args.length > 0){
@@ -33,11 +34,11 @@ public class LockdownCommand implements CommandExecutor{
 				}
 				
 				plugin.getBanManager().setLockdown(true, reason);
-				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + reason + plugin.color_primary + ".");
+				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + reason + Formatter.primary + ".");
 			}
 			else if(args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable")){
 				plugin.getBanManager().setLockdown(false);
-				sender.sendMessage(plugin.color_primary + "Lockdown disabled.");
+				sender.sendMessage(Formatter.primary + "Lockdown disabled.");
 			}
 			else{
 				StringBuilder sb = new StringBuilder();
@@ -49,17 +50,17 @@ public class LockdownCommand implements CommandExecutor{
 				String reason = sb.toString();
 				
 				plugin.getBanManager().setLockdown(true, reason);
-				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + reason + plugin.color_primary + ".");
+				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + reason + Formatter.primary + ".");
 			}
 		}
 		else{
 			if(plugin.getBanManager().isLockdown()){
 				plugin.getBanManager().setLockdown(false);
-				sender.sendMessage(plugin.color_primary + "Lockdown disabled.");
+				sender.sendMessage(Formatter.primary + "Lockdown disabled.");
 			}
 			else{
 				plugin.getBanManager().setLockdown(true);
-				sender.sendMessage(plugin.color_primary + "Lockdown enabled.  Reason: " + plugin.color_secondary + "Maintenance" + plugin.color_primary + ".");
+				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + "Maintenance" + Formatter.primary + ".");
 			}
 		}
 		return true;

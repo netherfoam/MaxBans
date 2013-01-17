@@ -11,6 +11,7 @@ import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class BanCommand implements CommandExecutor{
@@ -20,18 +21,18 @@ public class BanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.ban")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
 		
-		String usage = plugin.color_secondary + "Usage: /ban <player> [-s] <reason>";
+		String usage = Formatter.secondary + "Usage: /ban <player> [-s] <reason>";
 		
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);
 			
 			String name = args[0];
 			if(name.isEmpty()){
-				sender.sendMessage(plugin.color_primary + " No name given.");
+				sender.sendMessage(Formatter.primary + " No name given.");
 				return true;
 			}
 			
@@ -47,7 +48,7 @@ public class BanCommand implements CommandExecutor{
 				
 				Ban ban = plugin.getBanManager().getBan(name);
 				if(ban != null && !(ban instanceof TempBan)){
-					sender.sendMessage(plugin.color_secondary + "That player is already banned.");
+					sender.sendMessage(Formatter.secondary + "That player is already banned.");
 					return true;
 				}
 				
@@ -62,7 +63,7 @@ public class BanCommand implements CommandExecutor{
 			else{
 				IPBan ipban = plugin.getBanManager().getIPBan(name);
 				if(ipban != null && !(ipban instanceof TempIPBan)){
-					sender.sendMessage(plugin.color_secondary + "That IP is already banned.");
+					sender.sendMessage(Formatter.secondary + "That IP is already banned.");
 					return true;
 				}
 				
@@ -71,10 +72,10 @@ public class BanCommand implements CommandExecutor{
 			
 			//Notify online players
 			if(!silent){
-				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason);
+				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason);
 			}
 			else{
-				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silently banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason);
+				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason);
 			}
 			return true;
 		}

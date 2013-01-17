@@ -8,19 +8,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
 
 public class ForceSpawnCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public ForceSpawnCommand(MaxBans plugin){
-        this.plugin = plugin;
-    }
+    public ForceSpawnCommand(){}
+    
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.forcespawn")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /forcespawn <player>";
+		String usage = Formatter.secondary + "Usage: /forcespawn <player>";
 		
 		if(args.length > 0){
 			String name = args[0];
@@ -42,11 +40,11 @@ public class ForceSpawnCommand implements CommandExecutor{
 				//Double TP for /back'ers
 				p.teleport(spawn, TeleportCause.PLUGIN);
 				p.teleport(spawn, TeleportCause.PLUGIN);
-				p.sendMessage(plugin.color_secondary + "Forced to the spawn by " + banner);
-				sender.sendMessage(plugin.color_primary + "Forced " + plugin.color_secondary + p.getName() + plugin.color_primary + " to the spawn.");
+				p.sendMessage(Formatter.secondary + "Forced to the spawn by " + banner);
+				sender.sendMessage(Formatter.primary + "Forced " + Formatter.secondary + p.getName() + Formatter.primary + " to the spawn.");
 			}
 			else{
-				sender.sendMessage(plugin.color_primary + "No player found: " + plugin.color_secondary + name);
+				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);
 			}
 			
 			return true;

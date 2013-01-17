@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class KickCommand implements CommandExecutor{
@@ -16,16 +17,16 @@ public class KickCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.kick")){
-			sender.sendMessage(plugin.color_secondary + "You don't have permission to do that");
+			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
-		String usage = plugin.color_secondary + "Usage: /kick <player> [-s] [reason]";
+		String usage = Formatter.secondary + "Usage: /kick <player> [-s] [reason]";
 		
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);
 			String name = args[0];
 			if(name.isEmpty()){
-				sender.sendMessage(plugin.color_primary + " No name given.");
+				sender.sendMessage(Formatter.primary + " No name given.");
 				return true;
 			}
 			String reason = Util.buildReason(args);
@@ -43,7 +44,7 @@ public class KickCommand implements CommandExecutor{
 					p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
 				}
 				
-				plugin.getBanManager().announce(plugin.color_secondary + banner + plugin.color_primary + " has kicked everyone.");
+				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone.");
 				return true;
 			}
 			
@@ -51,14 +52,14 @@ public class KickCommand implements CommandExecutor{
 			if(p != null){
 				p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
 				if(!silent){
-					plugin.getBanManager().announce(plugin.color_secondary + p.getName() + plugin.color_primary + " was kicked by " + plugin.color_secondary + banner + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + ".");
+					plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + ".");
 				}
 				else{
-					sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_primary + "Kicked " + plugin.color_secondary + p.getName() + plugin.color_primary + " for " + plugin.color_secondary + reason + plugin.color_primary + " silently.");
+					sender.sendMessage(ChatColor.ITALIC + "" + Formatter.primary + "Kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + " silently.");
 				}
 			}
 			else{
-				sender.sendMessage(plugin.color_primary + "No player found: " + plugin.color_secondary + name);
+				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);
 			}
 			
 			return true;
