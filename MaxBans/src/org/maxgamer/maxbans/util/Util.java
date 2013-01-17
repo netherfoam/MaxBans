@@ -196,22 +196,16 @@ public class Util{
 		
 		//Trim off trailing spaces
 		int i = sb.length() - 1;
-		if(i >= 0){
-			while(sb.charAt(i) == ' '){
-				i--;
-			}
-			sb.replace(i + 1, sb.length(), "");
+		while(i > 0 && sb.charAt(i) == ' '){
+			i--;
 		}
+		sb.replace(i + 1, sb.length(), "");
 		
 		if(sb.length() < 1){
 			return "Misconduct";
 		}
-		else{
-			//Remove that space char.
-			sb.replace(sb.length() - 1, sb.length(), "");
-		}
 		
-		return sb.toString();
+		return "'" + sb.toString() + "'";
 	}
 	
 	/**
