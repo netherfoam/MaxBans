@@ -415,12 +415,6 @@ public class BanManager{
     	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
     	
-    	//Now we can escape them
-    	name = db.escape(name);
-    	banner = db.escape(banner);
-    	reason = db.escape(reason);
-    	
-    	//plugin.getDB().getBuffer().addString("INSERT INTO bans (name, reason, banner, time) VALUES ('"+name+"','" + reason+"','" + banner+"','" + System.currentTimeMillis()+"');");
     	db.execute("INSERT INTO bans (name, reason, banner, time) VALUES (?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis());
     }
     
@@ -434,8 +428,6 @@ public class BanManager{
     	TempBan tBan = this.tempbans.get(name);
     	String ip = this.getIP(name);
     	
-    	//Now we can escape it
-    	name = db.escape(name);
     	if(ban != null){
     		this.bans.remove(name);
     		db.execute("DELETE FROM bans WHERE name = ?", name);
@@ -482,7 +474,6 @@ public class BanManager{
     	TempMute tMute = this.tempmutes.get(name);
     	
     	//Escape it
-    	name = db.escape(name);
     	if(mute != null){
     		this.mutes.remove(name);
     		db.execute("DELETE FROM mutes WHERE name = ?", name);
@@ -510,11 +501,6 @@ public class BanManager{
     	TempBan ban = new TempBan(reason, banner, System.currentTimeMillis(), expires);
     	this.tempbans.put(name, ban);
     	
-    	//Safe to escape now
-    	name = db.escape(name);
-    	banner = db.escape(banner);
-    	reason = db.escape(reason);
-    	
     	db.execute("INSERT INTO bans (name, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis(), expires);
     }
     
@@ -528,12 +514,7 @@ public class BanManager{
     	banner = banner.toLowerCase();
     	
     	IPBan ipban = new IPBan(reason, banner, System.currentTimeMillis());
-    	
     	this.ipbans.put(ip, ipban);
-    	
-    	//Safe to escape now
-    	banner = db.escape(banner);
-    	reason = db.escape(reason);
     	
     	db.execute("INSERT INTO ipbans (ip, reason, banner, time) VALUES (?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis());
     }
@@ -552,10 +533,6 @@ public class BanManager{
     	
     	this.tempipbans.put(ip, tib);
     	
-    	//Safe to escape now
-    	banner = db.escape(banner);
-    	reason = db.escape(reason);
-    	
     	db.execute("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis(), expires);
     }
     
@@ -568,11 +545,7 @@ public class BanManager{
     	name = name.toLowerCase();
     	
     	Mute mute = new Mute(banner, System.currentTimeMillis());
-    	
     	this.mutes.put(name, mute);
-    	
-    	name = db.escape(name);
-    	banner = db.escape(banner);
     	
     	db.execute("INSERT INTO mutes (name, muter, time) VALUES (?, ?, ?)", name, banner, System.currentTimeMillis());
     }
@@ -588,11 +561,7 @@ public class BanManager{
     	banner = banner.toLowerCase();
     	
     	TempMute tmute = new TempMute(banner, System.currentTimeMillis(), expires);
-    	
     	this.tempmutes.put(name, tmute);
-    	
-    	name = db.escape(name);
-    	banner = db.escape(banner);
     	
     	db.execute("INSERT INTO mutes (name, muter, time, expires) VALUES (?, ?, ?, ?)", name, banner, System.currentTimeMillis(), expires);
     }
@@ -617,11 +586,6 @@ public class BanManager{
     	//Adds it to warnings
     	warns.add(new Warn(reason, banner, expires));
     	
-    	name = db.escape(name);
-    	banner = db.escape(banner);
-    	reason = db.escape(reason);
-    	
-    	//db.getBuffer().addString("INSERT INTO warnings (name, reason, banner, expires) VALUES ('"+name+"','"+reason+"','"+banner+"','"+expires+"')");
     	db.execute("INSERT INTO warnings (name, reason, banner, expires) VALUES (?, ?, ?, ?)", name, reason, banner, expires);
     	
     	int maxWarns = plugin.getConfig().getInt("max-warnings");
@@ -635,9 +599,6 @@ public class BanManager{
     			p.kickPlayer("Reached Max Warnings:\n" + reason);
     		}
     		announce(Formatter.secondary + name + Formatter.primary + " has reached max warnings.  One hour ban.");
-    		
-    		//clearWarnings(name);
-    		//Preserve warnings
     	}
     }
     
@@ -650,10 +611,6 @@ public class BanManager{
     	
     	this.warnings.remove(name);
     	
-    	//Escape it
-    	name = db.escape(name);
-    	
-    	//db.getBuffer().addString("DELETE FROM warnings WHERE name = '"+name+"'");
     	db.execute("DELETE FROM warnings WHERE name = ?", name);
     }
     
@@ -771,13 +728,26 @@ public class BanManager{
 		return partial;
 	}
 	
+	/**
+	 * Returns true if the server is disallowing all connections, except ones with maxbans.lockdown.bypass permissions.
+	 * @return true if the server is disallowing all connections, except ones with maxbans.lockdown.bypass permissions.
+	 */
 	public boolean isLockdown(){
 		return this.lockdown;
 	}
+	/**
+	 * The reason the server is in lockdown, or is not in lockdown.
+	 * @return The reason.
+	 */
 	public String getLockdownReason(){
 		return this.lockdownReason;
 	}
 	
+	/**
+	 * Changes the lockdown mode of the server.
+	 * @param lockdown Whether or not the server should go into lockdown.
+	 * @param reason The reason it is going into lockdown. This is ignored if unlocking the server.
+	 */
 	public void setLockdown(boolean lockdown, String reason){
 		this.lockdown = lockdown;
 		if(lockdown){
@@ -792,14 +762,28 @@ public class BanManager{
 		}
 		plugin.saveConfig();
 	}
+	/**
+	 * Sets the lockdown status, with a default "Maintenance" message.
+	 * @param lockdown Whether to lock down or not.
+	 */
 	public void setLockdown(boolean lockdown){
 		setLockdown(lockdown, "Maintenance");
 	}
 	
+	/**
+	 * Registers the given string as a chat command, like /me or /say.
+	 * This command will be blocked from muted players.
+	 * @param s The command string, excluding the starting slash (/)
+	 */
 	public void addChatCommand(String s){
 		s = s.toLowerCase();
 		this.chatCommands.add(s);
 	}
+	/**
+	 * Returns true if the given command is blocked from muted players.
+	 * @param s The command to look up, excluding the starting slash (/).
+	 * @return True if muted players cannot use the command.
+	 */
 	public boolean isChatCommand(String s){
 		s = s.toLowerCase();
 		return this.chatCommands.contains(s);
