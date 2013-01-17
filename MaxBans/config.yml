@@ -14,11 +14,12 @@ color:
     
 #This applies to kick, ban, and anything else.
 kick-colors:
-    regular: f
-    banner: a
-    reason: a
-    time: c
-    message: b
+    message: f #"You have been banned for:"
+    reason: f #"Misconduct"
+    regular: f #"By"
+    banner: f #"Netherfoam"
+    time: f #4 hours 59 minutes remaining.
+    
 
 chat-commands:
     - me
