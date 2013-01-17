@@ -301,7 +301,13 @@ public class Database {
 	public Connection getConnection(){
 		return this.dbCore.getConnection();
 	}
-	
+	/**
+	 * Tries to escape the given string.  Note that PreparedStatements,
+	 * or an alternative like org.maxgamer.maxbans.database.BufferStatement
+	 * should be used instead whenever possible!
+	 * @param s The string to escape.
+	 * @return The (Mostly) escaped result.
+	 */
 	public String escape(String s){
 		return this.dbCore.escape(s);
 	}
