@@ -10,14 +10,26 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.util.DNSBL;
 
+/**
+ * The ban manager class.
+ * <br/>
+ * <br/>
+ * This BanManager provides an API to ban, ipban,
+ * warn, mute, lockdown, and lookup IP history.
+ * All of its methods save to the database, so there
+ * is no need to write information to the database
+ * yourself.
+ * <br/>
+ * <br/>
+ * 
+ * @author netherfoam
+ */
 public class BanManager{
 	private MaxBans plugin;
 	private HashMap<String, Ban> bans = new HashMap<String, Ban>();
@@ -237,17 +249,16 @@ public class BanManager{
 		
 		if(plugin.getConfig().getBoolean("dnsbl.use", true)){
 			plugin.getLogger().info("Starting DNS blacklist");
-			try {
-				this.dnsbl = new DNSBL(plugin);
-			} catch (NamingException e) {
-				e.printStackTrace();
-				System.out.println("Could not load DNS Blacklist!");
-			}
+			this.dnsbl = new DNSBL(plugin);
 		}
 
 		db.scheduleWatcher(); //Actually starts it.
 	}
 	
+	/**
+	 * The DNS Blacklist object, or NULL if it is disabled.
+	 * @return The DNS Blacklist object, or NULL if it is disabled.
+	 */
 	public DNSBL getDNSBL(){
 		return this.dnsbl;
 	}

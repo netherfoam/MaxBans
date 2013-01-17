@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
 
@@ -28,7 +26,7 @@ public class DNSBL{
 	/** Should we notify online players with maxbans.notify perms when a DNSBL ip connects? */
 	public boolean notify = true;
 	
-	public DNSBL(MaxBans plugin) throws NamingException{
+	public DNSBL(MaxBans plugin){
 		this.plugin = plugin;
 		Database db = plugin.getDB();
 		
