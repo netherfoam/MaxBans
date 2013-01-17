@@ -5,6 +5,8 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
@@ -23,8 +25,13 @@ public class CheckBanCommand implements CommandExecutor{
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.checkban")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
+			if(sender.hasPermission("maxbans.checkban.self")){
+				args = new String[]{((Player) sender).getName()}; //Let them checkban themself, that's all.
+			}
+			else{
+				sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
+				return true;
+			}
 		}
 		
 		String usage = Formatter.secondary + "Usage: /checkban <player>";
