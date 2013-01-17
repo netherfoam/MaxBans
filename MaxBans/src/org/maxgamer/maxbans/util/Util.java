@@ -197,7 +197,7 @@ public class Util{
 		
 		//Trim off trailing spaces
 		int i = sb.length() - 1;
-		while(i > 0 && sb.charAt(i) == ' '){
+		while(i >= 0 && sb.charAt(i) == ' '){
 			i--;
 		}
 		sb.replace(i + 1, sb.length(), "");
