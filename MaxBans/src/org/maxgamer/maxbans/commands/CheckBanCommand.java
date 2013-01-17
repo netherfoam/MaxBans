@@ -88,7 +88,7 @@ public class CheckBanCommand implements CommandExecutor{
 			}
 			
 			if(mute == null && ipBan == null && ban == null){
-				sender.sendMessage(plugin.color_primary + "No records for " + plugin.color_secondary + name);
+				sender.sendMessage(plugin.color_primary + "No IP ban, ban or mute records for " + plugin.color_secondary + name);
 			}
 			
 			return true;
