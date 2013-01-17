@@ -37,7 +37,6 @@ public class BanCommand implements CommandExecutor{
 			
 			//Build reason
 			String reason = Util.buildReason(args);
-			
 			String banner = Util.getName(sender);
 			
 			if(!Util.isIP(name)){
@@ -75,7 +74,7 @@ public class BanCommand implements CommandExecutor{
 				plugin.getBanManager().announce(plugin.color_secondary + name + plugin.color_primary + " has been banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason);
 			}
 			else{
-				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silently banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary);
+				sender.sendMessage(ChatColor.ITALIC + "" + plugin.color_secondary + name + plugin.color_primary + " has been silently banned by " + plugin.color_secondary + banner + plugin.color_primary + ". Reason: " + plugin.color_secondary + reason);
 			}
 			return true;
 		}
