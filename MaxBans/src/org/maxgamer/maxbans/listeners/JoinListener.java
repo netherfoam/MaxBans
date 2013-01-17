@@ -67,7 +67,7 @@ public class JoinListener implements Listener{
 								Bukkit.getScheduler().runTask(plugin, new Runnable(){
 									public void run(){
 										if(dnsbl.kick && player.isOnline()){
-											player.kickPlayer("Kicked by MaxBans:\nYour IP ("+address+") is listed as a proxy.");
+											player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
 										}
 										if(dnsbl.notify){ 
 											String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
@@ -95,7 +95,7 @@ public class JoinListener implements Listener{
             		}
         			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
             		if(dnsbl.kick){
-            			event.disallow(Result.KICK_OTHER, "Kicked By MaxBans:\nYour IP ("+address+") is listed as a proxy.");
+            			player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
             			return; 
             		}
             	}
@@ -148,14 +148,12 @@ public class JoinListener implements Listener{
         }
         
         StringBuilder km = new StringBuilder(25); //kickmessage
-        km.append("You\'re "+(ipban == null ? "" : "IP ")+"banned!\n Reason: ");
-        km.append(reason);
-        km.append("\n By ");
-        km.append(banner + ". ");  //this is probably going to make the length too long
-        					// It's more info, it shouldnt be an issue. We can use \n now too!
-        					// ThankYou patch notes!
+        km.append(Formatter.message + "You\'re "+(ipban == null ? "" : "IP ")+"banned!" + Formatter.regular + "\n Reason: ");
+        km.append(Formatter.reason + reason);
+        km.append(Formatter.regular + "\n By ");
+        km.append(Formatter.banner + banner + Formatter.regular + ". ");
         if (expires > 0) {
-        	km.append("Expires in " + Util.getTimeUntil(expires));
+        	km.append("Expires in " + Formatter.time + Util.getTimeUntil(expires));
         }
         event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         event.setKickMessage(km.toString());

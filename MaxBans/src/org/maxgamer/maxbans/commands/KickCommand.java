@@ -41,7 +41,7 @@ public class KickCommand implements CommandExecutor{
 			
 			if(name.equals("*") && sender.hasPermission("maxbans.kick.all")){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
+					p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n" + Formatter.reason + reason);
 				}
 				
 				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone.");
@@ -50,7 +50,7 @@ public class KickCommand implements CommandExecutor{
 			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
-				p.kickPlayer("Kicked by " + banner + " - Reason: \n" + reason);
+				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n" + Formatter.reason + reason);
 				if(!silent){
 					plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + ".");
 				}

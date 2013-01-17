@@ -57,7 +57,7 @@ public class BanCommand implements CommandExecutor{
 				//Kick them
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null){
-					player.kickPlayer("You have been permanently banned for: \n" + reason + "\nBy " + banner);
+					player.kickPlayer(Formatter.message + "You have been permanently banned for: \n" + Formatter.reason + reason + Formatter.regular + "\nBy " + Formatter.banner + banner);
 				}
 			}
 			else{
