@@ -204,10 +204,12 @@ public class Util{
 		
 		//Trim off trailing spaces
 		int i = sb.length() - 1;
-		while(sb.charAt(i) == ' '){
-			i--;
+		if(i >= 0){
+			while(sb.charAt(i) == ' '){
+				i--;
+			}
+			sb.replace(i + 1, sb.length(), "");
 		}
-		sb.replace(i + 1, sb.length(), "");
 		
 		return sb.toString();
 	}
