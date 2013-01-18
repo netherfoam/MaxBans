@@ -46,6 +46,7 @@ public class DNSBL{
         else{
         	plugin.getLogger().info("Loading proxys...");
         	try{
+        		db.getConnection().close();
         		//Purge old proxy records.
         		PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM proxys WHERE created < ?");
         		ps.setLong(1, (System.currentTimeMillis() - cache_timeout));
