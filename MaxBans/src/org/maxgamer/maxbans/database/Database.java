@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -110,6 +112,8 @@ public class Database {
 		this.dbw = new DatabaseWatcher(this);
 	}
 	
+	public DatabaseCore getCore(){ return this.dbCore; }
+	
 	/**
 	 * Reschedules the db watcher
 	 */
@@ -136,6 +140,72 @@ public class Database {
 	}
 	
 	/**
+	 * Copies the contents of this database into the given database. 
+	 * Does not delete the contents of this database, or change any
+	 * settings. The plugin will STILL USE *THIS* database, and not
+	 * use the other.  This may take a long time, and will print out
+	 * progress reports to System.out
+	 * @param db The database to copy data to
+	 * @throws SQLException if an error occurs.
+	 */
+	public void copyTo(Database db) throws SQLException{
+		ResultSet rs = plugin.getDB().getConnection().getMetaData().getTables(null, null, "%", null);
+		List<String> tables = new LinkedList<String>();
+		while(rs.next()){
+			tables.add(rs.getString("TABLE_NAME"));
+		}
+		rs.close();
+		
+		plugin.getDB().getDatabaseWatcher().run(); //Flush the current query set.
+		db.createTables();
+		
+		//For each table
+		for(String table : tables){
+			if(table.toLowerCase().startsWith("sqlite_autoindex_")) continue;
+			System.out.println("Copying " + table);
+			//Wipe the old records
+			db.getConnection().prepareStatement("DELETE FROM " + table).execute();
+			
+			//Fetch all the data from the existing database
+			rs = plugin.getDB().getConnection().prepareStatement("SELECT * FROM " + table).executeQuery();
+			
+			int n = 0;
+			
+			//Build the query
+			String query = "INSERT INTO " + table + " VALUES (";
+			//Append another placeholder for the value
+			query += "?";
+			for(int i = 2; i <= rs.getMetaData().getColumnCount(); i++){
+				//Add the rest of the placeholders and values.  This is so we have (?, ?, ?) and not (?, ?, ?, ).
+				query += ", ?";
+			}
+			//End the query
+			query += ")";
+			
+			PreparedStatement ps = db.getConnection().prepareStatement(query);
+			while(rs.next()){
+				n++;
+				
+				for(int i = 1; i <= rs.getMetaData().getColumnCount(); i++){
+					ps.setObject(i, rs.getObject(i));
+				}
+				
+				ps.addBatch();
+				
+				if(n % 100 == 0){
+					ps.executeBatch();
+					System.out.println(n + " records copied...");
+				}
+			}
+			//Close the resultset of that table
+			rs.close();
+		}
+		//Success!
+		db.getConnection().close();
+		this.getConnection().close();
+	}
+	
+	/**
 	 * Just like java.sql.PreparedStatement, except this query will be executed later in a different thread.
 	 * @param query The query to execute
 	 * @param objs The Strings to replace ?'s with in the query supplied above
@@ -150,17 +220,18 @@ public class Database {
 	 * @param table The table to check for
 	 * @return True if the table is found
 	 */
-	public boolean hasTable(String table){
-		String query = "SELECT * FROM " + table + " LIMIT 0,1";
-		try {
-			PreparedStatement ps = this.getConnection().prepareStatement(query);
-			
-			ps.executeQuery();
-			
-			return true;
-		} catch (SQLException e) {
-			return false;
+	public boolean hasTable(String table) throws SQLException{
+		try{
+			ResultSet rs = getConnection().getMetaData().getTables(null, null, "%", null);
+			while(rs.next()){
+				if(table.equalsIgnoreCase(rs.getString("TABLE_NAME"))) return true;
+			}
+			rs.close();
 		}
+		catch(NullPointerException e){
+			throw new SQLException("Invalid connection");
+		}
+		return false;
 	}
 	
 	public boolean hasColumn(String table, String column){
@@ -183,7 +254,7 @@ public class Database {
 	/**
 	 * Creates the database tables (bans ipbans mutes iphistory and warnings)
 	 */
-	public void createTables(){
+	public void createTables() throws SQLException{
 		//Creates the database tables
 		if(!this.hasTable("bans")){
 			this.createBanTable();
@@ -200,12 +271,13 @@ public class Database {
 		if(!this.hasTable("warnings")){
 			this.createWarningsTable();
 		}
+		if(!this.hasTable("proxys")){
+			this.createProxysTable();
+		}
 		else if(!this.hasColumn("warnings", "expires")){
 			try {
 				this.getConnection().prepareStatement(" ALTER TABLE warnings ADD expires long").execute();
-			} catch (SQLException e) {
-				System.out.println("WTF, couldnt add column!");
-			}
+			} catch (SQLException e) {} //Already has expires column. Just no record of warnings yet.
 		}
 	}
 	

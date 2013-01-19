@@ -39,42 +39,36 @@ public class DNSBL{
         	this.servers.addAll(cfgServers);
         }
         
-        if(!db.hasTable("proxys")){
-        	plugin.getLogger().info("Creating proxys table...");
-        	db.createProxysTable();
-        }
-        else{
-        	plugin.getLogger().info("Loading proxys...");
-        	try{
-        		db.getConnection().close();
-        		//Purge old proxy records.
-        		PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM proxys WHERE created < ?");
-        		ps.setLong(1, (System.currentTimeMillis() - cache_timeout));
-        		ps.execute(); //Must do this before pulling data.
-        		
-        		//Fetch valid proxy records.
-        		ResultSet rs = db.getConnection().prepareStatement("SELECT * FROM proxys").executeQuery();
-        		while(rs.next()){
-        			String ip = rs.getString("ip");
-        			String statusString = rs.getString("status");
-        			long created = rs.getLong("created");
-        			
-        			DNSStatus status = DNSStatus.valueOf(statusString);
-        			if(status == null){
-        				plugin.getLogger().info("Invalid proxy status found: " + statusString);
-        				db.execute("DELETE FROM proxys WHERE ip = ?", ip); //This happens later.
-        				continue;
-        			}
-        			
-        			CacheRecord r = new CacheRecord(status, created);
-        			this.history.put(ip, r);
-        		}
+    	plugin.getLogger().info("Loading proxys...");
+    	try{
+    		db.getConnection().close();
+    		//Purge old proxy records.
+    		PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM proxys WHERE created < ?");
+    		ps.setLong(1, (System.currentTimeMillis() - cache_timeout));
+    		ps.execute(); //Must do this before pulling data.
+    		
+    		//Fetch valid proxy records.
+    		ResultSet rs = db.getConnection().prepareStatement("SELECT * FROM proxys").executeQuery();
+    		while(rs.next()){
+    			String ip = rs.getString("ip");
+    			String statusString = rs.getString("status");
+    			long created = rs.getLong("created");
+    			
+    			DNSStatus status = DNSStatus.valueOf(statusString);
+    			if(status == null){
+    				plugin.getLogger().info("Invalid proxy status found: " + statusString);
+    				db.execute("DELETE FROM proxys WHERE ip = ?", ip); //This happens later.
+    				continue;
+    			}
+    			
+    			CacheRecord r = new CacheRecord(status, created);
+    			this.history.put(ip, r);
         	}
-        	catch(SQLException e){
-        		e.printStackTrace();
-        		plugin.getLogger().info("Could not load proxys...");
-        	}
-        }
+    	}
+    	catch(SQLException e){
+    		e.printStackTrace();
+    		plugin.getLogger().info("Could not load proxys...");
+    	}
 	}
 	
 	/**

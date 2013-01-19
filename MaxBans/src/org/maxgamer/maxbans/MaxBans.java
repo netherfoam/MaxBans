@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans;
 
 import java.io.File;
+import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -96,7 +97,14 @@ public class MaxBans extends JavaPlugin{
 			db = new Database(this, new File(this.getDataFolder(), "bans.db"));
 		}
 		//Creates the tables if they don't exist
-		db.createTables();
+		try{
+			db.createTables();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			getLogger().severe("Could not create/check tables! Startup failed.");
+			return;
+		}
 		
 		//BanManager
 		banManager = new BanManager(this);

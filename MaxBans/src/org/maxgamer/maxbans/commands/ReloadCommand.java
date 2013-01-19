@@ -1,5 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +20,8 @@ public class ReloadCommand implements CommandExecutor{
 		}
 		
 		sender.sendMessage(Formatter.secondary + "Reloading MaxBans");
-		plugin.getBanManager().reload();
+		Bukkit.getPluginManager().disablePlugin(plugin);
+		Bukkit.getPluginManager().enablePlugin(plugin);
 		sender.sendMessage(ChatColor.GREEN + "Reload Complete");
 		return true;
 	}
