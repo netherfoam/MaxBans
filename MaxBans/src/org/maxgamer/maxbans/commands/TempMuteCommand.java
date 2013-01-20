@@ -65,7 +65,7 @@ public class TempMuteCommand implements CommandExecutor{
 				p.sendMessage(Formatter.secondary + "You have been muted for " + until);
 			}
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until);
-			
+			plugin.getBanManager().addHistory(banner + " temp muted " + name + " for " + until);
 			return true;
 		}
 		else{

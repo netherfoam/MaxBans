@@ -274,10 +274,24 @@ public class Database {
 		if(!this.hasTable("proxys")){
 			this.createProxysTable();
 		}
+		if(!this.hasTable("history")){
+			this.createHistoryTable();
+		}
 		else if(!this.hasColumn("warnings", "expires")){
 			try {
 				this.getConnection().prepareStatement(" ALTER TABLE warnings ADD expires long").execute();
 			} catch (SQLException e) {} //Already has expires column. Just no record of warnings yet.
+		}
+	}
+	
+	public void createHistoryTable(){
+		String query = "CREATE TABLE history (created BIGINT NOT NULL, message TEXT(100));";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create history table.");
 		}
 	}
 	
@@ -383,5 +397,4 @@ public class Database {
 	public String escape(String s){
 		return this.dbCore.escape(s);
 	}
-	
 }

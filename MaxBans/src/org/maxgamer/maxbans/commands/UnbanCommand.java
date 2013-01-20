@@ -59,6 +59,7 @@ public class UnbanCommand implements CommandExecutor{
 			else{
 				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".");
 			}
+			plugin.getBanManager().addHistory(banner + " unbanned " + name);
 			return true;
 		}
 		else{

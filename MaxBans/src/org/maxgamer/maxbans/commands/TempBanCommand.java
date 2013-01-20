@@ -89,7 +89,7 @@ public class TempBanCommand implements CommandExecutor{
 				//Tell sender
 				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
 			}
-			
+			plugin.getBanManager().addHistory(banner + " tempbanned " + name + " for " + Util.getTimeUntil(expires) + " for " + reason);
 			return true;
 		}
 	}

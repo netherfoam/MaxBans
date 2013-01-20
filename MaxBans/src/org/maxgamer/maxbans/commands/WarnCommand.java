@@ -32,7 +32,7 @@ public class WarnCommand implements CommandExecutor{
 			
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been warned for " + Formatter.secondary + reason + Formatter.primary + " by " + Formatter.secondary + banner + Formatter.primary + ".");
 			plugin.getBanManager().warn(name, reason, banner);
-			
+			plugin.getBanManager().addHistory(banner + " warned " + name + " for " + reason);
 			return true;
 		}
 		else{

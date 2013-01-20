@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.Util;
 
 public class UnMuteCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -32,12 +33,12 @@ public class UnMuteCommand implements CommandExecutor{
 			if(mute != null){
 				plugin.getBanManager().unmute(name);
 				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
-				return true;
+				plugin.getBanManager().addHistory(Util.getName(sender) + " unmuted " + name);
 			}
 			else{
 				sender.sendMessage(ChatColor.GREEN + name + " is not muted.");
-				return true;
 			}
+			return true;
 		}
 		else{
 			sender.sendMessage(usage);

@@ -34,6 +34,7 @@ public class MaxBans extends JavaPlugin{
     
     private LockdownCommand lockdownCommand;
     private KickCommand kickCommand;
+    private HistoryCommand historyCommand;
     private ForceSpawnCommand forceSpawnCommand;
     
     private ReloadCommand reloadCommand;
@@ -178,6 +179,7 @@ public class MaxBans extends JavaPlugin{
 		this.kickCommand = new KickCommand(this);
 		
 		this.forceSpawnCommand = new ForceSpawnCommand();
+		this.historyCommand = new HistoryCommand(this);
 		
 		this.reloadCommand = new ReloadCommand(this);
 		this.mbCommand = new MBCommand();
@@ -207,6 +209,7 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("lockdown").setExecutor(lockdownCommand);
 		this.getCommand("kick").setExecutor(kickCommand);
 		this.getCommand("forcespawn").setExecutor(forceSpawnCommand);
+		this.getCommand("history").setExecutor(historyCommand);
 		
 		this.getCommand("mbreload").setExecutor(reloadCommand);
 		this.getCommand("mb").setExecutor(mbCommand);

@@ -1,5 +1,5 @@
 name: MaxBans
-version: 1.0
+version: 1.1
 main: org.maxgamer.maxbans.MaxBans
 authors: [Darekfive, Netherfoam]
 
@@ -54,6 +54,9 @@ commands:
     lockdown:
         description: Prevents anyone without maxbans.lockdown.bypass from joining. Toggles if no reason given.
         usage: /lockdown [reason]
+    history:
+        description: Reports recent usage of MaxBans.
+        usage: /history <number>
     forcespawn:
         description: Teleports a player to the spawn.
         usage: /forcespawn <player>

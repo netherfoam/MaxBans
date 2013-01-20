@@ -61,6 +61,7 @@ public class KickCommand implements CommandExecutor{
 			else{
 				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);
 			}
+			plugin.getBanManager().addHistory(banner + " kicked " + name + " for " + reason);
 			
 			return true;
 		}

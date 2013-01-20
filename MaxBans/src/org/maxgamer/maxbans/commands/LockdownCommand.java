@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.Util;
 
 public class LockdownCommand implements CommandExecutor{
     private MaxBans plugin;
@@ -63,6 +64,7 @@ public class LockdownCommand implements CommandExecutor{
 				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + "Maintenance" + Formatter.primary + ".");
 			}
 		}
+		plugin.getBanManager().addHistory(Util.getName(sender) + " set lockdown: " + plugin.getBanManager().isLockdown());
 		return true;
 	}
 }

@@ -53,7 +53,7 @@ public class ClearWarningsCommand implements CommandExecutor{
 				p.sendMessage(Formatter.primary + "Your previous warnings have been pardoned by " + Formatter.secondary + banner);
 			}
 			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s warnings.");
-			
+			plugin.getBanManager().addHistory(banner + " cleared " + name + "'s warnings.");
 			return true;
 		}
 		else{

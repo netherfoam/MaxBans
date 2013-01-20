@@ -47,7 +47,7 @@ public class MuteCommand implements CommandExecutor{
 				p.sendMessage(Formatter.secondary + " You have been muted.");
 			}
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name);
-			
+			plugin.getBanManager().addHistory(banner + " muted " + name);
 			return true;
 		}
 		else{

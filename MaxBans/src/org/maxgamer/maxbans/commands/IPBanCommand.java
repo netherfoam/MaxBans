@@ -80,6 +80,7 @@ public class IPBanCommand implements CommandExecutor{
 			else{
 				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
 			}
+			plugin.getBanManager().addHistory(banner + " IP banned " + name + "(" + ip + ") for " + reason);
 			
 			return true;
 		}

@@ -40,6 +40,8 @@ public class BanManager{
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
+	/** The recent actions that have occured */
+	private ArrayList<HistoryRecord> history = new ArrayList<HistoryRecord>(50);
 	
 	/** Hashmap of Usernamep, IP address */
 	private HashMap<String, String> recentips = new HashMap<String, String>();
@@ -75,7 +77,17 @@ public class BanManager{
 	public HashMap<String, Ban> getBans(){ return bans; }
 	/** Returns a hashmap of ip bans. Do not edit these. */
 	public HashMap<String, IPBan> getIPBans(){ return ipbans; }
-	
+	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
+	public HistoryRecord[] getHistory(){ return history.toArray(new HistoryRecord[history.size()]); }
+	/**
+	 * Adds the given string as a history message.
+	 * @param s The string to add.
+	 * This method adds the message to the database records.
+	 */
+	public void addHistory(String s){
+		history.add(0, new HistoryRecord(s));
+		plugin.getDB().execute("INSERT INTO history (created, message) VALUES (?, ?)", System.currentTimeMillis(), s);
+	}
 	
 	/**
 	 * Reloads from the database.
@@ -245,6 +257,15 @@ public class BanManager{
 			for(String s : cmds){
 				this.addChatCommand(s);
 			}
+			
+			//Phase 7 loading: Load history
+			plugin.getLogger().info("Loading history...");
+			db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+			rs = db.getConnection().prepareStatement("SELECT * FROM history").executeQuery();
+			while(rs.next()){
+				this.history.add(new HistoryRecord(rs.getString("message"), rs.getLong("created")));
+			}
+			rs.close();
 		}
 		catch(SQLException e){
 			plugin.getLogger().severe(Formatter.secondary + "Could not load database history using: " + query);

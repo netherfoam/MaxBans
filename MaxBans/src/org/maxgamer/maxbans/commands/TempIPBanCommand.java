@@ -106,7 +106,7 @@ public class TempIPBanCommand implements CommandExecutor{
 				//Silent
 				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
 			}
-			
+			plugin.getBanManager().addHistory(banner + " temp IP banned " + name + "("+ip+") for " + Util.getTimeUntil(time) + " for " + reason);
 			return true;
 		}
 		else{
