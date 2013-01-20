@@ -197,6 +197,7 @@ public class Database {
 					System.out.println(n + " records copied...");
 				}
 			}
+			ps.executeBatch();
 			//Close the resultset of that table
 			rs.close();
 		}
