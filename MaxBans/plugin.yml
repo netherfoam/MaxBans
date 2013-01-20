@@ -12,54 +12,71 @@ commands:
     ban:
         description: Bans a player
         usage: /ban <player> [-s] <reason>
+        aliases: [mbban]
     unban:
         description: Unbans a player, includes ip bans
         usage: /unban <player>
+        aliases: [mbunban]
     tempban:
         description: Bans a player temporarily
         usage: /tempban <player> <time> <timeform> [-s] <reason>
+        aliases: [mbtempban]
     tempipban:
         description: Temporarily ip bans a player
         usage: /tempipban <player> <time> <timeform> [-s] <reason>
+        aliases: [mbtempipban]
     ipban:
         description: IP bans a player
-        usage: /tempipban <player> [-s] <reason>
+        usage: /ipban <player> [-s] <reason>
+        aliases: [mbipban]
     mute:
         description: Toggles a players mute
         usage: /mute <player>
+        aliases: [mbmute]
     unmute:
         description: Unmutes a player
         usage: /unmute <player>
+        aliases: [mbunmute]
     tempmute:
         description: Mutes a player for a time
         usage: /tempmute <player> <time> <timeform>
+        aliases: [mbtempmute]
     checkban:
         description: Reports any mutes, bans or ipbans a player has
         usage: /checkban <player>
+        aliases: [mbcheckban]
     checkip:
         description: Reports a players IP address
         usage: /checkip <player>
+        aliases: [mbcheckip]
     dupeip:
         description: Scans a players IP address and reports anyone else who uses it.
         usage: /dupeip <player>
+        aliases: [mbdupeip]
     warn:
         description: Warns a player
         usage: /warn <player> <reason>
+        aliases: [mbwarn]
     clearwarnings:
         description: Removes a players warning history
         usage: /clearwarnings <player>
+        aliases: [mbclearwarnings]
     kick:
         description: Kicks a player from the game
         usage: /kick <player> [reason]
+        aliases: [mbkick]
     lockdown:
         description: Prevents anyone without maxbans.lockdown.bypass from joining. Toggles if no reason given.
         usage: /lockdown [reason]
+        aliases: [mblockdown]
     history:
         description: Reports recent usage of MaxBans.
         usage: /history <number>
+        aliases: [mbhistory]
     forcespawn:
         description: Teleports a player to the spawn.
         usage: /forcespawn <player>
+        aliases: [mbforcespawn]
     mbreload:
         description: Reloads MaxBans from the DB and config
         usage: /mbreload
