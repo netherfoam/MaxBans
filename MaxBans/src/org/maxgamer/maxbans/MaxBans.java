@@ -12,6 +12,7 @@ import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Metrics;
+import org.maxgamer.maxbans.util.Metrics.Graph;
 
 public class MaxBans extends JavaPlugin{
     private BanManager banManager;
@@ -131,14 +132,7 @@ public class MaxBans extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
         
-        try{
-        	Metrics metrics = new Metrics(this);
-        	metrics.start();
-        }
-        catch(IOException e){
-        	e.printStackTrace();
-        	System.out.println("Metrics start failed");
-        }
+        startMetrics();
     }
 	
 	public void onDisable(){
@@ -227,5 +221,42 @@ public class MaxBans extends JavaPlugin{
 		
 		this.getCommand("mbimport").setExecutor(importCommand);
 		this.getCommand("mbexport").setExecutor(exportCommand);
+    }
+    
+    public void startMetrics(){
+        try{
+        	Metrics metrics = new Metrics(this);
+        	if(metrics.start() == false) return; //Metrics is opt-out.
+        	
+        	Graph bans = metrics.createGraph("Bans");
+        	Graph ipbans = metrics.createGraph("IP Bans");
+        	Graph mutes = metrics.createGraph("Mutes");
+        	
+        	bans.addPlotter(new Metrics.Plotter() {
+				@Override
+				public int getValue() {
+					return getBanManager().getBans().size();
+				}
+			});
+        	
+        	ipbans.addPlotter(new Metrics.Plotter() {
+				@Override
+				public int getValue() {
+					return getBanManager().getIPBans().size();
+				}
+			});
+        	
+        	mutes.addPlotter(new Metrics.Plotter() {
+				@Override
+				public int getValue() {
+					return getBanManager().getMutes().size();
+				}
+			});
+        	
+        }
+        catch(IOException e){
+        	e.printStackTrace();
+        	System.out.println("Metrics start failed");
+        }
     }
 }
