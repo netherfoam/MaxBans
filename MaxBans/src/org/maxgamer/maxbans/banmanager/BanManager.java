@@ -764,7 +764,7 @@ public class BanManager{
 	 * offline players.
 	 * 
 	 * @param partial The partial name
-	 * @param excludeOnline Avoids searching online players
+	 * @param excludeOnline Avoids searching online players if true
 	 * @return The full name, or the same partial name if it can't find one
 	 */
 	public String match(String partial, boolean excludeOnline){
@@ -774,7 +774,7 @@ public class BanManager{
 		if(ip != null) return partial; // it's already complete.
 		
 		//Check the player and if they're online
-		if(!excludeOnline){
+		if(excludeOnline == false){
 			Player p = Bukkit.getPlayer(partial);
 			if(p != null) return p.getName();
 		}
