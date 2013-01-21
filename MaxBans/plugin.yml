@@ -11,48 +11,70 @@ website: http://maxgamer.org
 permissions:
     maxbans.ban:
         description: Allows a player to ban others.
+        default: op
     maxbans.unban:
         description: Allows a player to unban others.
+        default: op
     maxbans.tempban:
         description: Allows a player to tempban others.
+        default: op
     maxbans.tempipban:
         description: Allows a player to temp IP ban others.
+        default: op
     maxbans.ipban:
         description: Allows a player to IP ban others
+        default: op
     maxbans.mute:
         description: Allows a player to mute/unmute others.
+        default: op
     maxbans.unmute:
         description: Allows a player to unmute others.
+        default: op
     maxbans.tempmute:
         description: Allows a player to temp mute others.
+        default: op
     maxbans.checkban:
         description: Allows a player to check others ban info
+        default: op
     maxbans.checkban.self:
         description: Allows a player to check their own ban info (and warnings)
+        default: true
     maxbans.checkip:
         descriptions: Allows a player to lookup another players IP address
+        default: op
     maxbans.dupeip:
         description: Allows a player to check other accounts that use the same IP address as the given one
+        default: op
     maxbans.warn:
         description: Allows a player to give out warnings to others.
+        default: op
     maxbans.clearwarnings:
         description: Allows a player to delete all warnings for a given player.
+        default: op
     maxbans.kick:
         description: Allows a player to kick others with a reason
+        default: op
     maxbans.lockdown.use:
         description: Allows a player to use /lockdown on|off.
+        default: op
     maxbans.lockdown.bypass:
         description: Allows a player to enter the server if lockdown is enabled
+        default: op
     maxbans.history:
         description: Allows the player to use /history to view recent maxbans changes
+        default: op
     maxbans.forcespawn:
         description: Allows a player to use /forcespawn on another player. This teleports them to the spawn.
+        default: op
     maxbans.reload:
         description: Allows a player to use /mbreload, reloading MaxBans from scratch.
+        default: op
     maxbans.import:
         description: Allows a player to use /mbimport, importing bans.
+        default: op
     maxbans.export:
         description: Allows a player to use /mbexport, exporting bans.
+        default: op
 
 commands:
     ban:
