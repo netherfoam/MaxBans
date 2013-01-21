@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
 
@@ -68,6 +72,67 @@ public class DNSBL{
     	catch(SQLException e){
     		e.printStackTrace();
     		plugin.getLogger().info("Could not load proxys...");
+    	}
+	}
+	
+	/**
+	 * Handles the given PlayerLoginEvent appropriately.
+	 * If the IP is a known proxy, it will notify or kick
+	 * the player immediately. If the IP has to be looked
+	 * up, the event will be allowed, the IP will be looked
+	 * up.  If the result is a proxy, then the player will
+	 * be kicked soon after, and their IP cached for a week.
+	 * @param event The PlayerLoginEvent.
+	 */
+	public void handle(PlayerLoginEvent event){
+		final Player player = event.getPlayer();
+		if(event.getAddress() == null) return; //"Legacy purposes" says bukkit?
+		
+		final String address = event.getAddress().getHostAddress();
+    	CacheRecord r = getRecord(address);
+    	
+    	//We have no record of their IP, or it has expired.
+    	if(r == null){
+    		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable(){
+				public void run() {
+					//Fetch the new status, this method also caches it for future use.
+					DNSStatus status = reload(address);
+					if(status == DNSStatus.DENIED){
+						//Notify console.
+						Bukkit.getScheduler().runTask(plugin, new Runnable(){
+							public void run(){
+								if(kick && player.isOnline()){
+									player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+								}
+								if(notify){ 
+									String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
+									for(Player p : Bukkit.getOnlinePlayers()){
+										if(p.hasPermission("maxbans.notify")){
+											p.sendMessage(msg);
+										}
+									}
+								}
+								Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
+							}
+						});
+					}
+				}
+    		});
+    	}
+    	else if(r.getStatus() == DNSStatus.DENIED){
+    		if(notify){
+    			String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
+				for(Player p : Bukkit.getOnlinePlayers()){
+					if(p.hasPermission("maxbans.notify")){
+						p.sendMessage(msg);
+					}
+				}
+    		}
+			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
+    		if(kick){
+    			event.disallow(Result.KICK_OTHER, Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+    			return;
+    		}
     	}
 	}
 	

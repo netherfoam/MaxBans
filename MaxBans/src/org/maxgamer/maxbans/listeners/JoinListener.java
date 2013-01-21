@@ -10,9 +10,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.*;
-import org.maxgamer.maxbans.util.DNSBL;
-import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
-import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -53,52 +50,8 @@ public class JoinListener implements Listener{
         	
         	//DNS Blacklist handling.
             if(plugin.getBanManager().getDNSBL() != null){
-            	final DNSBL dnsbl = plugin.getBanManager().getDNSBL();
-            	CacheRecord r = dnsbl.getRecord(address);
-            	
-            	//We have no record of their IP, or it has expired.
-            	if(r == null){
-            		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable(){
-						public void run() {
-							//Fetch the new status, this method also caches it for future use.
-							DNSStatus status = plugin.getBanManager().getDNSBL().reload(address);
-							if(status == DNSStatus.DENIED){
-								//Notify console.
-								Bukkit.getScheduler().runTask(plugin, new Runnable(){
-									public void run(){
-										if(dnsbl.kick && player.isOnline()){
-											player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
-										}
-										if(dnsbl.notify){ 
-											String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
-											for(Player p : Bukkit.getOnlinePlayers()){
-												if(p.hasPermission("maxbans.notify")){
-													p.sendMessage(msg);
-												}
-											}
-										}
-										Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
-									}
-								});
-							}
-						}
-            		});
-            	}
-            	else if(r.getStatus() == DNSStatus.DENIED){
-            		if(dnsbl.notify){
-            			String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
-						for(Player p : Bukkit.getOnlinePlayers()){
-							if(p.hasPermission("maxbans.notify")){
-								p.sendMessage(msg);
-							}
-						}
-            		}
-        			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
-            		if(dnsbl.kick){
-            			event.disallow(Result.KICK_OTHER, Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
-            			return;
-            		}
-            	}
+            	plugin.getBanManager().getDNSBL().handle(event);
+            	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
             }
         	
         	plugin.getBanManager().logIP(player.getName(), address);
@@ -148,7 +101,7 @@ public class JoinListener implements Listener{
         }
         
         StringBuilder km = new StringBuilder(25); //kickmessage
-        km.append(Formatter.message + "You\'re "+(ipban == null ? "" : "IP ")+"banned!" + Formatter.regular + "\n Reason: ");
+        km.append(Formatter.message + "You're "+(ipban == null ? "" : "IP ")+"banned!" + Formatter.regular + "\n Reason: ");
         km.append(Formatter.reason + reason);
         km.append(Formatter.regular + "\n By ");
         km.append(Formatter.banner + banner + Formatter.regular + ". ");
