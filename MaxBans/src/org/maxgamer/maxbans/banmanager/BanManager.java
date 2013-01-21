@@ -78,6 +78,8 @@ public class BanManager{
 	public HashMap<String, Ban> getBans(){ return bans; }
 	/** Returns a hashmap of ip bans. Do not edit these. */
 	public HashMap<String, IPBan> getIPBans(){ return ipbans; }
+	/** Returns a hashmap of mutes. Do not edit these. */
+	public HashMap<String, Mute> getMutes(){ return mutes; }
 	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
 	public HistoryRecord[] getHistory(){ return history.toArray(new HistoryRecord[history.size()]); }
 	/**
@@ -126,9 +128,15 @@ public class BanManager{
 		plugin.getLogger().info("Loading from DB...");
 		try{
 			//Phase 1: Load bans
+			
+			//Purge old temp bans
+			PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM bans WHERE expires <> 0 AND expires < ?");
+			ps.setLong(1, System.currentTimeMillis());
+			ps.execute(); 
+			
 			plugin.getLogger().info("Loading bans");
 			query = "SELECT * FROM bans";
-			PreparedStatement ps = db.getConnection().prepareStatement(query);
+			ps = db.getConnection().prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()){
@@ -150,6 +158,12 @@ public class BanManager{
 			}
 			
 			//Phase 2: Load IP Bans
+			
+			//Purge old temp ip bans
+			ps = db.getConnection().prepareStatement("DELETE FROM ipbans WHERE expires <> 0 AND expires < ?");
+			ps.setLong(1, System.currentTimeMillis());
+			ps.execute(); 
+			
 			plugin.getLogger().info("Loading ipbans");
 			query = "SELECT * FROM ipbans";
 			ps = db.getConnection().prepareStatement(query);
@@ -164,14 +178,8 @@ public class BanManager{
 				long time = rs.getLong("time");
 				
 				if(expires != 0){
-					if(expires < System.currentTimeMillis()){
-						//db.getBuffer().addString("DELETE FROM ipbans WHERE ip = '"+ip+"' AND time <> 0");
-						db.execute("DELETE FROM ipbans WHERE ip = ? AND TIME <> 0", ip);
-					}
-					else{
-						TempIPBan tib = new TempIPBan(reason, banner, time, expires);
-						this.tempipbans.put(ip, tib);
-					}
+					TempIPBan tib = new TempIPBan(reason, banner, time, expires);
+					this.tempipbans.put(ip, tib);
 				}
 				else{
 					IPBan ipban = new IPBan(reason, banner, time);
@@ -180,6 +188,12 @@ public class BanManager{
 			}
 			
 			//Phase 3: Load Mutes
+			
+			//Purge old temp mutes
+			ps = db.getConnection().prepareStatement("DELETE FROM mutes WHERE expires <> 0 AND expires < ?");
+			ps.setLong(1, System.currentTimeMillis());
+			ps.execute(); 
+			
 			plugin.getLogger().info("Loading mutes");
 			query = "SELECT * FROM mutes";
 			ps = db.getConnection().prepareStatement(query);
@@ -193,14 +207,8 @@ public class BanManager{
 				long time = rs.getLong("time");
 				
 				if(expires != 0){
-					if(expires < System.currentTimeMillis()){
-						//db.getBuffer().addString("DELETE FROM mutes WHERE name = '"+name+"' AND time <> 0");
-						db.execute("DELETE FROM mutes WHERE name = ? AND time <> 0", name);
-					}
-					else{
-						TempMute tmute = new TempMute(banner, time, expires);
-						this.tempmutes.put(name, tmute);
-					}
+					TempMute tmute = new TempMute(banner, time, expires);
+					this.tempmutes.put(name, tmute);
 				}
 				else{
 					Mute mute = new Mute(banner, time);
@@ -230,9 +238,15 @@ public class BanManager{
 			}
 			
 			//Phase 5 loading: Load Warn history
+			
+			//Purge old warnings
+			ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
+			ps.setLong(1, System.currentTimeMillis());
+			ps.execute(); 
+			
 			plugin.getLogger().info("Loading warn history...");
 			//We only want warns that haven't expired.
-			query = "SELECT * FROM warnings WHERE expires > '" + System.currentTimeMillis() + "'";
+			query = "SELECT * FROM warnings";
 			ps = db.getConnection().prepareStatement(query);
 			rs = ps.executeQuery();
 			
@@ -261,6 +275,8 @@ public class BanManager{
 			
 			//Phase 7 loading: Load history
 			plugin.getLogger().info("Loading history...");
+			
+			//TODO: I should convert this "created" column into an "expires" column, like everything else.
 			db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
 			rs = db.getConnection().prepareStatement("SELECT * FROM history ORDER BY created DESC").executeQuery();
 			while(rs.next()){
