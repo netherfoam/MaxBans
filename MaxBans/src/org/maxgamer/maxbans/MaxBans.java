@@ -52,6 +52,7 @@ public class MaxBans extends JavaPlugin{
     private ChatCommandListener chatCommandListener;
     
     private Database db;
+    private Metrics metrics;
     
     /** Should we filter players names onJoin? */
     public boolean filter_names;
@@ -225,7 +226,9 @@ public class MaxBans extends JavaPlugin{
     
     public void startMetrics(){
         try{
-        	Metrics metrics = new Metrics(this);
+        	if(metrics != null) return; //Don't start two metrics. 
+        	
+        	metrics = new Metrics(this);
         	if(metrics.start() == false) return; //Metrics is opt-out.
         	
         	Graph bans = metrics.createGraph("Bans");
@@ -259,4 +262,6 @@ public class MaxBans extends JavaPlugin{
         	System.out.println("Metrics start failed");
         }
     }
+    /** Returns the metrics object for MaxBans */
+    public Metrics getMetrics(){ return metrics; }
 }
