@@ -23,38 +23,52 @@ public class UnbanCommand implements CommandExecutor{
 		
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);
+			String banner = Util.getName(sender);
 			String name = args[0];
 			if(name.isEmpty()){
 				sender.sendMessage(Formatter.primary + " No name given.");
 				return true;
 			}
 			
-			Ban ban = null;
-			IPBan ipBan = null;
-						
-			if(!Util.isIP(name)){
-				name = plugin.getBanManager().match(name, true);
-				ban = plugin.getBanManager().getBan(name);
-				ipBan = plugin.getBanManager().getIPBan(plugin.getBanManager().getIP(name));
-			}
-			else{
-				ipBan = plugin.getBanManager().getIPBan(name);
-			}
-			
-			String banner = Util.getName(sender);
-			
-			if(ban != null || ipBan != null){
-				plugin.getBanManager().unban(name);
-				plugin.getBanManager().unbanip(name);
-				
-				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
-				plugin.getBanManager().addHistory(banner + " unbanned " + name);
-			}
-			else{
-				sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + name + Formatter.primary + ".");
+			if(Util.isIP(name)){
+				//They gave us an IP instead.
+				String ip = name; //For readabilities sake.
+				IPBan ipban = plugin.getBanManager().getIPBan(ip);
+
+				if(ipban != null){
+					plugin.getBanManager().unbanip(ip);
+					plugin.getBanManager().announce(Formatter.secondary + ip + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
+					plugin.getBanManager().addHistory(banner + " unbanned " + ip);
+				}
+				else{
+					sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + ip + Formatter.primary + ".");
+				}
 				return true;
 			}
-			return true;
+			else{
+				//Assume it's a name they gave us.
+				name = plugin.getBanManager().match(name, true);
+				String ip = plugin.getBanManager().getIP(name);
+				
+				Ban ban = plugin.getBanManager().getBan(name);
+				IPBan ipban = plugin.getBanManager().getIPBan(ip);
+				
+				if(ipban == null && ban == null){
+					sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + name + Formatter.primary + ".");
+					return true;
+				}
+				
+				if(ban != null){
+					plugin.getBanManager().unban(name);
+				}
+				if(ipban != null){
+					plugin.getBanManager().unbanip(ip);
+				}
+				
+				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
+				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " unbanned " + Formatter.secondary + name);
+				return true;
+			}
 		}
 		else{
 			sender.sendMessage(usage);
