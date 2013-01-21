@@ -95,8 +95,8 @@ public class JoinListener implements Listener{
             		}
         			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
             		if(dnsbl.kick){
-            			player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
-            			return; 
+            			event.disallow(Result.KICK_OTHER, Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+            			return;
             		}
             	}
             }
