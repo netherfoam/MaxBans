@@ -276,7 +276,6 @@ public class BanManager{
 			//Phase 7 loading: Load history
 			plugin.getLogger().info("Loading history...");
 			
-			//TODO: I should convert this "created" column into an "expires" column, like everything else.
 			db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
 			rs = db.getConnection().prepareStatement("SELECT * FROM history ORDER BY created DESC").executeQuery();
 			while(rs.next()){
