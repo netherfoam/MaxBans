@@ -69,16 +69,7 @@ public class BanCommand implements CommandExecutor{
 				plugin.getBanManager().ipban(name, reason, banner);
 			}
 			
-			//Notify online players
-			/*
-			if(!silent){
-				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason);
-			}
-			else{
-				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason);
-			}*/
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason, silent, sender);
-			
 			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + reason);
 			return true;
 		}

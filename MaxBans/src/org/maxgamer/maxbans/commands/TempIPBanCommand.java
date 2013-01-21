@@ -95,17 +95,6 @@ public class TempIPBanCommand implements CommandExecutor{
 			
 			//Ban them
 			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
-			
-			//Notify online players
-			/*
-			if(!silent){
-				//Announce
-				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
-			}
-			else{
-				//Silent
-				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently temp IP banned ("+Util.getTimeUntil(time/1000*1000)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
-			}*/
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".", silent, sender);
 			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for " + Formatter.secondary + reason);
 			return true;
