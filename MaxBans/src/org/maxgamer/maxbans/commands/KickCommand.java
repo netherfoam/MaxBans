@@ -44,6 +44,7 @@ public class KickCommand implements CommandExecutor{
 				}
 				
 				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone.");
+				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + "everyone" + Formatter.primary + " for " + Formatter.secondary + reason);
 				return true;
 			}
 			
@@ -51,7 +52,7 @@ public class KickCommand implements CommandExecutor{
 			if(p != null){
 				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n" + Formatter.reason + reason);
 				plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + ".", silent, sender);
-				plugin.getBanManager().addHistory(banner + " kicked " + p.getName() + " for " + reason);
+				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for " + Formatter.secondary + reason);
 			}
 			else{
 				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);
