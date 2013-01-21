@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.maxgamer.maxbans.commands.*;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.Metrics;
 
 public class MaxBans extends JavaPlugin{
     private BanManager banManager;
@@ -128,6 +130,15 @@ public class MaxBans extends JavaPlugin{
         
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
+        
+        try{
+        	Metrics metrics = new Metrics(this);
+        	metrics.start();
+        }
+        catch(IOException e){
+        	e.printStackTrace();
+        	System.out.println("Metrics start failed");
+        }
     }
 	
 	public void onDisable(){
