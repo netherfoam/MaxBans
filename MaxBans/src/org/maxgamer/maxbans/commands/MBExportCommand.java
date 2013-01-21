@@ -27,6 +27,11 @@ public class MBExportCommand implements CommandExecutor{
         this.plugin = plugin;
     }
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!sender.hasPermission("maxbans.export")){
+			sender.sendMessage(ChatColor.RED + "You may not use that command.");
+			return true;
+		}
+		
 		if(args.length == 0){
 			sender.sendMessage(Formatter.primary + "MaxBans Exporter:");
 			sender.sendMessage(Formatter.secondary + "/mbexport vanilla " + Formatter.primary + " - Exports bans to vanilla bans.");
