@@ -8,6 +8,52 @@ soft-depend: [HeroChat]
 description: Banning plugin
 website: http://maxgamer.org
 
+permissions:
+    maxbans.ban:
+        description: Allows a player to ban others.
+    maxbans.unban:
+        description: Allows a player to unban others.
+    maxbans.tempban:
+        description: Allows a player to tempban others.
+    maxbans.tempipban:
+        description: Allows a player to temp IP ban others.
+    maxbans.ipban:
+        description: Allows a player to IP ban others
+    maxbans.mute:
+        description: Allows a player to mute/unmute others.
+    maxbans.unmute:
+        description: Allows a player to unmute others.
+    maxbans.tempmute:
+        description: Allows a player to temp mute others.
+    maxbans.checkban:
+        description: Allows a player to check others ban info
+    maxbans.checkban.self:
+        description: Allows a player to check their own ban info (and warnings)
+    maxbans.checkip:
+        descriptions: Allows a player to lookup another players IP address
+    maxbans.dupeip:
+        description: Allows a player to check other accounts that use the same IP address as the given one
+    maxbans.warn:
+        description: Allows a player to give out warnings to others.
+    maxbans.clearwarnings:
+        description: Allows a player to delete all warnings for a given player.
+    maxbans.kick:
+        description: Allows a player to kick others with a reason
+    maxbans.lockdown.use:
+        description: Allows a player to use /lockdown on|off.
+    maxbans.lockdown.bypass:
+        description: Allows a player to enter the server if lockdown is enabled
+    maxbans.history:
+        description: Allows the player to use /history to view recent maxbans changes
+    maxbans.forcespawn:
+        description: Allows a player to use /forcespawn on another player. This teleports them to the spawn.
+    maxbans.reload:
+        description: Allows a player to use /mbreload, reloading MaxBans from scratch.
+    maxbans.import:
+        description: Allows a player to use /mbimport, importing bans.
+    maxbans.export:
+        description: Allows a player to use /mbexport, exporting bans.
+
 commands:
     ban:
         description: Bans a player
