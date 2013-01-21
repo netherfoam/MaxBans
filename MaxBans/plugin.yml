@@ -75,6 +75,9 @@ permissions:
     maxbans.export:
         description: Allows a player to use /mbexport, exporting bans.
         default: op
+    maxbans.seesilent:
+        description: Allows a player to see other players using silent ban commands
+        default: op
 
 commands:
     ban:
