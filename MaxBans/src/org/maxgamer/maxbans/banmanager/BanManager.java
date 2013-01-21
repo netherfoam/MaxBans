@@ -736,6 +736,8 @@ public class BanManager{
 	 * 
 	 * @param partial The partial name
 	 * @return The full name, or the same partial name if it can't find one
+	 * <br/><br/>
+	 * This is the equivilant of match(partial, false)
 	 */
 	public String match(String partial){
 		return match(partial, false);
