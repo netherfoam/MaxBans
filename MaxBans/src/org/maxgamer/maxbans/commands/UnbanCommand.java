@@ -46,20 +46,14 @@ public class UnbanCommand implements CommandExecutor{
 			if(ban != null || ipBan != null){
 				plugin.getBanManager().unban(name);
 				plugin.getBanManager().unbanip(name);
+				
+				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
+				plugin.getBanManager().addHistory(banner + " unbanned " + name);
 			}
 			else{
 				sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + name + Formatter.primary + ".");
 				return true;
 			}
-			/*
-			if(silent){
-				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silenty unbanned.");
-			}
-			else{
-				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".");
-			}*/
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
-			plugin.getBanManager().addHistory(banner + " unbanned " + name);
 			return true;
 		}
 		else{
