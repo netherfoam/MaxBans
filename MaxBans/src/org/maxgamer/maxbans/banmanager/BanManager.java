@@ -737,7 +737,7 @@ public class BanManager{
 		}
 		else{
 			for(Player p : Bukkit.getOnlinePlayers()){
-				p.sendMessage(s);
+				if(p.hasPermission("maxbans.seebroadcast")) p.sendMessage(s);
 			}
 		}
 		plugin.getLogger().info(s);
