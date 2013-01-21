@@ -47,15 +47,6 @@ public class JoinListener implements Listener{
         
         //If they havent been banned or IP banned, they can join.
         if(ipban == null && ban == null){
-        	
-        	//DNS Blacklist handling.
-            if(plugin.getBanManager().getDNSBL() != null){
-            	plugin.getBanManager().getDNSBL().handle(event);
-            	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
-            }
-        	
-        	plugin.getBanManager().logIP(player.getName(), address);
-        	
         	if(plugin.getBanManager().isLockdown()){
     	        if(!player.hasPermission("maxbans.lockdown.bypass")){
     	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().getLockdownReason());
@@ -75,6 +66,14 @@ public class JoinListener implements Listener{
     	        	}, 40);
     	        }
             }
+        	
+        	//DNS Blacklist handling.
+            if(plugin.getBanManager().getDNSBL() != null){
+            	plugin.getBanManager().getDNSBL().handle(event);
+            	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
+            }
+        	
+        	plugin.getBanManager().logIP(player.getName(), address);
         	
         	return;
         }
