@@ -33,7 +33,8 @@ public class HistoryCommand implements CommandExecutor{
 			sender.sendMessage(Formatter.primary + "No history.");
 		}
 		else{
-			for(int i = 0; i < count && i < history.length; i++){
+			//for(int i = count - 1; i >= 0 && i < history.length; i++){
+			for(int i = Math.min(history.length, count); i >= 0; i--){
 				sender.sendMessage(Formatter.secondary + history[i].getMessage());
 			}
 		}

@@ -262,7 +262,7 @@ public class BanManager{
 			//Phase 7 loading: Load history
 			plugin.getLogger().info("Loading history...");
 			db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
-			rs = db.getConnection().prepareStatement("SELECT * FROM history").executeQuery();
+			rs = db.getConnection().prepareStatement("SELECT * FROM history ORDER BY created DESC").executeQuery();
 			while(rs.next()){
 				this.history.add(new HistoryRecord(rs.getString("message"), rs.getLong("created")));
 			}
