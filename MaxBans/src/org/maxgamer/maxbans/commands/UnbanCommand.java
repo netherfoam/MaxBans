@@ -1,6 +1,5 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -52,13 +51,14 @@ public class UnbanCommand implements CommandExecutor{
 				sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + name + Formatter.primary + ".");
 				return true;
 			}
-			
+			/*
 			if(silent){
 				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silenty unbanned.");
 			}
 			else{
 				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".");
-			}
+			}*/
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
 			plugin.getBanManager().addHistory(banner + " unbanned " + name);
 			return true;
 		}

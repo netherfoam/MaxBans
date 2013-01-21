@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -80,7 +79,7 @@ public class TempBanCommand implements CommandExecutor{
 			if(player != null && player.isOnline()){
 				player.kickPlayer(Formatter.message + "You have been Temporarily Banned for: \n" + Formatter.reason + reason + Formatter.regular + "\nBy " + Formatter.banner + banner + Formatter.regular + ". Expires in " + Formatter.time + Util.getTimeUntil(expires));
 			}
-			
+			/*
 			if(!silent){
 				//Announce
 				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
@@ -88,8 +87,9 @@ public class TempBanCommand implements CommandExecutor{
 			else{
 				//Tell sender
 				sender.sendMessage(ChatColor.ITALIC + "" + Formatter.secondary + name + Formatter.primary + " has been silently temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".");
-			}
-			plugin.getBanManager().addHistory(banner + " tempbanned " + name + " for " + Util.getTimeUntil(expires) + " for " + reason);
+			}*/
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".", silent, sender);
+			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " tempbanned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + Util.getTimeUntil(expires) + Formatter.primary + " for " + Formatter.secondary + reason);
 			return true;
 		}
 	}

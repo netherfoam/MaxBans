@@ -5,7 +5,7 @@ authors: [Darekfive, Netherfoam]
 
 soft-depend: [HeroChat]
 
-description: Banning plugin
+description: "rock solid and feather light banning plugin!"
 website: http://maxgamer.org
 
 permissions:

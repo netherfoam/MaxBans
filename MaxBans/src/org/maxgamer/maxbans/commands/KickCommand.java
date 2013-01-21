@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -51,17 +50,19 @@ public class KickCommand implements CommandExecutor{
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
 				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n" + Formatter.reason + reason);
+				/*
 				if(!silent){
 					plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + ".");
 				}
 				else{
 					sender.sendMessage(ChatColor.ITALIC + "" + Formatter.primary + "Kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + " silently.");
-				}
+				}*/
+				plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + ".", silent, sender);
+				plugin.getBanManager().addHistory(banner + " kicked " + p.getName() + " for " + reason);
 			}
 			else{
 				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);
 			}
-			plugin.getBanManager().addHistory(banner + " kicked " + name + " for " + reason);
 			
 			return true;
 		}

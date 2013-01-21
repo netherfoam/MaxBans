@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
@@ -700,10 +701,31 @@ public class BanManager{
 	 * @param s The string
 	 */
 	public void announce(String s){
-		plugin.getLogger().info(s);
-		for(Player p : Bukkit.getOnlinePlayers()){
-			p.sendMessage(s);
+		announce(s, false, null);
+	}
+	/**
+	 * Announces a message to everyone who has the given permission
+	 * Also logs it to the console.
+	 * @param s The string
+	 * @param silent If this message is to be silent
+	 */
+	public void announce(String s, boolean silent, CommandSender sender){
+		if(silent){
+			s = Formatter.primary + "[Silent] " + s;
+			
+			for(Player p : Bukkit.getOnlinePlayers()){
+				if(p.hasPermission("maxbans.seesilent")) p.sendMessage(s);
+			}
+			if(sender != null && !sender.hasPermission("maxbans.seesilent")){
+				sender.sendMessage(s);
+			}
 		}
+		else{
+			for(Player p : Bukkit.getOnlinePlayers()){
+				p.sendMessage(s);
+			}
+		}
+		plugin.getLogger().info(s);
 	}
 	
 	/**
