@@ -78,7 +78,7 @@ permissions:
     maxbans.seesilent:
         description: Allows a player to see other players using silent ban commands
         default: op
-    maxbans.seesilent:
+    maxbans.seebroadcast:
         description: Allows a player to see other players using regular ban commands (Not silent ones)
         default: true
 
