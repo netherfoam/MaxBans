@@ -45,7 +45,7 @@ public class JoinListener implements Listener{
         //IP Ban
         IPBan ipban= plugin.getBanManager().getIPBan(address);
         
-        //If they havent been banned or IP banned, they can join.
+        //If they haven't been banned or IP banned, they can join.
         if(ipban == null && ban == null){
         	if(plugin.getBanManager().isLockdown()){
     	        if(!player.hasPermission("maxbans.lockdown.bypass")){
