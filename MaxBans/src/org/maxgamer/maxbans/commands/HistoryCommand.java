@@ -24,7 +24,7 @@ public class HistoryCommand implements CommandExecutor{
 				count = Integer.parseInt(args[0]);				
 			}
 			catch(NumberFormatException e){
-				sender.sendMessage(Formatter.secondary + "Usage: /history <number fo records>");
+				sender.sendMessage(Formatter.secondary + "Usage: /history <number of records>");
 				return true;
 			}
 		}
@@ -33,8 +33,7 @@ public class HistoryCommand implements CommandExecutor{
 			sender.sendMessage(Formatter.primary + "No history.");
 		}
 		else{
-			//for(int i = count - 1; i >= 0 && i < history.length; i++){
-			for(int i = Math.min(history.length, count); i >= 0; i--){
+			for(int i = Math.min(history.length, count) - 1; i >= 0; i--){
 				sender.sendMessage(Formatter.secondary + history[i].getMessage());
 			}
 		}
