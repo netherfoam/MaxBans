@@ -20,6 +20,31 @@ public class JoinListener implements Listener{
         this.plugin = plugin;
     }
     
+    @EventHandler(priority = EventPriority.LOW)
+	public void onJoinLockdown(PlayerLoginEvent event) {
+		if(event.getResult() != Result.ALLOWED) return;
+    	Player player = event.getPlayer();
+    	if(plugin.getBanManager().isLockdown()){
+	        if(!player.hasPermission("maxbans.lockdown.bypass")){
+	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().getLockdownReason());
+	    		event.setResult(Result.KICK_OTHER);
+	    		return;
+	    	}
+	        else{ //Delay this, because it's fucken more important than essentials
+	        	final String name = player.getName();
+	        	Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable(){
+					public void run() {
+						Player p = Bukkit.getPlayerExact(name);
+						if(p != null){
+							p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
+						}
+					}
+	        		
+	        	}, 40);
+	        }
+        }
+    }
+    
     @EventHandler (priority = EventPriority.LOWEST)
     public void onJoinHandler(PlayerLoginEvent event) {
         final Player player = event.getPlayer();
@@ -46,27 +71,7 @@ public class JoinListener implements Listener{
         IPBan ipban= plugin.getBanManager().getIPBan(address);
         
         //If they haven't been banned or IP banned, they can join.
-        if(ipban == null && ban == null){
-        	if(plugin.getBanManager().isLockdown()){
-    	        if(!player.hasPermission("maxbans.lockdown.bypass")){
-    	    		event.setKickMessage("Server is in lockdown mode. Try again shortly. Reason: \n" + plugin.getBanManager().getLockdownReason());
-    	    		event.setResult(Result.KICK_OTHER);
-    	    		return;
-    	    	}
-    	        else{ //Delay this, because it's fucken more important than essentials
-    	        	final String name = player.getName();
-    	        	Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable(){
-    					public void run() {
-    						Player p = Bukkit.getPlayerExact(name);
-    						if(p != null){
-    							p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
-    						}
-    					}
-    	        		
-    	        	}, 40);
-    	        }
-            }
-        	
+        if(ipban == null && ban == null){        	
         	//DNS Blacklist handling.
             if(plugin.getBanManager().getDNSBL() != null){
             	plugin.getBanManager().getDNSBL().handle(event);
