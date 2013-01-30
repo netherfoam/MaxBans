@@ -112,6 +112,9 @@ public class JoinListener implements Listener{
         if (expires > 0) {
         	km.append("Expires in " + Formatter.time + Util.getTimeUntil(expires));
         }
+        String appeal = plugin.getConfig().getString("appeal-message");
+        if(appeal != null && !appeal.isEmpty()) km.append("\n" + appeal);
+        
         event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         event.setKickMessage(km.toString());
         

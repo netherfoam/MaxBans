@@ -6,6 +6,7 @@ max-warnings: 3
 warn-expirey-in-minutes: 4320 
 
 default-reason: "Misconduct"
+appeal-message: ""
 
 #The two char colors used that STAFF will see.
 #Usually, primary = text, and secondary = variables (Like ban reason)
