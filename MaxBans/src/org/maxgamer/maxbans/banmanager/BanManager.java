@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
@@ -61,6 +62,9 @@ public class BanManager{
 	/** Default reason for punishments */
 	public String defaultReason = "Misconduct";
 	
+	/** Appeal message appended when a player is prevented from joining. */
+	private String appealMessage = "";
+	
 	/** The database that we should use */
 	private Database db;
 	
@@ -73,6 +77,11 @@ public class BanManager{
 		
 		this.reload();
 	}
+	
+	/** Returns the appeal message */
+	public String getAppealMessage(){ return appealMessage; }
+	/** Sets the appeal message. Translates & to ChatColor's */
+	public void setAppealMessage(String msg){ this.appealMessage = ChatColor.translateAlternateColorCodes('&', msg); }
 	
 	/** Returns a hashmap of bans.  Do not edit these. */
 	public HashMap<String, Ban> getBans(){ return bans; }
@@ -122,6 +131,7 @@ public class BanManager{
 		
 		this.lockdown = plugin.getConfig().getBoolean("lockdown");
 		this.lockdownReason = plugin.getConfig().getString("lockdown-reason");
+		setAppealMessage(plugin.getConfig().getString("appeal-message", "")); //Default to empty string.
 		
 		//Reload the cache from the database.
 		String query = "";

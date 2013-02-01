@@ -6,6 +6,7 @@ max-warnings: 3
 warn-expirey-in-minutes: 4320 
 
 default-reason: "Misconduct"
+#Appeal-message accepts color codes, like &a and &4
 appeal-message: ""
 
 #The two char colors used that STAFF will see.

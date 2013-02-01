@@ -56,7 +56,7 @@ public class MaxBans extends JavaPlugin{
     
     /** Should we filter players names onJoin? */
     public boolean filter_names;
-    
+    /** The one plugin instance */
     public static MaxBans instance;
         
 	public void onEnable(){
