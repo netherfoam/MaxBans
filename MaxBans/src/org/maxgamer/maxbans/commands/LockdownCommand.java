@@ -35,7 +35,7 @@ public class LockdownCommand implements CommandExecutor{
 				}
 				
 				plugin.getBanManager().setLockdown(true, reason);
-				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + reason + Formatter.primary + ".");
+				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + plugin.getBanManager().getLockdownReason() + Formatter.primary + ".");
 			}
 			else if(args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable")){
 				plugin.getBanManager().setLockdown(false);
@@ -51,7 +51,7 @@ public class LockdownCommand implements CommandExecutor{
 				String reason = sb.toString();
 				
 				plugin.getBanManager().setLockdown(true, reason);
-				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + reason + Formatter.primary + ".");
+				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + plugin.getBanManager().getLockdownReason() + Formatter.primary + ".");
 			}
 		}
 		else{
@@ -61,7 +61,7 @@ public class LockdownCommand implements CommandExecutor{
 			}
 			else{
 				plugin.getBanManager().setLockdown(true);
-				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + "Maintenance" + Formatter.primary + ".");
+				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + plugin.getBanManager().getLockdownReason() + Formatter.primary + ".");
 			}
 		}
 		plugin.getBanManager().addHistory(Util.getName(sender) + " set lockdown: " + plugin.getBanManager().isLockdown());
