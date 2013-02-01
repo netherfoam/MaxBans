@@ -103,8 +103,7 @@ public class Database {
 	 */
 	public Database(MaxBans plugin, String host, String dbName, String user, String pass, String port){
 		this(plugin);
-		String url = "jdbc:mysql://"+host+":"+port+"/"+dbName;
-		this.dbCore = new MySQL(plugin, url, user, pass);
+		this.dbCore = new MySQL(plugin, host, user, pass, dbName, port);
 	}
 	private Database(MaxBans plugin){
 		this.plugin = plugin;

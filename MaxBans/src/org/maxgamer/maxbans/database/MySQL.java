@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import org.maxgamer.maxbans.MaxBans;
 
 public class MySQL implements DatabaseCore{
-	//DriverManager.getConnection("jdbc:mysql://"+this.host+":"+this.port+"/"+this.dbName, user, pass);
 	private MaxBans plugin;
 	private String url;
 	private String user;
@@ -22,7 +21,7 @@ public class MySQL implements DatabaseCore{
 		this.pass = pass;
 	}
 	public MySQL(MaxBans plugin, String host, String user, String pass, String database, String port){
-		this(plugin, "jdbc:mysql://"+host+":"+port+"/"+database, user, pass);
+		this(plugin, "jdbc:mysql://"+host+":"+port+"/"+database+"?autoReconnect=true", user, pass);
 	}
 	
 	
