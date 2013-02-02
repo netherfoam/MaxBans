@@ -33,7 +33,7 @@ public class UnMuteCommand implements CommandExecutor{
 			if(mute != null){
 				plugin.getBanManager().unmute(name);
 				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
-				plugin.getBanManager().addHistory(Util.getName(sender) + " unmuted " + name);
+				plugin.getBanManager().addHistory(Formatter.secondary + Util.getName(sender) + Formatter.primary + " unmuted " + Formatter.secondary + name);
 			}
 			else{
 				sender.sendMessage(ChatColor.GREEN + name + " is not muted.");
