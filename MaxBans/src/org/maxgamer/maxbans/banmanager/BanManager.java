@@ -137,6 +137,9 @@ public class BanManager{
 		String query = "";
 		plugin.getLogger().info("Loading from DB...");
 		try{
+			//Close any old connections (Possibly fix SQLITE_BUSY on reload?)
+			db.getConnection().close();
+			
 			//Phase 1: Load bans
 			
 			//Purge old temp bans
