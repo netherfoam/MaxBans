@@ -1,7 +1,10 @@
 package org.maxgamer.maxbans.util;
 
+import java.text.ParseException;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
@@ -14,6 +17,14 @@ public class Util{
 	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	private static Pattern IP_PATTERN = Pattern.compile(IP_REGEX);
 	private static Pattern VALID_CHARS_PATTERN = Pattern.compile("[A-Za-z0-9_]");
+	
+	private static HashSet<String> yes = new HashSet<String>();
+	private static HashSet<String> no = new HashSet<String>();
+	
+	static{
+		yes.add("yes"); yes.add("true"); yes.add("on"); yes.add("enable");
+		no.add("no"); no.add("false"); no.add("off"); no.add("disable");
+	}
 	
 	/**
 	 * Returns true if the given string matches *.*.*.*
@@ -206,7 +217,20 @@ public class Util{
 			return MaxBans.instance.getBanManager().defaultReason;
 		}
 		
-		return "'" + sb.toString() + "'";
+		return "'" + ChatColor.translateAlternateColorCodes('&', sb.toString()) + Formatter.regular + "'";
+	}
+	
+	/**
+	 * Converts the given user input string into a boolean.  Such as if a player enters "yes", "enable", "disable", it converts them to true, true, false respectively.
+	 * @param response The string the user has sent
+	 * @return The boolean equivilant
+	 * @throws ParseException if the given string is not a valid answer... Example: "bananas" is not a boolean!
+	 */
+	public static boolean parseBoolean(String response) throws ParseException{
+		response = response.toLowerCase();
+		if(yes.contains(response)) return true;
+		if(no.contains(response)) return false;
+		throw new ParseException("Invalid boolean: " + response, 0);
 	}
 	
 	/**

@@ -130,7 +130,7 @@ public class BanManager{
 		plugin.reloadConfig();
 		
 		this.lockdown = plugin.getConfig().getBoolean("lockdown");
-		this.lockdownReason = plugin.getConfig().getString("lockdown-reason");
+		this.lockdownReason = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("lockdown-reason", ""));
 		setAppealMessage(plugin.getConfig().getString("appeal-message", "")); //Default to empty string.
 		
 		//Reload the cache from the database.
@@ -306,7 +306,7 @@ public class BanManager{
 		//Load the default ban reason - Default to Misconduct if none given
 		String defaultReason = plugin.getConfig().getString("default-reason");
 		if(defaultReason == null || defaultReason.isEmpty()) defaultReason = "Misconduct";
-		this.defaultReason = defaultReason;
+		this.defaultReason = ChatColor.translateAlternateColorCodes('&', defaultReason);
 
 		db.scheduleWatcher(); //Actually starts it.
 	}
@@ -806,7 +806,7 @@ public class BanManager{
 		return this.lockdown;
 	}
 	/**
-	 * The reason the server is in lockdown, or is not in lockdown.
+	 * The reason the server is in lockdown. Result is not guaranteed if server is not in lockdown.
 	 * @return The reason.
 	 */
 	public String getLockdownReason(){
@@ -820,6 +820,7 @@ public class BanManager{
 	 */
 	public void setLockdown(boolean lockdown, String reason){
 		this.lockdown = lockdown;
+		reason = ChatColor.translateAlternateColorCodes('&', reason);
 		if(lockdown){
 			plugin.getConfig().set("lockdown", true);
 			plugin.getConfig().set("lockdown-reason", reason);

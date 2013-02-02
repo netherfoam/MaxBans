@@ -1,5 +1,7 @@
 package org.maxgamer.maxbans.commands;
 
+import java.text.ParseException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,6 +11,7 @@ import org.maxgamer.maxbans.util.Util;
 
 public class LockdownCommand implements CommandExecutor{
     private MaxBans plugin;
+    private String defaultReason = "Maintenance";
     public LockdownCommand(MaxBans plugin){
         this.plugin = plugin;
     }
@@ -17,53 +20,38 @@ public class LockdownCommand implements CommandExecutor{
 			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
 			return true;
 		}
+		boolean on;
+		String reason;
+		
 		if(args.length > 0){
-			if(args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("enable")){
-				StringBuilder sb = new StringBuilder();
-				args[0] = "";
-				for(String s : args){
-					if(s.isEmpty()) continue;
-					sb.append(s + " ");
-				}
-				if(sb.length() > 0){
-					sb.deleteCharAt(sb.length() - 1);
-				}
-				String reason = sb.toString();
-				
-				if(reason.isEmpty()){
-					reason = "Maintenance";
-				}
-				
-				plugin.getBanManager().setLockdown(true, reason);
-				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + plugin.getBanManager().getLockdownReason() + Formatter.primary + ".");
+			try{
+				on = Util.parseBoolean(args[0]);
+				args[0] = ""; //It was a boolean answer, so we can throw it away from the reason.
 			}
-			else if(args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable")){
-				plugin.getBanManager().setLockdown(false);
-				sender.sendMessage(Formatter.primary + "Lockdown disabled.");
+			catch(ParseException e){
+				on = !plugin.getBanManager().isLockdown();
 			}
-			else{
-				StringBuilder sb = new StringBuilder();
-				for(String s : args){
-					if(s.isEmpty()) continue;
-					sb.append(s + " ");
-				}
+			
+			StringBuilder sb = new StringBuilder();
+			for(String s : args){
+				if(s.isEmpty()) continue;
+				sb.append(s + " ");
+			}
+			if(sb.length() > 0){
 				sb.deleteCharAt(sb.length() - 1);
-				String reason = sb.toString();
-				
-				plugin.getBanManager().setLockdown(true, reason);
-				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + plugin.getBanManager().getLockdownReason() + Formatter.primary + ".");
+			}
+			reason = sb.toString();
+			if(reason.isEmpty()){
+				reason = defaultReason;
 			}
 		}
 		else{
-			if(plugin.getBanManager().isLockdown()){
-				plugin.getBanManager().setLockdown(false);
-				sender.sendMessage(Formatter.primary + "Lockdown disabled.");
-			}
-			else{
-				plugin.getBanManager().setLockdown(true);
-				sender.sendMessage(Formatter.primary + "Lockdown enabled.  Reason: " + Formatter.secondary + plugin.getBanManager().getLockdownReason() + Formatter.primary + ".");
-			}
+			on = !plugin.getBanManager().isLockdown();
+			reason = defaultReason;
 		}
+		plugin.getBanManager().setLockdown(on, reason);
+		sender.sendMessage(Formatter.secondary + "Lockdown is now " + (on?"enabled. Reason: " + Formatter.primary + plugin.getBanManager().getLockdownReason() + Formatter.secondary:"disabled") + ".");
+		
 		plugin.getBanManager().addHistory(Util.getName(sender) + " set lockdown: " + plugin.getBanManager().isLockdown());
 		return true;
 	}

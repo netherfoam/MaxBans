@@ -5,9 +5,10 @@ max-warnings: 3
 #3 days
 warn-expirey-in-minutes: 4320 
 
+#Accepts colorcodes. (v1.2)
 default-reason: "Misconduct"
-#Appeal-message accepts color codes, like &a and &4
-appeal-message: ""
+#Appeal-message accepts color codes, like &a and &4... Set it to "" to disable this. Accepts new line characters, just add \n where you want a new line.
+appeal-message: "No appeal website set :("
 
 #The two char colors used that STAFF will see.
 #Usually, primary = text, and secondary = variables (Like ban reason)
