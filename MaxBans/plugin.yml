@@ -163,3 +163,6 @@ commands:
     mbexport:
         description: Exports a set of bans
         usage: /mbexport nameOfPlugin
+    mbdebug:
+        description: Print debug info to the console
+        usage: /mbdebug

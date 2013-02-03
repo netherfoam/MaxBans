@@ -29,4 +29,9 @@ public class Mute{
     public long getTime(){
         return time;
     }
+    
+	@Override
+	public String toString(){
+		return "{MUTE} Muter: " + getMuter();
+	}
 }

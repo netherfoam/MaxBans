@@ -21,4 +21,9 @@ public class TempMute extends Mute{
     public long getExpires() {
         return expires;
     }
+    
+	@Override
+	public String toString(){
+		return "{TEMPMUTE} Muter: " + getMuter();
+	}
 }

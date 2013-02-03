@@ -43,4 +43,9 @@ public class Ban{
 	public long getTime(){
 		return time;
 	}
+	
+	@Override
+	public String toString(){
+		return "{BAN} Reason: " + reason;
+	}
 }

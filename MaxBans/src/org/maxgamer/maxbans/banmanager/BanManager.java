@@ -89,6 +89,14 @@ public class BanManager{
 	public HashMap<String, IPBan> getIPBans(){ return ipbans; }
 	/** Returns a hashmap of mutes. Do not edit these. */
 	public HashMap<String, Mute> getMutes(){ return mutes; }
+	
+	/** Returns a hashmap of bans.  Do not edit these. */
+	public HashMap<String, TempBan> getTempBans(){ return tempbans; }
+	/** Returns a hashmap of ip bans. Do not edit these. */
+	public HashMap<String, TempIPBan> getTempIPBans(){ return tempipbans; }
+	/** Returns a hashmap of mutes. Do not edit these. */
+	public HashMap<String, TempMute> getTempMutes(){ return tempmutes; }
+	
 	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
 	public HistoryRecord[] getHistory(){ return history.toArray(new HistoryRecord[history.size()]); }
 	/**

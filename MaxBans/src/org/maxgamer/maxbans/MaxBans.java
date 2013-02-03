@@ -45,6 +45,7 @@ public class MaxBans extends JavaPlugin{
     
     private MBImportCommand importCommand;
     private MBExportCommand exportCommand;
+    private MBDebug mbDebugCommand;
             
     private JoinListener joinListener;
     private HeroChatListener herochatListener; 
@@ -192,6 +193,7 @@ public class MaxBans extends JavaPlugin{
 		
 		this.importCommand = new MBImportCommand(this);
 		this.exportCommand = new MBExportCommand(this);
+		this.mbDebugCommand = new MBDebug();
 		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
@@ -222,6 +224,7 @@ public class MaxBans extends JavaPlugin{
 		
 		this.getCommand("mbimport").setExecutor(importCommand);
 		this.getCommand("mbexport").setExecutor(exportCommand);
+		this.getCommand("mbdebug").setExecutor(mbDebugCommand);
     }
     
     public void startMetrics(){

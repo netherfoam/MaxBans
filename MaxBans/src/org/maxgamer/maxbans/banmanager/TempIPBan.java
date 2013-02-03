@@ -22,4 +22,9 @@ public class TempIPBan extends IPBan{
     public long getExpires() {
         return expires;
     }
+    
+	@Override
+	public String toString(){
+		return "{TEMPIPBAN} Reason: " + super.getReason();
+	}
 }
