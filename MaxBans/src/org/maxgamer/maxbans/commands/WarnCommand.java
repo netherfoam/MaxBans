@@ -22,9 +22,9 @@ public class WarnCommand extends CmdSkeleton{
 			String reason = Util.buildReason(args);
 			String banner = Util.getName(sender);
 			
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been warned for " + Formatter.secondary + reason + Formatter.primary + " by " + Formatter.secondary + banner + Formatter.primary + ".");
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been warned for '" + Formatter.secondary + reason + Formatter.primary + "' by " + Formatter.secondary + banner + Formatter.primary + ".");
 			plugin.getBanManager().warn(name, reason, banner);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + reason);
+			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			return true;
 		}
 		else{

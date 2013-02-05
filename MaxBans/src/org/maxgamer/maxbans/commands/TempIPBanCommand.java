@@ -54,7 +54,7 @@ public class TempIPBanCommand extends CmdSkeleton{
 				//Kick them
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null && player.isOnline()){
-					player.kickPlayer(Formatter.message + "You have been Temporarily IP Banned for: \n" + Formatter.reason + reason + Formatter.regular + "\nBy " + Formatter.banner + banner + Formatter.regular + ". Expires in " + Formatter.time + Util.getTimeUntil(time));
+					player.kickPlayer(Formatter.message + "You have been Temporarily IP Banned for: \n" + Formatter.regular + "'" + Formatter.reason + reason + Formatter.regular + "'\nBy " + Formatter.banner + banner + Formatter.regular + ". Expires in " + Formatter.time + Util.getTimeUntil(time));
 				}
 			}
 			else{
@@ -87,8 +87,8 @@ public class TempIPBanCommand extends CmdSkeleton{
 			
 			//Ban them
 			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".", silent, sender);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for " + Formatter.secondary + reason);
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
+			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			return true;
 		}
 		else{

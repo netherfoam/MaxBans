@@ -48,7 +48,7 @@ public class IPBanCommand extends CmdSkeleton{
 				//Kick them
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null && player.isOnline()){
-					player.kickPlayer(Formatter.message + "You have been permanently IP Banned for: \n" + Formatter.reason + reason + Formatter.regular + "\nBy " + Formatter.banner + banner);
+					player.kickPlayer(Formatter.message + "You have been permanently IP Banned for: \n" + Formatter.regular + "'" + Formatter.reason + reason + Formatter.regular + "'\nBy " + Formatter.banner + banner);
 				}
 			}
 			else{
@@ -63,8 +63,8 @@ public class IPBanCommand extends CmdSkeleton{
 			
 			//Ban them
 			plugin.getBanManager().ipban(ip, reason, banner); //IP
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".", silent, sender);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " IP banned " + Formatter.secondary + name + Formatter.primary + " (" + Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + reason);
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
+			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " IP banned " + Formatter.secondary + name + Formatter.primary + " (" + Formatter.secondary + ip + Formatter.primary + ") for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			
 			return true;
 		}

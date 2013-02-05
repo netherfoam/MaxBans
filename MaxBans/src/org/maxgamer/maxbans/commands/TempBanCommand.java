@@ -72,7 +72,7 @@ public class TempBanCommand extends CmdSkeleton{
 				plugin.getBanManager().tempban(name, reason, banner, expires);
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null && player.isOnline()){
-					player.kickPlayer(Formatter.message + "You have been Temporarily Banned for: \n" + Formatter.reason + reason + Formatter.regular + "\nBy " + Formatter.banner + banner + Formatter.regular + ". Expires in " + Formatter.time + Util.getTimeUntil(expires));
+					player.kickPlayer(Formatter.message + "You have been Temporarily Banned for: \n'" + Formatter.reason + reason + Formatter.regular + "'\nBy " + Formatter.banner + banner + Formatter.regular + ". Expires in " + Formatter.time + Util.getTimeUntil(expires));
 				}
 			}
 			else{
@@ -96,8 +96,8 @@ public class TempBanCommand extends CmdSkeleton{
 			}
 			
 			
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason + ".", silent, sender);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " tempbanned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + Util.getTimeUntil(expires) + Formatter.primary + " for " + Formatter.secondary + reason);
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
+			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " tempbanned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + Util.getTimeUntil(expires) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			return true;
 		}
 	}

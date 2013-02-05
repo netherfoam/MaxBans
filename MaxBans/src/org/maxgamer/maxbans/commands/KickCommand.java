@@ -32,19 +32,19 @@ public class KickCommand extends CmdSkeleton{
 			
 			if(name.equals("*") && sender.hasPermission("maxbans.kick.all")){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n" + Formatter.reason + reason);
+					p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
 				}
 				
 				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone.");
-				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + "everyone" + Formatter.primary + " for " + Formatter.secondary + reason);
+				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + "everyone" + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 				return true;
 			}
 			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
-				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n" + Formatter.reason + reason);
-				plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for " + Formatter.secondary + reason + Formatter.primary + ".", silent, sender);
-				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for " + Formatter.secondary + reason);
+				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
+				plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
+				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			}
 			else{
 				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);

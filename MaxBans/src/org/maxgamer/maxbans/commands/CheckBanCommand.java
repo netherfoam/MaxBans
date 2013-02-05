@@ -55,7 +55,7 @@ public class CheckBanCommand implements CommandExecutor{
 					int ttl = plugin.getConfig().getInt("warn-expirey-in-minutes") * 60000;
 					for(Warn warn : plugin.getBanManager().getWarnings(name)){
 						long amt = 2*System.currentTimeMillis() - warn.getExpires() + ttl; //2x system.now because util.getTimeUntil() subtracts it once.
-						sender.sendMessage(Formatter.secondary + name + Formatter.primary + " was warned for " + Formatter.secondary + warn.getReason() + Formatter.primary + " by " + Formatter.secondary + warn.getBanner() + " " + Util.getTimeUntil(amt) + Formatter.primary + " ago.");
+						sender.sendMessage(Formatter.secondary + name + Formatter.primary + " was warned for '" + Formatter.secondary + warn.getReason() + Formatter.primary + "' by " + Formatter.secondary + warn.getBanner() + " " + Util.getTimeUntil(amt) + Formatter.primary + " ago.");
 					}
 				}
 			}

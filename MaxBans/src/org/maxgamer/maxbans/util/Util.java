@@ -217,7 +217,7 @@ public class Util{
 			return MaxBans.instance.getBanManager().defaultReason;
 		}
 		
-		return "'" + ChatColor.translateAlternateColorCodes('&', sb.toString()) + Formatter.regular + "'";
+		return ChatColor.translateAlternateColorCodes('&', sb.toString());
 	}
 	
 	/**

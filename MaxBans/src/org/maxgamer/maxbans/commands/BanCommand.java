@@ -47,7 +47,7 @@ public class BanCommand extends CmdSkeleton{
 				//Kick them
 				Player player = Bukkit.getPlayerExact(name);
 				if(player != null){
-					player.kickPlayer(Formatter.message + "You have been permanently banned for: \n" + Formatter.reason + reason + Formatter.regular + "\nBy " + Formatter.banner + banner);
+					player.kickPlayer(Formatter.message + "You have been permanently banned for: \n'" + Formatter.reason + reason + Formatter.regular + "'\nBy " + Formatter.banner + banner);
 				}
 			}
 			else{
@@ -60,8 +60,8 @@ public class BanCommand extends CmdSkeleton{
 				plugin.getBanManager().ipban(name, reason, banner);
 			}
 			
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: " + Formatter.secondary + reason, silent, sender);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + reason);
+			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'", silent, sender);
+			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			return true;
 		}
 		else{

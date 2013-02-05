@@ -105,9 +105,9 @@ public class JoinListener implements Listener{
         }
         
         StringBuilder km = new StringBuilder(25); //kickmessage
-        km.append(Formatter.message + "You're "+(ipban == null ? "" : "IP ")+"banned!" + Formatter.regular + "\n Reason: ");
+        km.append(Formatter.message + "You're "+(ipban == null ? "" : "IP ")+"banned!" + Formatter.regular + "\n Reason: '");
         km.append(Formatter.reason + reason);
-        km.append(Formatter.regular + "\n By ");
+        km.append(Formatter.regular + "'\n By ");
         km.append(Formatter.banner + banner + Formatter.regular + ". ");
         if (expires > 0) {
         	km.append("Expires in " + Formatter.time + Util.getTimeUntil(expires));
