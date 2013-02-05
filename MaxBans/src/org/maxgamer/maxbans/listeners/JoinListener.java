@@ -36,7 +36,7 @@ public class JoinListener implements Listener{
 					public void run() {
 						Player p = Bukkit.getPlayerExact(name);
 						if(p != null){
-							p.sendMessage(ChatColor.RED + "Bypassing lockdown!");
+							p.sendMessage(ChatColor.RED + "Bypassing lockdown (" + plugin.getBanManager().getLockdownReason() + ")!");
 						}
 					}
 	        		
