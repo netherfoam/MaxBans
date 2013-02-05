@@ -1,25 +1,16 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class MBImportCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public MBImportCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class MBImportCommand extends CmdSkeleton{
+    public MBImportCommand(){
+        super("maxbans.import");
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.import")){
-			sender.sendMessage(ChatColor.RED + "You may not use that command.");
-			return true;
-		}
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0){
 			sender.sendMessage(Formatter.primary + "MaxBans Importer:");
 			sender.sendMessage(Formatter.secondary + "/mbimport vanilla " + Formatter.primary + " - Imports vanilla bans.");

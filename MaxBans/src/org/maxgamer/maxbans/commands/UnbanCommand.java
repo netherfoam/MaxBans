@@ -1,26 +1,18 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class UnbanCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public UnbanCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class UnbanCommand extends CmdSkeleton{
+    public UnbanCommand(){
+        super("maxbans.unban");
+        usage = Formatter.secondary + "Usage: /unban <player>";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.unban")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /unban <player>";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);
 			String banner = Util.getName(sender);

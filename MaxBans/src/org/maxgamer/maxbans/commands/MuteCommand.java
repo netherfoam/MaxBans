@@ -3,26 +3,18 @@ package org.maxgamer.maxbans.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class MuteCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public MuteCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class MuteCommand extends CmdSkeleton{
+    public MuteCommand(){
+        super("maxbans.mute");
+        usage = Formatter.secondary + "Usage: /mute <player>";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.mute")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /mute <player>";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			String name = args[0];
 			

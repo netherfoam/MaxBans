@@ -3,23 +3,16 @@ package org.maxgamer.maxbans.commands;
 import java.text.ParseException;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class LockdownCommand implements CommandExecutor{
-    private MaxBans plugin;
+public class LockdownCommand extends CmdSkeleton{
     private String defaultReason = "Maintenance";
-    public LockdownCommand(MaxBans plugin){
-        this.plugin = plugin;
+    public LockdownCommand(){
+        super("maxbans.lockdown.use");
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.lockdown.use")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		boolean on;
 		String reason;
 		

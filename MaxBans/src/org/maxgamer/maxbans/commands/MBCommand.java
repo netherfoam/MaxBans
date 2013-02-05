@@ -1,14 +1,15 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class MBCommand implements CommandExecutor{
-    public MBCommand(){}
+public class MBCommand extends CmdSkeleton{
+    public MBCommand(){
+    	super(null);
+    }
     
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		sender.sendMessage(Formatter.primary + "MaxBans Commands:");
 		if(sender.hasPermission("maxbans.ban")) sender.sendMessage(Formatter.secondary + "/ban "+Formatter.primary+"<player> [-s] <reason>");
 		if(sender.hasPermission("maxbans.checkban")) sender.sendMessage(Formatter.secondary + "/checkban "+Formatter.primary+"<player>");

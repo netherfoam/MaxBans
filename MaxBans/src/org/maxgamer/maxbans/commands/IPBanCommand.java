@@ -2,27 +2,19 @@ package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class IPBanCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public IPBanCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class IPBanCommand extends CmdSkeleton{
+    public IPBanCommand(){
+        super("maxbans.ipban");
+        usage = Formatter.secondary + "Usage: /ipban <player> [-s] <reason>";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.ipban")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /ipban <player> [-s] <reason>";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		boolean silent = Util.isSilent(args);
 		
 		//Build the reason

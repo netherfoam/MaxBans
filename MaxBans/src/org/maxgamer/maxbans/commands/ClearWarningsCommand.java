@@ -4,25 +4,17 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class ClearWarningsCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public ClearWarningsCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class ClearWarningsCommand extends CmdSkeleton{
+    public ClearWarningsCommand(){
+        super("maxbans.clearwarnings");
+        usage = Formatter.secondary + "Usage: /clearwarnings <player>";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.clearwarnings")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /clearwarnings <player>";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			String name = args[0];
 			

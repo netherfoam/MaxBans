@@ -1,22 +1,16 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.HistoryRecord;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class HistoryCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public HistoryCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class HistoryCommand extends CmdSkeleton{
+    public HistoryCommand(){
+        super("maxbans.history");
+        usage = Formatter.secondary + "Usage: /history <number of records>";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.history")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		int count;
 		if(args.length < 1) count = 20;
 		else{
@@ -24,7 +18,7 @@ public class HistoryCommand implements CommandExecutor{
 				count = Integer.parseInt(args[0]);				
 			}
 			catch(NumberFormatException e){
-				sender.sendMessage(Formatter.secondary + "Usage: /history <number of records>");
+				sender.sendMessage(Formatter.secondary + usage);
 				return true;
 			}
 		}

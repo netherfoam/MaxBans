@@ -8,10 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
@@ -21,17 +19,11 @@ import org.maxgamer.maxbans.database.MySQL;
 import org.maxgamer.maxbans.database.SQLite;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class MBExportCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public MBExportCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class MBExportCommand extends CmdSkeleton{
+    public MBExportCommand(){
+        super("maxbans.export");
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.export")){
-			sender.sendMessage(ChatColor.RED + "You may not use that command.");
-			return true;
-		}
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0){
 			sender.sendMessage(Formatter.primary + "MaxBans Exporter:");
 			sender.sendMessage(Formatter.secondary + "/mbexport vanilla " + Formatter.primary + " - Exports bans to vanilla bans.");

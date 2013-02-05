@@ -5,28 +5,20 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class DupeIPCommand implements CommandExecutor{
-    private MaxBans plugin;
-	ChatColor banned = ChatColor.RED;
-	ChatColor online = ChatColor.GREEN;
-	ChatColor offline = ChatColor.GRAY;
+public class DupeIPCommand extends CmdSkeleton{
+	private ChatColor banned = ChatColor.RED;
+	private ChatColor online = ChatColor.GREEN;
+	private ChatColor offline = ChatColor.GRAY;
     
-    public DupeIPCommand(MaxBans plugin){
-        this.plugin = plugin;
+    public DupeIPCommand(){
+        super("maxbans.dupeip");
+        usage = Formatter.secondary + "Usage: /dupeip <player>";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.dupeip")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /dupeip <player>";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			String name = args[0];
 			

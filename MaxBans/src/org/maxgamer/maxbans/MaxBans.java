@@ -164,35 +164,35 @@ public class MaxBans extends JavaPlugin{
      */
     public void registerCommands(){
     	//Instances
-    	this.banCommand = new BanCommand(this);
-		this.ipBanCommand = new IPBanCommand(this);
-		this.muteCommand = new MuteCommand(this);
+    	this.banCommand = new BanCommand();
+		this.ipBanCommand = new IPBanCommand();
+		this.muteCommand = new MuteCommand();
 		
-		this.tempBanCommand = new TempBanCommand(this);
-		this.tempIPBanCommand = new TempIPBanCommand(this);
-		this.tempMuteCommand = new TempMuteCommand(this);
+		this.tempBanCommand = new TempBanCommand();
+		this.tempIPBanCommand = new TempIPBanCommand();
+		this.tempMuteCommand = new TempMuteCommand();
 		
-		this.unbanCommand = new UnbanCommand(this);
-		this.unMuteCommand = new UnMuteCommand(this);
+		this.unbanCommand = new UnbanCommand();
+		this.unMuteCommand = new UnMuteCommand();
 		
-		this.checkIPCommand = new CheckIPCommand(this);
-		this.checkBanCommand = new CheckBanCommand(this);
-		this.dupeIPCommand = new DupeIPCommand(this);
+		this.checkIPCommand = new CheckIPCommand();
+		this.checkBanCommand = new CheckBanCommand();
+		this.dupeIPCommand = new DupeIPCommand();
 		
-		this.warnCommand = new WarnCommand(this);
-		this.clearWarningsCommand = new ClearWarningsCommand(this);
+		this.warnCommand = new WarnCommand();
+		this.clearWarningsCommand = new ClearWarningsCommand();
 		
-		this.lockdownCommand = new LockdownCommand(this);
-		this.kickCommand = new KickCommand(this);
+		this.lockdownCommand = new LockdownCommand();
+		this.kickCommand = new KickCommand();
 		
 		this.forceSpawnCommand = new ForceSpawnCommand();
-		this.historyCommand = new HistoryCommand(this);
+		this.historyCommand = new HistoryCommand();
 		
-		this.reloadCommand = new ReloadCommand(this);
+		this.reloadCommand = new ReloadCommand();
 		this.mbCommand = new MBCommand();
 		
-		this.importCommand = new MBImportCommand(this);
-		this.exportCommand = new MBExportCommand(this);
+		this.importCommand = new MBImportCommand();
+		this.exportCommand = new MBExportCommand();
 		this.mbDebugCommand = new MBDebug();
 		
 		//Register commands

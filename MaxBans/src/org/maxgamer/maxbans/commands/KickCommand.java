@@ -2,25 +2,17 @@ package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class KickCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public KickCommand(MaxBans plugin){
-        this.plugin = plugin;
+public class KickCommand extends CmdSkeleton{
+    public KickCommand(){
+        super("maxbans.kick");
+        usage = Formatter.secondary + "Usage: /kick <player> [-s] [reason]";
     }
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.kick")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /kick <player> [-s] [reason]";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);
 			String name = args[0];

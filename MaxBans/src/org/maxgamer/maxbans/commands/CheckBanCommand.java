@@ -19,10 +19,8 @@ import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class CheckBanCommand implements CommandExecutor{
-    private MaxBans plugin;
-    public CheckBanCommand(MaxBans plugin){
-        this.plugin = plugin;
-    }
+    private MaxBans plugin = MaxBans.instance;
+    
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!sender.hasPermission("maxbans.checkban")){
 			if(sender.hasPermission("maxbans.checkban.self")){

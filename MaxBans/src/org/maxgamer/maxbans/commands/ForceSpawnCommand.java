@@ -3,23 +3,19 @@ package org.maxgamer.maxbans.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class ForceSpawnCommand implements CommandExecutor{
-    public ForceSpawnCommand(){}
+public class ForceSpawnCommand extends CmdSkeleton{
+    public ForceSpawnCommand(){
+    	super("maxbans.forcespawn");
+    	usage = Formatter.secondary + "Usage: /forcespawn <player>";
+    }
     
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.forcespawn")){
-			sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
-			return true;
-		}
-		String usage = Formatter.secondary + "Usage: /forcespawn <player>";
-		
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			String name = args[0];
 			String banner;
