@@ -718,10 +718,6 @@ public class BanManager{
 		else if(!oldActual.equals(actual)){
 			plugin.getDB().execute("UPDATE players SET actual = ? WHERE name = ?", actual, name);
 		}
-		else{
-			//DEBUG!
-			System.out.println(name + " is still " + actual);
-		}
     	
     	String oldIP = this.recentips.get(name);
     	if(ip.equals(oldIP)) return; //Nothing has changed.

@@ -213,7 +213,6 @@ public class Database {
 	public void execute(String query, Object...objs){
 		BufferStatement bs = new BufferStatement(query, objs);
 		this.getBuffer().add(bs);
-		System.out.println(bs.toString());
 	}
 	
 	/**
