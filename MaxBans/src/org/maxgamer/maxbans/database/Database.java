@@ -213,6 +213,7 @@ public class Database {
 	public void execute(String query, Object...objs){
 		BufferStatement bs = new BufferStatement(query, objs);
 		this.getBuffer().add(bs);
+		System.out.println(bs.toString());
 	}
 	
 	/**
@@ -277,7 +278,10 @@ public class Database {
 		if(!this.hasTable("history")){
 			this.createHistoryTable();
 		}
-		else if(!this.hasColumn("warnings", "expires")){
+		if(!this.hasTable("players")){
+			this.createPlayersTable();
+		}
+		if(!this.hasColumn("warnings", "expires")){
 			try {
 				this.getConnection().prepareStatement(" ALTER TABLE warnings ADD expires long").execute();
 			} catch (SQLException e) {} //Already has expires column. Just no record of warnings yet.
@@ -292,6 +296,17 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			this.plugin.getLogger().severe(ChatColor.RED + "Could not create history table.");
+		}
+	}
+	
+	public void createPlayersTable(){
+		String query = "CREATE TABLE players (name TEXT(30) NOT NULL, actual TEXT(30) NOT NULL);";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create players table.");
 		}
 	}
 	
@@ -386,15 +401,5 @@ public class Database {
 	 */
 	public Connection getConnection(){
 		return this.dbCore.getConnection();
-	}
-	/**
-	 * Tries to escape the given string.  Note that PreparedStatements,
-	 * or an alternative like org.maxgamer.maxbans.database.BufferStatement
-	 * should be used instead whenever possible!
-	 * @param s The string to escape.
-	 * @return The (Mostly) escaped result.
-	 */
-	public String escape(String s){
-		return this.dbCore.escape(s);
 	}
 }

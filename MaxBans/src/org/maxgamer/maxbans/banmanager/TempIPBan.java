@@ -1,6 +1,6 @@
 package org.maxgamer.maxbans.banmanager;
 
-public class TempIPBan extends IPBan{
+public class TempIPBan extends IPBan implements Temporary{
     private long expires;
     
     /**
@@ -10,9 +10,9 @@ public class TempIPBan extends IPBan{
      * @param time The time the ban was created
      * @param expires The time the ban expires
      */
-    public TempIPBan(String reason, String banner, long time, long expires){
-        super (reason, banner, time);
-        this.expires=expires;
+    public TempIPBan(String ip, String reason, String banner, long created, long expires){
+    	super(ip, reason, banner, created);
+        this.expires = expires;
     }
     
     /**
@@ -21,6 +21,10 @@ public class TempIPBan extends IPBan{
      */
     public long getExpires() {
         return expires;
+    }
+    
+    public boolean hasExpired(){
+    	return System.currentTimeMillis() > expires;
     }
     
 	@Override

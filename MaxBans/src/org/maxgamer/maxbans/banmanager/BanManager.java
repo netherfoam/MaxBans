@@ -49,8 +49,10 @@ public class BanManager{
 	private HashMap<String, String> recentips = new HashMap<String, String>();
 	/** Hashmap of IP Address, users from that IP address */
 	private HashMap<String, HashSet<String>> iplookup = new HashMap<String, HashSet<String>>(); 
-	/** Player names */
+	/** Player names. These are all lowercase. */
 	private TrieSet players = new TrieSet();
+	/** Player names. Keys are lowercase, values may not be */
+	private HashMap<String, String> actualNames = new HashMap<String, String>();
 	/** Commands that send chat messages - Such as /me, /action and /say */
 	private HashSet<String> chatCommands = new HashSet<String>();
 	
@@ -96,6 +98,8 @@ public class BanManager{
 	public HashMap<String, TempIPBan> getTempIPBans(){ return tempipbans; }
 	/** Returns a hashmap of mutes. Do not edit these. */
 	public HashMap<String, TempMute> getTempMutes(){ return tempmutes; }
+	/** Returns a hashmap of lowercase usernames as keys, and actual usernames as values */
+	public HashMap<String, String> getPlayers(){ return actualNames; }
 	
 	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
 	public HistoryRecord[] getHistory(){ return history.toArray(new HistoryRecord[history.size()]); }
@@ -134,6 +138,7 @@ public class BanManager{
 		this.tempmutes.clear();
 		this.recentips.clear();
 		this.players.clear();
+		this.actualNames.clear();
 		
 		plugin.reloadConfig();
 		
@@ -169,12 +174,12 @@ public class BanManager{
 				long time = rs.getLong("time");
 				
 				if(expires != 0){
-					TempBan tb = new TempBan(reason, banner, time, expires);
-					this.tempbans.put(name, tb);
+					TempBan tb = new TempBan(name, reason, banner, time, expires);
+					this.tempbans.put(name.toLowerCase(), tb);
 				}
 				else{
-					Ban ban = new Ban(reason, banner, time);
-					this.bans.put(name, ban);
+					Ban ban = new Ban(name, reason, banner, time);
+					this.bans.put(name.toLowerCase(), ban);
 				}
 			}
 			
@@ -199,11 +204,11 @@ public class BanManager{
 				long time = rs.getLong("time");
 				
 				if(expires != 0){
-					TempIPBan tib = new TempIPBan(reason, banner, time, expires);
+					TempIPBan tib = new TempIPBan(ip, reason, banner, time, expires);
 					this.tempipbans.put(ip, tib);
 				}
 				else{
-					IPBan ipban = new IPBan(reason, banner, time);
+					IPBan ipban = new IPBan(ip, reason, banner, time);
 					this.ipbans.put(ip, ipban);
 				}
 			}
@@ -228,37 +233,50 @@ public class BanManager{
 				long time = rs.getLong("time");
 				
 				if(expires != 0){
-					TempMute tmute = new TempMute(banner, time, expires);
-					this.tempmutes.put(name, tmute);
+					TempMute tmute = new TempMute(name, banner, time, expires);
+					this.tempmutes.put(name.toLowerCase(), tmute);
 				}
 				else{
-					Mute mute = new Mute(banner, time);
-					this.mutes.put(name, mute);
+					Mute mute = new Mute(name, banner, time);
+					this.mutes.put(name.toLowerCase(), mute);
 				}
 			}
 			
-			//Phase 4 loading: Load IP history & Player history
+			//Phase 4 loading: Load Player names.
+			plugin.getLogger().info("Loading player names...");
+			query = "SELECT * FROM players";
+			ps = db.getConnection().prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+				String actual = rs.getString("actual"); //Real name (May have capitals)
+				String name = rs.getString("name"); //Lower case
+				
+				this.actualNames.put(name, actual);
+				this.players.add(name); //For auto completion. 
+			}
+			
+			
+			//Phase 5 loading: Load IP history
 			plugin.getLogger().info("Loading IP History");
 			query = "SELECT * FROM iphistory";
 			ps = db.getConnection().prepareStatement(query);
 			rs = ps.executeQuery();
 			
 			while(rs.next()){
-				String name = rs.getString("name");
+				String name = rs.getString("name").toLowerCase();
 				String ip = rs.getString("ip");
 				
-				this.recentips.put(name, ip);
+				this.recentips.put(name, ip); //So we don't need it here
 				HashSet<String> list = this.iplookup.get(ip);
 				if(list == null){
-					list = new HashSet<String>(8);
+					list = new HashSet<String>(2);
 					this.iplookup.put(ip, list);
 				}
-				list.add(name);
-				
-				this.players.add(name);
+				list.add(name); //Or here.
 			}
 			
-			//Phase 5 loading: Load Warn history
+			//Phase 6 loading: Load Warn history
 			
 			//Purge old warnings
 			ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
@@ -279,22 +297,22 @@ public class BanManager{
 				
 				Warn warn = new Warn(reason,banner, expires);
 				
-				List<Warn> warns = this.warnings.get(name);
+				List<Warn> warns = this.warnings.get(name.toLowerCase());
 				if(warns == null){
 					warns = new ArrayList<Warn>();
-					this.warnings.put(name, warns);
+					this.warnings.put(name.toLowerCase(), warns);
 				}
 				warns.add(warn);
 			}
 			
-			//Phase 6 loading: Load Chat Commands
+			//Phase 7 loading: Load Chat Commands
 			plugin.getLogger().info("Loading chat commands...");
 			List<String> cmds = plugin.getConfig().getStringList("chat-commands");
 			for(String s : cmds){
 				this.addChatCommand(s);
 			}
 			
-			//Phase 7 loading: Load history
+			//Phase 8 loading: Load history
 			plugin.getLogger().info("Loading history...");
 			
 			db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
@@ -345,7 +363,7 @@ public class BanManager{
         }
         TempMute tempm = tempmutes.get(name);
         if (tempm !=null) {
-            if (System.currentTimeMillis() < tempm.getExpires()) {
+            if(!tempm.hasExpired()) {
                 return tempm;
             }
             else{
@@ -373,7 +391,7 @@ public class BanManager{
     	
     	TempBan tempBan = tempbans.get(name);
     	if(tempBan != null){
-    		if(System.currentTimeMillis() < tempBan.getExpires()){
+    		if(!tempBan.hasExpired()){
     			return tempBan;
     		}
     		else{
@@ -399,11 +417,11 @@ public class BanManager{
     	
     	TempIPBan tempIPBan = tempipbans.get(ip);
     	if(tempIPBan != null){
-    		if(System.currentTimeMillis() < tempIPBan.getExpires()){
+    		if(!tempIPBan.hasExpired()){
             	return tempIPBan;
     		}
     		else{
-    			ipbans.remove(ip);
+    			tempipbans.remove(ip);
     			db.execute("DELETE FROM ipbans WHERE ip = ? AND expires <> 0", ip);
     		}
     	}
@@ -470,7 +488,7 @@ public class BanManager{
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
     	
-    	Ban ban = new Ban(reason, banner, System.currentTimeMillis());
+    	Ban ban = new Ban(name, reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
     	
     	db.execute("INSERT INTO bans (name, reason, banner, time) VALUES (?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis());
@@ -556,7 +574,7 @@ public class BanManager{
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
     	
-    	TempBan ban = new TempBan(reason, banner, System.currentTimeMillis(), expires);
+    	TempBan ban = new TempBan(name, reason, banner, System.currentTimeMillis(), expires);
     	this.tempbans.put(name, ban);
     	
     	db.execute("INSERT INTO bans (name, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis(), expires);
@@ -571,7 +589,7 @@ public class BanManager{
     public void ipban(String ip, String reason, String banner){
     	banner = banner.toLowerCase();
     	
-    	IPBan ipban = new IPBan(reason, banner, System.currentTimeMillis());
+    	IPBan ipban = new IPBan(ip, reason, banner, System.currentTimeMillis());
     	this.ipbans.put(ip, ipban);
     	
     	db.execute("INSERT INTO ipbans (ip, reason, banner, time) VALUES (?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis());
@@ -587,7 +605,7 @@ public class BanManager{
     public void tempipban(String ip, String reason, String banner, long expires){
     	banner = banner.toLowerCase();
     	
-    	TempIPBan tib = new TempIPBan(reason, banner, System.currentTimeMillis(), expires);
+    	TempIPBan tib = new TempIPBan(ip, reason, banner, System.currentTimeMillis(), expires);
     	
     	this.tempipbans.put(ip, tib);
     	
@@ -602,7 +620,7 @@ public class BanManager{
     public void mute(String name, String banner){
     	name = name.toLowerCase();
     	
-    	Mute mute = new Mute(banner, System.currentTimeMillis());
+    	Mute mute = new Mute(name, banner, System.currentTimeMillis());
     	this.mutes.put(name, mute);
     	
     	db.execute("INSERT INTO mutes (name, muter, time) VALUES (?, ?, ?)", name, banner, System.currentTimeMillis());
@@ -618,7 +636,7 @@ public class BanManager{
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
     	
-    	TempMute tmute = new TempMute(banner, System.currentTimeMillis(), expires);
+    	TempMute tmute = new TempMute(name, banner, System.currentTimeMillis(), expires);
     	this.tempmutes.put(name, tmute);
     	
     	db.execute("INSERT INTO mutes (name, muter, time, expires) VALUES (?, ?, ?, ?)", name, banner, System.currentTimeMillis(), expires);
@@ -688,7 +706,23 @@ public class BanManager{
      * @param ip The ip they're connecting from.
      */
     public void logIP(String name, String ip){
+    	String actual = name;
     	name = name.toLowerCase();
+    	
+    	//Record the players original name versus the lowercase one.
+		String oldActual = this.actualNames.put(name, actual);
+		if(oldActual == null){
+			//We've never seen this player before.
+			plugin.getDB().execute("INSERT INTO players (name, actual) VALUES (?, ?)", name, actual);
+		}
+		else if(!oldActual.equals(actual)){
+			plugin.getDB().execute("UPDATE players SET actual = ? WHERE name = ?", actual, name);
+		}
+		else{
+			//DEBUG!
+			System.out.println(name + " is still " + actual);
+		}
+    	
     	String oldIP = this.recentips.get(name);
     	if(ip.equals(oldIP)) return; //Nothing has changed.
     	
@@ -713,7 +747,6 @@ public class BanManager{
     	list.add(name);
     	
     	if(this.recentips.containsKey(name)){
-    		//query = "UPDATE iphistory SET ip = '"+ip+"' WHERE name = '"+db.escape(name)+"'";
     		db.execute("UPDATE iphistory SET ip = ? WHERE name = ?", ip, name);
     	}
     	else{
@@ -721,14 +754,6 @@ public class BanManager{
     	}
     	
     	this.recentips.put(name, ip);
-    }
-    
-    /**
-     * Notes that a player joined from the given IP.
-     * @param p The player who is connecting
-     */
-    public void logIP(Player p){
-    	this.logIP(p.getName(), p.getAddress().getAddress().getHostAddress());
     }
 	
 	/**
@@ -782,7 +807,7 @@ public class BanManager{
 	 * Finds the nearest known match to a given name.
 	 * Searches online players first, then any exact matches
 	 * for offline players, and then the nearest match for
-	 * offline players.
+	 * offline players. Guaranteed to be lowercase.
 	 * 
 	 * @param partial The partial name
 	 * @param excludeOnline Avoids searching online players if true
@@ -797,7 +822,7 @@ public class BanManager{
 		//Check the player and if they're online
 		if(excludeOnline == false){
 			Player p = Bukkit.getPlayer(partial);
-			if(p != null) return p.getName();
+			if(p != null) return p.getName().toLowerCase();
 		}
 		
 		//Scan the map for the match. Iff one is found, return it.

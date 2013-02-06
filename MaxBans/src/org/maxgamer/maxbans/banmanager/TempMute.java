@@ -1,6 +1,6 @@
 package org.maxgamer.maxbans.banmanager;
 
-public class TempMute extends Mute{
+public class TempMute extends Mute implements Temporary{
     private long expires;
     
     /**
@@ -9,8 +9,8 @@ public class TempMute extends Mute{
      * @param time The time the mute was created
      * @param expires The time the mute expires
      */
-	public TempMute(String muter, long time, long expires){
-		super (muter, time);
+	public TempMute(String muted, String muter, long created, long expires){
+		super(muted, muter, created);
         this.expires = expires;
 	}
     
@@ -22,8 +22,12 @@ public class TempMute extends Mute{
         return expires;
     }
     
+    public boolean hasExpired(){
+    	return System.currentTimeMillis() > expires;
+    }
+    
 	@Override
 	public String toString(){
-		return "{TEMPMUTE} Muter: " + getMuter();
+		return "{TEMPMUTE} Muter: " + getBanner();
 	}
 }
