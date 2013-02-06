@@ -14,6 +14,21 @@ import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Metrics;
 import org.maxgamer.maxbans.util.Metrics.Graph;
 
+/**
+ * The MaxBans plugin.<br/>
+ * <br/>
+ * The goal of this plugin is to be a lightweight and bug-free<br/>
+ * banning plugin.  It offers a variety of tools to help Bukkit<br/>
+ * server staff to manage administration tasks such as banning,<br/>
+ * kicking, muting, all temporary variants, preventing proxies,<br/>
+ * and locking down the server.<br/>
+ * <br/>
+ * <b>Server Website</b> 	http://maxgamer.org/<br/></a>
+ * <b>Primary Server IP</b> play.maxgamer.org<br/>
+ * <b>Source code</b> 		http://github.com/netherfoam/MaxBans/<br/>
+ * <b>Compiled plugin</b>   http://dev.bukkit.org/server-mods/maxbans/<br/><br/>
+ * @author Netherfoam, Darekfive<br/><br/>
+ */
 public class MaxBans extends JavaPlugin{
     private BanManager banManager;
     
