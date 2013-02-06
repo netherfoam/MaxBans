@@ -78,7 +78,7 @@ public class JoinListener implements Listener{
             	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
             }
         	
-        	plugin.getBanManager().logIP(player.getName(), address);
+            plugin.getBanManager().logIP(player);
         	
         	return;
         }
