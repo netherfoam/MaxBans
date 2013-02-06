@@ -31,7 +31,7 @@ import org.maxgamer.maxbans.util.Formatter;
  * <br/>
  * <br/>
  * 
- * @author netherfoam
+ * @author netherfoam, darekfive
  */
 public class BanManager{
 	private MaxBans plugin;
@@ -98,7 +98,7 @@ public class BanManager{
 	public HashMap<String, TempIPBan> getTempIPBans(){ return tempipbans; }
 	/** Returns a hashmap of mutes. Do not edit these. */
 	public HashMap<String, TempMute> getTempMutes(){ return tempmutes; }
-	/** Returns a hashmap of lowercase usernames as keys, and actual usernames as values */
+	/** Returns a hashmap of lowercase usernames as keys, and actual usernames as values. Do not edit these. */
 	public HashMap<String, String> getPlayers(){ return actualNames; }
 	
 	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
@@ -828,6 +828,19 @@ public class BanManager{
 		
 		//We can't help you. Maybe you can not be lazy.
 		return partial;
+	}
+	
+	/**
+	 * Converts the given name into the case sensitive version.
+	 * @param lowercase The correct name for the given player, but with the wrong case.
+	 * Such as, FriZiRe.  Note that it doesn't necessarily have to be lowercase for this method to work.
+	 * @return The last version of the name the plugin has seen... Such as Frizire.
+	 * <br/><br/>
+	 * Note that the BanManager is brutal with converting names to lowercase. This undoes that effect as
+	 * best as possible.
+	 */
+	public String convertName(String lowercase){
+		return this.actualNames.get(lowercase.toLowerCase());
 	}
 	
 	/**
