@@ -86,10 +86,10 @@ public class CheckBanCommand implements CommandExecutor{
 			if(mute != null){
 				if(mute instanceof TempMute){
 					TempMute tMute = (TempMute) mute;
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is temp muted by " + Formatter.secondary + tMute.getMuter() + Formatter.primary + ". Remaining: " + Formatter.secondary + tMute.getExpires() + Formatter.primary + ".");
+					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is temp muted by " + Formatter.secondary + tMute.getBanner() + Formatter.primary + ". Remaining: " + Formatter.secondary +Util.getTimeUntil(tMute.getExpires()) + Formatter.primary + ".");
 				}
 				else{
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is muted by " + mute.getMuter() + Formatter.primary + ".");
+					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is muted by " + mute.getBanner() + Formatter.primary + ".");
 				}
 			}
 			
