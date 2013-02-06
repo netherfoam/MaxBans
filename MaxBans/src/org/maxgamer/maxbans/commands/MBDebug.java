@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 public class MBDebug extends CmdSkeleton{
 	public MBDebug(){
 		super("maxbans.debug");
+		namePos = -1;
 	}
 	public boolean run(CommandSender sender, Command command, String label, String[] args) {
 		Map<String, Map<String, ?>> maps = new LinkedHashMap<String, Map<String, ?>>();

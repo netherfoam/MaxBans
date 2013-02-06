@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Util;
 
 /**
  * Suggested database format:
@@ -279,6 +281,38 @@ public class Database {
 		}
 		if(!this.hasTable("players")){
 			this.createPlayersTable();
+			ResultSet rs = this.getConnection().prepareStatement("SELECT * FROM iphistory").executeQuery();
+			List<String> names = new ArrayList<String>();
+			while(rs.next()){
+				names.add(rs.getString("name"));
+			}
+			rs.close();
+			
+			if(names.isEmpty() == false){
+				System.out.println("Created players table. Now converting old player list. Size: "+names.size() + ", please wait :)");
+				
+				int n = 0;
+				PreparedStatement ps = this.getConnection().prepareStatement("INSERT INTO players (name, actual) VALUES (?, ?)");
+				for(String name : names){
+					n++;
+					
+					ps.setString(1, name);
+					ps.setString(2, name);
+					ps.addBatch();
+					
+					if(n % 100 == 0){
+						long start = System.currentTimeMillis();
+						ps.executeBatch();
+						long end = System.currentTimeMillis();
+						
+						long remaining = (names.size() - n)/100 *  (end - start);
+						System.out.println(n + " records copied... Remaining: " + Util.getTime(remaining));
+					}
+				}
+				ps.executeBatch();
+				//Close the resultset of that table
+				rs.close();
+			}
 		}
 		if(!this.hasColumn("warnings", "expires")){
 			try {

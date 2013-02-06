@@ -16,6 +16,7 @@ public class BanCommand extends CmdSkeleton{
         super("maxbans.ban");
         usage = Formatter.secondary + "Usage: /ban <player> [-s] <reason>";
     }
+    
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
 			boolean silent = Util.isSilent(args);

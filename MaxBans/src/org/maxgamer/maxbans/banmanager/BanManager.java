@@ -831,6 +831,16 @@ public class BanManager{
 	}
 	
 	/**
+	 * Returns a hashset of all known players with the given prefix.
+	 * @param partial The prefix for the players names.
+	 * @return A HashSet of all possible names.
+	 */
+	public HashSet<String> matchAll(String partial){
+		partial = partial.toLowerCase();
+		return this.players.matches(partial);
+	}
+	
+	/**
 	 * Converts the given name into the case sensitive version.
 	 * @param lowercase The correct name for the given player, but with the wrong case.
 	 * Such as, FriZiRe.  Note that it doesn't necessarily have to be lowercase for this method to work.

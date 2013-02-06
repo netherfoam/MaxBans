@@ -7,6 +7,7 @@ import org.maxgamer.maxbans.util.Formatter;
 public class MBCommand extends CmdSkeleton{
     public MBCommand(){
     	super(null);
+    	namePos = -1;
     }
     
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {

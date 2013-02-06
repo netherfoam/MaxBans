@@ -9,6 +9,7 @@ public class HistoryCommand extends CmdSkeleton{
     public HistoryCommand(){
         super("maxbans.history");
         usage = Formatter.secondary + "Usage: /history <number of records>";
+        namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		int count;

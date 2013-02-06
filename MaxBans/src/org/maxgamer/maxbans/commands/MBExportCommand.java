@@ -22,6 +22,7 @@ import org.maxgamer.maxbans.util.Formatter;
 public class MBExportCommand extends CmdSkeleton{
     public MBExportCommand(){
         super("maxbans.export");
+        namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 0){

@@ -11,6 +11,7 @@ public class LockdownCommand extends CmdSkeleton{
     private String defaultReason = "Maintenance";
     public LockdownCommand(){
         super("maxbans.lockdown.use");
+        namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		boolean on;
