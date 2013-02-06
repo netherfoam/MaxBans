@@ -26,6 +26,7 @@ public class MBDebug extends CmdSkeleton{
 		maps.put("Temp Mutes", plugin.getBanManager().getTempMutes());
 		
 		maps.put("IP History", plugin.getBanManager().getIPHistory());
+		maps.put("Players", plugin.getBanManager().getPlayers());
 		
 		if(args.length <= 0){
 			print(sender, maps);
