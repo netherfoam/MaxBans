@@ -54,7 +54,7 @@ public class MBDebug extends CmdSkeleton{
 				Map<String, ?> map = entry.getValue();
 				ps.println("=== " + type + " ===");
 				for(Entry<String, ?> mapEntry : map.entrySet()){
-					ps.println(String.format("%-16s | %.35s", mapEntry.getKey(), mapEntry.getValue().toString()));
+					ps.println(String.format("%-16s | %.100s", mapEntry.getKey(), mapEntry.getValue().toString()));
 				}
 			}
 			sender.sendMessage("Created debug log: " + file.toString());
@@ -71,7 +71,7 @@ public class MBDebug extends CmdSkeleton{
 			Map<String, ?> map = entry.getValue();
 			sender.sendMessage("=== " + type + " ===");
 			for(Entry<String, ?> mapEntry : map.entrySet()){
-				sender.sendMessage(String.format("%-16s | %.35s", mapEntry.getKey(), mapEntry.getValue().toString()));
+				sender.sendMessage(String.format("%-16s | %.100s", mapEntry.getKey(), mapEntry.getValue().toString()));
 			}
 		}
 	}

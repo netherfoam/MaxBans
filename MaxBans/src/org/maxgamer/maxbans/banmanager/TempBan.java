@@ -29,9 +29,4 @@ public class TempBan extends Ban implements Temporary{
 	public boolean hasExpired(){
 		return System.currentTimeMillis() > expires;
 	}
-    
-    @Override
-	public String toString(){
-		return "{TEMPBAN} Reason: " + super.getReason();
-	}
 }

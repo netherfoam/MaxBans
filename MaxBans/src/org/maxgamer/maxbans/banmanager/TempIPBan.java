@@ -26,9 +26,4 @@ public class TempIPBan extends IPBan implements Temporary{
     public boolean hasExpired(){
     	return System.currentTimeMillis() > expires;
     }
-    
-	@Override
-	public String toString(){
-		return "{TEMPIPBAN} Reason: " + super.getReason();
-	}
 }

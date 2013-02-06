@@ -25,9 +25,4 @@ public class TempMute extends Mute implements Temporary{
     public boolean hasExpired(){
     	return System.currentTimeMillis() > expires;
     }
-    
-	@Override
-	public String toString(){
-		return "{TEMPMUTE} Muter: " + getBanner();
-	}
 }

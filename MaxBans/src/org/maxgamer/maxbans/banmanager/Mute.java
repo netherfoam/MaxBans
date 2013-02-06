@@ -10,9 +10,4 @@ public class Mute extends Punishment{
 	public Mute(String muted, String muter, long created){
 		super(muted, "", muter, created);
 	}
-    
-	@Override
-	public String toString(){
-		return "{MUTE} Muter: " + getBanner();
-	}
 }

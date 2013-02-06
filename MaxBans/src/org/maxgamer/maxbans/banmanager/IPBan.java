@@ -10,9 +10,4 @@ public class IPBan extends Punishment{ // I think its just luck that you can do 
 	public IPBan(String ip, String reason, String banner, long created){
         super(ip, reason, banner, created);
 	}
-	
-	@Override
-	public String toString(){
-		return "{IPBAN} Reason: " + super.getReason();
-	}
 }

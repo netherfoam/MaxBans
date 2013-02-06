@@ -16,9 +16,4 @@ public class Ban extends Punishment{
 	public Ban(String user, String reason, String banner, long created){
 		super(user, reason, banner, created);
 	}
-	
-	@Override
-	public String toString(){
-		return "{BAN} Reason: " + reason;
-	}
 }

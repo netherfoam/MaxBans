@@ -1,5 +1,7 @@
 package org.maxgamer.maxbans.banmanager;
 
+import org.maxgamer.maxbans.util.Util;
+
 public class Punishment{
 	protected String id;
 	protected String reason;
@@ -44,6 +46,11 @@ public class Punishment{
 	
 	@Override
 	public String toString(){
-		return getClass().getSimpleName() + " ID: " + id + ", Reason: " + reason + ", Banner: " + banner + ", Created: " + created;
+		String str = getClass().getSimpleName() + " ID:" + id + (this.reason != null && !this.reason.isEmpty() ? ", R:" + reason : "") + ", B:" + banner + ", C:" + created;
+		if(this instanceof Temporary){
+			Temporary t = (Temporary) this;
+			str += ", E:" + Util.getTimeUntil(t.getExpires());
+		}
+		return str;
 	}
 }
