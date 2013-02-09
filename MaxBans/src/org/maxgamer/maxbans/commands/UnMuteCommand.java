@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.banmanager.Mute;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -25,11 +26,24 @@ public class UnMuteCommand extends CmdSkeleton{
 			if(mute != null){
 				plugin.getBanManager().unmute(name);
 				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
-				plugin.getBanManager().addHistory(Formatter.secondary + Util.getName(sender) + Formatter.primary + " unmuted " + Formatter.secondary + name);
+				String message = Formatter.secondary + Util.getName(sender) + Formatter.primary + " unmuted " + Formatter.secondary + name;
+				plugin.getBanManager().addHistory(message);
+				
+		    	if(plugin.getSyncer() != null){
+		    		Packet prop = new Packet();
+		    		prop.setCommand("unmute");
+		    		prop.put("name", name);
+		    		plugin.getSyncer().broadcast(prop);
+		    		
+		    		//Send the addhistory request.
+		    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+		    		plugin.getSyncer().broadcast(history);
+		    	}
 			}
 			else{
 				sender.sendMessage(ChatColor.GREEN + name + " is not muted.");
 			}
+			
 			return true;
 		}
 		else{

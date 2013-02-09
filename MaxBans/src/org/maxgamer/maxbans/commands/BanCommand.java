@@ -8,6 +8,7 @@ import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -62,7 +63,22 @@ public class BanCommand extends CmdSkeleton{
 			}
 			
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'", silent, sender);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
+			
+			String message = Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
+			plugin.getBanManager().addHistory(message);
+			
+	    	if(plugin.getSyncer() != null){
+	    		Packet prop = new Packet();
+	    		prop.setCommand("ban");
+	    		prop.put("name", name);
+	    		prop.put("reason", reason);
+	    		prop.put("banner", banner);
+	    		plugin.getSyncer().broadcast(prop);
+	    		
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		plugin.getSyncer().broadcast(history);
+	    	}
+	    	
 			return true;
 		}
 		else{

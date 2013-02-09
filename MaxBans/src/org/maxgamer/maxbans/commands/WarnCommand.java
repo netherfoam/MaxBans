@@ -2,6 +2,7 @@ package org.maxgamer.maxbans.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -24,7 +25,23 @@ public class WarnCommand extends CmdSkeleton{
 			
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been warned for '" + Formatter.secondary + reason + Formatter.primary + "' by " + Formatter.secondary + banner + Formatter.primary + ".");
 			plugin.getBanManager().warn(name, reason, banner);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
+			
+			String message = Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
+			plugin.getBanManager().addHistory(message);
+			
+	    	if(plugin.getSyncer() != null){
+	    		Packet prop = new Packet();
+	    		prop.setCommand("warn");
+	    		prop.put("name", name);
+	    		prop.put("banner", banner);
+	    		prop.put("reason", reason);
+	    		plugin.getSyncer().broadcast(prop);
+	    		
+	    		//Send the addhistory request.
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		plugin.getSyncer().broadcast(history);
+	    	}
+	    	
 			return true;
 		}
 		else{

@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.Warn;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 
 public class ClearWarningsCommand extends CmdSkeleton{
@@ -40,12 +41,33 @@ public class ClearWarningsCommand extends CmdSkeleton{
 			}
 			
 			plugin.getBanManager().clearWarnings(name);
+			
+			if(plugin.getSyncer() != null){
+				plugin.getSyncer().broadcast(new Packet().setCommand("clearwarnings").put("name", name));
+			}
+			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
 				p.sendMessage(Formatter.primary + "Your previous warnings have been pardoned by " + Formatter.secondary + banner);
 			}
 			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s warnings.");
-			plugin.getBanManager().addHistory(banner + " cleared " + name + "'s warnings.");
+			
+			String message = Formatter.secondary + banner + Formatter.primary + " cleared " + Formatter.secondary + name + Formatter.primary + "'s warnings.";
+			plugin.getBanManager().addHistory(message);
+			
+			if(plugin.getSyncer() != null){
+				//Send the clearwarnings request
+	    		Packet prop = new Packet();
+	    		prop.setCommand("clearwarnings");
+	    		prop.put("name", name);
+	    		prop.put("banner", banner);
+	    		plugin.getSyncer().broadcast(prop);
+	    		
+	    		//Send the addhistory request.
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		plugin.getSyncer().broadcast(history);
+	    	}
+			
 			return true;
 		}
 		else{

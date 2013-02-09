@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
+import org.maxgamer.maxbans.sync.Packet;
 
 public class DNSBL{
 	private HashMap<String, CacheRecord> history = new HashMap<String, CacheRecord>();
@@ -96,8 +97,16 @@ public class DNSBL{
     		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable(){
 				public void run() {
 					//Fetch the new status, this method also caches it for future use.
-					DNSStatus status = reload(address);
-					if(status == DNSStatus.DENIED){
+					CacheRecord r = reload(address);
+					
+					if(plugin.getSyncer() != null){
+						Packet packet = new Packet("dnsbl").put("ip", address);
+						packet.put("status", r.getStatus().toString()).put("created", r.getCreated());
+						
+						plugin.getSyncer().broadcast(packet);
+					}
+					
+					if(r.getStatus() == DNSStatus.DENIED){
 						//Notify console.
 						Bukkit.getScheduler().runTask(plugin, new Runnable(){
 							public void run(){
@@ -171,7 +180,7 @@ public class DNSBL{
      * @return The status of the IP.
      * This automatically caches the given IP address.
      */
-    public DNSStatus reload(String ip){    	
+    public CacheRecord reload(String ip){    	
     	//Reverses the IP's order... Eg 192.168.2.4 becomes 4.2.168.192
         String[] parts = ip.split("\\.");
         StringBuilder buffer = new StringBuilder();
@@ -195,6 +204,17 @@ public class DNSBL{
             }
             catch (UnknownHostException e){} //Host has never heard of that IP...Safe.
         }
+        
+        setRecord(ip, r);
+        return r;
+    }
+    
+    /**
+     * Sets that the given IP address, using the given record. Updates the database too.
+     * @param ip The IP address
+     * @param r The CacheRecord object.
+     */
+    public void setRecord(String ip, CacheRecord r){
     	if(getRecord(ip) == null){ //Do we have an old record?
     		plugin.getDB().execute("INSERT INTO proxys (ip, status, created) VALUES (?, ?, ?)", ip, r.getStatus().toString(), r.getCreated()); //No old records
     	}
@@ -203,14 +223,13 @@ public class DNSBL{
     	}
     	
         this.history.put(ip, r);
-        return r.status;
     }
     
     /**
      * Represents a DNS status, and the time it was acquired.
      * Used for caching, as DNS lookups are incredibly slow.
      */
-    public class CacheRecord{
+    public static class CacheRecord{
     	private DNSStatus status;
     	private long created;
     	

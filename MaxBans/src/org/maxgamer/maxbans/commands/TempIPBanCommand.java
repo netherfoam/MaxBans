@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -88,7 +89,23 @@ public class TempIPBanCommand extends CmdSkeleton{
 			//Ban them
 			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
-			plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
+			String message = Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
+			plugin.getBanManager().addHistory(message);
+			
+	    	if(plugin.getSyncer() != null){
+	    		Packet prop = new Packet();
+	    		prop.setCommand("ipban");
+	    		prop.put("ip", ip);
+	    		prop.put("reason", reason);
+	    		prop.put("banner", banner);
+	    		prop.put("expires", time);
+	    		plugin.getSyncer().broadcast(prop);
+	    		
+	    		//Send the addhistory request.
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		plugin.getSyncer().broadcast(history);
+	    	}
+			
 			return true;
 		}
 		else{

@@ -58,6 +58,25 @@ dnsbl:
     #Should we kick players who are discovered to have proxy IPs?
     kick: false
 
+# Sync is an advanced feature of MaxBans.
+# It only applies to server owners who want to BAN/etc Players using a WEBPAGE, such as PHP Script
+# Or owners who want two servers to have the SAME banlist!
+# This option is in BETA! I take no responsibility if it breaks, though I will endeaver to fix it.
+sync:
+    #Should we use Sync? Setting this to false disables it entirely :)
+    use: true
+    #Is this server the Sync server? Otherwise it's a client.
+    server: false
+    #The host of the Sync server, if this is a client.
+    host: 127.0.0.1
+    #The port of the Sync server. 
+    port: 2711
+    #The password required to join.
+    pass: ChangeMeNow
+    #How many times should the Syncer try to ping the SyncServer
+    #Before giving up?
+    tries: 120
+
 database:
     mysql: false
     user: root
@@ -65,3 +84,4 @@ database:
     host: localhost
     port: 3306
     name: maxbans
+    read-only: false

@@ -2,14 +2,19 @@ package org.maxgamer.maxbans;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
 import org.maxgamer.maxbans.commands.*;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.listeners.*;
+import org.maxgamer.maxbans.sync.SyncServer;
+import org.maxgamer.maxbans.sync.Syncer;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Metrics;
 import org.maxgamer.maxbans.util.Metrics.Graph;
@@ -31,6 +36,8 @@ import org.maxgamer.maxbans.util.Metrics.Graph;
  */
 public class MaxBans extends JavaPlugin{
     private BanManager banManager;
+    private Syncer syncer;
+    private SyncServer syncServer;
     
     private BanCommand banCommand;
     private IPBanCommand ipBanCommand;
@@ -103,13 +110,14 @@ public class MaxBans extends JavaPlugin{
 		
 		Formatter.load(this);
 		
+		ConfigurationSection dbConfig = getConfig().getConfigurationSection("database");
 		if(getConfig().getBoolean("database.mysql", false)){
 			getLogger().info("Using MySQL");
-			String user = getConfig().getString("database.user");
-			String pass = getConfig().getString("database.pass");
-			String host = getConfig().getString("database.host");
-			String name = getConfig().getString("database.name");
-			String port = getConfig().getString("database.port");
+			String user = dbConfig.getString("user");
+			String pass = dbConfig.getString("pass");
+			String host = dbConfig.getString("host");
+			String name = dbConfig.getString("name");
+			String port = dbConfig.getString("port");
 			db = new Database(this, host, name, user, pass, port);
 		}
 		else{
@@ -118,7 +126,12 @@ public class MaxBans extends JavaPlugin{
 			db = new Database(this, new File(this.getDataFolder(), "bans.db"));
 		}
 		//Creates the tables if they don't exist
+		db.setReadOnly(dbConfig.getBoolean("read-only", false));
 		try{
+			//Note that this bypasses db.isReadOnly(), but this is okay
+			//Because if these tables exist, nothing will change.
+			//If they do not exist, errors are thrown when loading.
+			//So skipping db.isReadOnly() is necessary.
 			db.createTables();
 		}
 		catch(SQLException e){
@@ -129,6 +142,40 @@ public class MaxBans extends JavaPlugin{
 		
 		//BanManager
 		banManager = new BanManager(this);
+		
+		ConfigurationSection syncConfig = this.getConfig().getConfigurationSection("sync");
+		if(syncConfig.getBoolean("use", false)){
+			getLogger().info("Using Sync.");
+			final String host = syncConfig.getString("host");
+			final int port = syncConfig.getInt("port");
+			final String pass = syncConfig.getString("pass");
+			
+			if(syncConfig.getBoolean("server", false)){
+				try{
+					this.syncServer = new SyncServer(port, pass);
+				}
+				catch(IOException e){
+					e.printStackTrace();
+					getLogger().info("Could not start sync server!");
+				}
+				catch(NoSuchAlgorithmException e){
+					e.printStackTrace();
+					getLogger().info("Could not encrypt SyncServer password!");
+				}
+			}
+			
+			try {
+				syncer = new Syncer(host, port, pass);
+				syncer.start();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+				getLogger().info("Could not encrypt SyncServer password!");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				getLogger().info("Could not encrypt SyncServer password!");
+			}
+		}
+		
 		
 		//Commands
 		registerCommands();
@@ -154,6 +201,16 @@ public class MaxBans extends JavaPlugin{
 	
 	public void onDisable(){
 		this.getLogger().info("Disabling Maxbans...");
+		
+		if(syncServer != null){
+			syncServer.stop();
+		}
+		
+		if(syncer != null){
+			syncer.stopReconnect();
+			syncer.stop();
+		}
+		
 		this.db.getDatabaseWatcher().run(); //Empties buffer
 		this.getLogger().info("Cleared buffer...");
 		instance = null;
@@ -282,4 +339,6 @@ public class MaxBans extends JavaPlugin{
     }
     /** Returns the metrics object for MaxBans */
     public Metrics getMetrics(){ return metrics; }
+    
+    public Syncer getSyncer(){ return this.syncer; }
 }

@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -57,7 +58,22 @@ public class TempMuteCommand extends CmdSkeleton{
 				p.sendMessage(Formatter.secondary + "You have been muted for " + until);
 			}
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until);
-			plugin.getBanManager().addHistory(banner + " temp muted " + name + " for " + until);
+			String message = Formatter.secondary + banner + Formatter.primary + " temp muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until;
+			plugin.getBanManager().addHistory(message);
+			
+	    	if(plugin.getSyncer() != null){
+	    		Packet prop = new Packet();
+	    		prop.setCommand("tempmute");
+	    		prop.put("name", name);
+	    		prop.put("banner", banner);
+	    		prop.put("expires", time);
+	    		plugin.getSyncer().broadcast(prop);
+	    		
+	    		//Send the addhistory request.
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		plugin.getSyncer().broadcast(history);
+	    	}
+			
 			return true;
 		}
 		else{

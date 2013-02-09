@@ -77,6 +77,7 @@ import org.maxgamer.maxbans.util.Util;
  */
 public class Database {
 	private DatabaseCore dbCore;
+	private boolean readOnly;
 	
 	private Buffer buffer;
 	private MaxBans plugin;
@@ -113,6 +114,8 @@ public class Database {
 		this.dbw = new DatabaseWatcher(this);
 	}
 	
+	public void setReadOnly(boolean readOnly){ this.readOnly = readOnly; }
+	public boolean isReadOnly(){ return this.readOnly; }
 	public DatabaseCore getCore(){ return this.dbCore; }
 	
 	/**
@@ -213,6 +216,7 @@ public class Database {
 	 * @param objs The Strings to replace ?'s with in the query supplied above
 	 */
 	public void execute(String query, Object...objs){
+		if(this.isReadOnly()) return; //Read only.
 		BufferStatement bs = new BufferStatement(query, objs);
 		this.getBuffer().add(bs);
 	}

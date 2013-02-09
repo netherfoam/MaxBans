@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.*;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -78,7 +79,22 @@ public class JoinListener implements Listener{
             	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
             }
         	
-            plugin.getBanManager().logIP(player.getName(), address);
+            //Log that the player connected from that IP address.
+            if(plugin.getBanManager().logIP(player.getName(), address)){
+            	if(plugin.getSyncer() != null){
+    	    		Packet ipUpdate = new Packet().setCommand("setip").put("name", player.getName());
+    	    		ipUpdate.put("ip", address);
+    	    		plugin.getSyncer().broadcast(ipUpdate);
+    	    	}
+            }
+            
+            //Log the players actual case-sensitive name.
+            if(plugin.getBanManager().logActual(player.getName(), player.getName())){
+            	if(plugin.getSyncer() != null){
+    	    		Packet nameUpdate = new Packet().setCommand("setname").put("name", player.getName());
+    	    		plugin.getSyncer().broadcast(nameUpdate);
+    	    	}
+            }
         	
         	return;
         }

@@ -155,10 +155,13 @@ public class BanManager{
 			
 			//Phase 1: Load bans
 			
-			//Purge old temp bans
-			PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM bans WHERE expires <> 0 AND expires < ?");
-			ps.setLong(1, System.currentTimeMillis());
-			ps.execute(); 
+			PreparedStatement ps;
+			if(!db.isReadOnly()){
+				//Purge old temp bans
+				ps = db.getConnection().prepareStatement("DELETE FROM bans WHERE expires <> 0 AND expires < ?");
+				ps.setLong(1, System.currentTimeMillis());
+				ps.execute(); 
+			}
 			
 			plugin.getLogger().info("Loading bans");
 			query = "SELECT * FROM bans";
@@ -185,10 +188,12 @@ public class BanManager{
 			
 			//Phase 2: Load IP Bans
 			
-			//Purge old temp ip bans
-			ps = db.getConnection().prepareStatement("DELETE FROM ipbans WHERE expires <> 0 AND expires < ?");
-			ps.setLong(1, System.currentTimeMillis());
-			ps.execute(); 
+			if(!db.isReadOnly()){
+				//Purge old temp ip bans
+				ps = db.getConnection().prepareStatement("DELETE FROM ipbans WHERE expires <> 0 AND expires < ?");
+				ps.setLong(1, System.currentTimeMillis());
+				ps.execute(); 
+			}
 			
 			plugin.getLogger().info("Loading ipbans");
 			query = "SELECT * FROM ipbans";
@@ -215,10 +220,12 @@ public class BanManager{
 			
 			//Phase 3: Load Mutes
 			
-			//Purge old temp mutes
-			ps = db.getConnection().prepareStatement("DELETE FROM mutes WHERE expires <> 0 AND expires < ?");
-			ps.setLong(1, System.currentTimeMillis());
-			ps.execute(); 
+			if(!db.isReadOnly()){
+				//Purge old temp mutes
+				ps = db.getConnection().prepareStatement("DELETE FROM mutes WHERE expires <> 0 AND expires < ?");
+				ps.setLong(1, System.currentTimeMillis());
+				ps.execute();
+			}
 			
 			plugin.getLogger().info("Loading mutes");
 			query = "SELECT * FROM mutes";
@@ -278,10 +285,12 @@ public class BanManager{
 			
 			//Phase 6 loading: Load Warn history
 			
-			//Purge old warnings
-			ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
-			ps.setLong(1, System.currentTimeMillis());
-			ps.execute(); 
+			if(!db.isReadOnly()){
+				//Purge old warnings
+				ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
+				ps.setLong(1, System.currentTimeMillis());
+				ps.execute();
+			}
 			
 			plugin.getLogger().info("Loading warn history...");
 			//We only want warns that haven't expired.
@@ -315,7 +324,9 @@ public class BanManager{
 			//Phase 8 loading: Load history
 			plugin.getLogger().info("Loading history...");
 			
-			db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+			if(!db.isReadOnly()){
+				db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+			}
 			rs = db.getConnection().prepareStatement("SELECT * FROM history ORDER BY created DESC").executeQuery();
 			while(rs.next()){
 				this.history.add(new HistoryRecord(rs.getString("message"), rs.getLong("created")));
@@ -502,7 +513,6 @@ public class BanManager{
     	name = name.toLowerCase();
     	Ban ban = this.bans.get(name);
     	TempBan tBan = this.tempbans.get(name);
-    	String ip = this.getIP(name);
     	
     	if(ban != null){
     		this.bans.remove(name);
@@ -515,7 +525,6 @@ public class BanManager{
     			db.execute("DELETE FROM bans WHERE name = ?", name);
     		}
     	}
-    	unbanip(ip);
     }
     
     /**
@@ -701,12 +710,14 @@ public class BanManager{
     }
     
     /**
-     * Notes that a player joined from the given IP.
-     * @param name Name of player. Case insensitive.
-     * @param ip The ip they're connecting from.
+     * Notes the actual-case version of a players name in
+     * the database.
+     * @param name The name, case insensitive. This is converted to lowercase.
+     * @param actual The actual name, CASE SENSITIVE.  This is stored as is.
+     * @return True if the name has changed from last time, or there is
+     * no record of the player previously.
      */
-    public void logIP(String name, String ip){
-    	String actual = name;
+    public boolean logActual(String name, String actual){
     	name = name.toLowerCase();
     	
     	//Record the players original name versus the lowercase one.
@@ -714,13 +725,26 @@ public class BanManager{
 		if(oldActual == null){
 			//We've never seen this player before.
 			plugin.getDB().execute("INSERT INTO players (name, actual) VALUES (?, ?)", name, actual);
+			return true;
 		}
 		else if(!oldActual.equals(actual)){
 			plugin.getDB().execute("UPDATE players SET actual = ? WHERE name = ?", actual, name);
+			return true;
 		}
+		return false; //Nothing has changed.
+    }
+    
+    /**
+     * Notes that a player joined from the given IP.
+     * @param name Name of player. Case insensitive.
+     * @param ip The ip they're connecting from.
+     * @return True if their IP has changed, or they had none previously.
+     */
+    public boolean logIP(String name, String ip){
+    	name = name.toLowerCase();
     	
     	String oldIP = this.recentips.get(name);
-    	if(ip.equals(oldIP)) return; //Nothing has changed.
+    	if(ip.equals(oldIP)) return false; //Nothing has changed.
     	
     	if(!this.recentips.containsKey(name)){
     		//First time we've seen this player! Add them to the autocomplete list
@@ -750,6 +774,7 @@ public class BanManager{
     	}
     	
     	this.recentips.put(name, ip);
+    	return true;
     }
 	
 	/**

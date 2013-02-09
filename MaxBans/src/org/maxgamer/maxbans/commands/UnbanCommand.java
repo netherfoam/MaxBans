@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -52,13 +53,35 @@ public class UnbanCommand extends CmdSkeleton{
 				
 				if(ban != null){
 					plugin.getBanManager().unban(name);
+					
+					if(plugin.getSyncer() != null){
+			    		Packet prop = new Packet();
+			    		prop.setCommand("unban");
+			    		prop.put("name", name);
+			    		plugin.getSyncer().broadcast(prop);
+			    	}
 				}
 				if(ipban != null){
 					plugin.getBanManager().unbanip(ip);
+					
+					if(plugin.getSyncer() != null){
+			    		Packet prop = new Packet();
+			    		prop.setCommand("unbanip");
+			    		prop.put("ip", ip);
+			    		plugin.getSyncer().broadcast(prop);
+			    	}
 				}
 				
 				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
-				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " unbanned " + Formatter.secondary + name);
+				String message = Formatter.secondary + banner + Formatter.primary + " unbanned " + Formatter.secondary + name;
+				plugin.getBanManager().addHistory(message);
+				
+				if(plugin.getServer() != null){
+					//Send the addhistory request.
+		    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+		    		plugin.getSyncer().broadcast(history);
+				}
+				
 				return true;
 			}
 		}

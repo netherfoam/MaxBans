@@ -2,6 +2,7 @@ package org.maxgamer.maxbans.util;
 
 import java.text.ParseException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
@@ -21,9 +22,25 @@ public class Util{
 	private static HashSet<String> yes = new HashSet<String>();
 	private static HashSet<String> no = new HashSet<String>();
 	
+	private static char[] chars;
+	private static Random r = new Random();
+	
 	static{
 		yes.add("yes"); yes.add("true"); yes.add("on"); yes.add("enable");
 		no.add("no"); no.add("false"); no.add("off"); no.add("disable");
+		
+		chars = "abcdefghijklmnopqrstuvwrxyzABCDEFGHIJKLMNOPQRSTUVWRXYZ0123456789".toCharArray();
+	}
+	
+	/**
+	 * Returns a random string of A-Z, a-z and 0-9 with the given length.
+	 * @param len The length of the required string
+	 * @return A string random letters/numbers of the given length.
+	 */
+	public static String getRandomString(int len){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < len; i++){ sb.append(chars[r.nextInt(chars.length)]); }
+		return sb.toString();
 	}
 	
 	/**
