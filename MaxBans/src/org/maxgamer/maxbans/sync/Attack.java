@@ -12,6 +12,8 @@ import org.maxgamer.maxbans.sync.Connection.PacketListener;
  *<br/><br/>
  *This client allows you to send any Packet object, and
  *prints out any received packets.
+ *
+ *This is used for debugging purposes only.
  */
 public class Attack{
 	public static void main(String[] args){
