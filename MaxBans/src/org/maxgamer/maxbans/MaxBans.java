@@ -204,11 +204,13 @@ public class MaxBans extends JavaPlugin{
 		
 		if(syncServer != null){
 			syncServer.stop();
+			syncServer = null; //Required when reloading, if sync.server changes to false
 		}
 		
 		if(syncer != null){
 			syncer.stopReconnect();
 			syncer.stop();
+			syncer = null; //Required when reloading, if sync.use changes to false
 		}
 		
 		this.db.getDatabaseWatcher().run(); //Empties buffer
