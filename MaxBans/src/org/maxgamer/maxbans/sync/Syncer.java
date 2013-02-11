@@ -297,6 +297,7 @@ public class Syncer{
 		while(!queue.isEmpty()){
 			Packet packet = queue.remove();
 			send(packet);
+			try{ Thread.sleep(10); } catch(InterruptedException e){}
 		}
 	}
 	
