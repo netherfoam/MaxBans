@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.banmanager.HistoryRecord;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.Util;
 
 public class HistoryCommand extends CmdSkeleton{
     public HistoryCommand(){
@@ -29,7 +30,7 @@ public class HistoryCommand extends CmdSkeleton{
 		}
 		else{
 			for(int i = Math.min(history.length, count) - 1; i >= 0; i--){
-				sender.sendMessage(Formatter.secondary + history[i].getMessage());
+				sender.sendMessage(Formatter.primary + "[" + Util.getShortTime(System.currentTimeMillis() - history[i].getCreated()) + "] " + Formatter.secondary + history[i].getMessage());
 			}
 		}
 		return true;

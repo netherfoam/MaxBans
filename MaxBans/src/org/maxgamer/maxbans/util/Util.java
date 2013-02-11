@@ -61,6 +61,21 @@ public class Util{
 		return VALID_CHARS_PATTERN.matcher(s).replaceAll("");
 	}
 	
+	/**
+	 * Returns the short time, like Facebook. So
+	 * <br/><br/>
+	 * long ms = 3661;
+	 * getTime(ms); //= 1 hour 1 minute 1 second
+	 * getShortTime(ms); //=1 hour
+	 * <br/><br/>
+	 * @param ms The time
+	 * @return The short version
+	 */
+	public static String getShortTime(long ms){
+		String s = getTime(ms);
+		String[] vals = s.split(" ");
+		return vals[0] + " " + vals[1];
+	}
 	
 	/**
      * Finds the time until a specific epoch.
@@ -78,52 +93,52 @@ public class Util{
      * @param epoch the epoch (Milliseconds) time to check
      * @return The time (String format) of an epoch. Eg 3661 = 1 hours 1 minutes 1 seconds
      */
-    public static String getTime(long epoch){
-    	epoch =  (long) Math.ceil(epoch / 1000.0); //Work in seconds.
+    public static String getTime(long ms){
+    	ms =  (long) Math.ceil(ms / 1000.0); //Work in seconds.
     	StringBuilder sb = new StringBuilder(40);
     	
-    	if(epoch / 31449600 > 0){
+    	if(ms / 31449600 > 0){
     		//Years
-    		long years = epoch / 31449600;
+    		long years = ms / 31449600;
     		sb.append(years + (years == 1 ? " year " : " years "));
-    		epoch -= years * 31449600;
+    		ms -= years * 31449600;
     	}
-    	if(epoch / 2620800 > 0){
+    	if(ms / 2620800 > 0){
     		//Months
-    		long months = epoch / 2620800;
+    		long months = ms / 2620800;
     		sb.append(months + (months == 1 ? " month " : " months "));
-    		epoch -= months * 2620800;
+    		ms -= months * 2620800;
     	}
-    	if(epoch / 604800 > 0){
+    	if(ms / 604800 > 0){
     		//Weeks
-    		long weeks = epoch / 604800;
+    		long weeks = ms / 604800;
     		sb.append(weeks + (weeks == 1 ? " week " : " weeks "));
-    		epoch -= weeks * 604800;
+    		ms -= weeks * 604800;
     	}
-    	if(epoch / 86400 > 0){
+    	if(ms / 86400 > 0){
     		//Days
-    		long days = epoch / 86400;
+    		long days = ms / 86400;
     		sb.append(days + (days == 1 ? " day " : " days "));
-    		epoch -= days * 86400;
+    		ms -= days * 86400;
     	}
     	
-    	if(epoch / 3600 > 0){
+    	if(ms / 3600 > 0){
     		//Hours
-    		long hours = epoch / 3600;
+    		long hours = ms / 3600;
     		sb.append(hours + (hours == 1 ? " hour " : " hours "));
-    		epoch -= hours * 3600;
+    		ms -= hours * 3600;
     	}
     	
-    	if(epoch / 60 > 0){
+    	if(ms / 60 > 0){
     		//Minutes
-    		long minutes = epoch / 60;
+    		long minutes = ms / 60;
     		sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));
-    		epoch -= minutes * 60;
+    		ms -= minutes * 60;
     	}
     	
-    	if(epoch > 0){
+    	if(ms > 0){
     		//Seconds
-    		sb.append(epoch + (epoch == 1 ? " second " : " seconds "));
+    		sb.append(ms + (ms == 1 ? " second " : " seconds "));
     	}
     	
     	if(sb.length() > 1){
@@ -158,9 +173,9 @@ public class Util{
 	}
 	
 	/**
-	 * Fetches the milliseconds from a time eg 4 mins or 6 seconds
-	 * @param args
-	 * @return
+	 * Fetches the milliseconds from a time eg 4 mins = 240,000, or 6 seconds = 6,000
+	 * @param args The args from a command. Only args[1] (number) and args[2] are used.
+	 * @return The value 
 	 */
 	public static long getTime(String[] args){
 		int modifier;
