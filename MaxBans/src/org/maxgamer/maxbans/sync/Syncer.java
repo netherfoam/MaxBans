@@ -6,6 +6,7 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
 import org.maxgamer.maxbans.MaxBans;
@@ -21,6 +22,8 @@ public class Syncer{
 	private String host;
 	private int port;
 	private String password;
+	
+	private LinkedList<Packet> queue = new LinkedList<Packet>();
 	
 	public static Syncer instance;
 	
@@ -288,6 +291,15 @@ public class Syncer{
 		this.server.addListener(pl);
 	}
 	
+	/** Called when the server connection is accepted */
+	public void onAuth(){
+		log("Authenticated! Sending " + queue.size() + " old packets!");
+		while(!queue.isEmpty()){
+			Packet packet = queue.remove();
+			send(packet);
+		}
+	}
+	
 	/** Attempts to start the syncer, until the stop method is called. */
 	public void start(){
 		log("Starting...");
@@ -365,8 +377,9 @@ public class Syncer{
 			@Override
 			public void run(){
 				try {
-					if(!server.isOpen()){
-						throw new IOException("The socket is closed. It cannot send data.");
+					if(server == null || !server.isOpen()){
+						queue.add(properties);
+						log("Could not send request to SyncServer (Not connected). Queued it instead.");
 					}
 					else{
 						server.print(properties);

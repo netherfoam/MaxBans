@@ -3,7 +3,9 @@ package org.maxgamer.maxbans.sync;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -88,30 +90,65 @@ public class Connection{
 								break; //Makes more sense than continue.
 							}
 							
-							String response = null;
-							Packet packet;
+							String responses;
 							try{
-								response = new String(bytes.toByteArray(), CHARSET);
-								packet = Packet.unserialize(response);
+								responses = new String(bytes.toByteArray(), CHARSET);
 							}
-							catch(Exception e){
+							catch(UnsupportedEncodingException e){
 								e.printStackTrace();
-								log("Ignoring bad packet: '" + response + "'");
-								continue;
+								close();
+								break;
 							}
-							if(privateOnPacket(packet) == false && isOpen()){
-								//The packet event
-								PacketEvent e = new PacketEvent(Connection.this, packet);
-								
-								//Each connection has a dynamic set of listeners.
-								Iterator<PacketListener> it = listeners.iterator();
-								while(it.hasNext()){
-									PacketListener pl = it.next();
-									if(pl.onPacket(e)) it.remove(); //If it returns true, it wants to be removed.
-									else if(e.isHandled() == false){
-										log("Unhandled packet: " + e.getPacket().serialize());
+							
+							/* When responses are sent rapidly, they queue up. E.g. the server intends to send:
+							 * @connect
+							 * @msg -string Greetings, Mortal!
+							 * 
+							 * But instead, it is received as:
+							 * @connect@msg -string Greetings, Mortal!
+							 * 
+							 *  Which is wrong. This corrects that.
+							 */
+							ArrayList<String> packs = new ArrayList<String>();
+							char[] chars = responses.toCharArray();
+							int start = 0;
+							
+							for(int i = 1; i < chars.length; i++){ //Start at 1 so we don't have an empty string at the beginning. (eg we're splitting at @ symbols, if there is an @ at the start)
+								char c = chars[i];
+								if(c == '\\'){
+									i++; //Skip the next symbol, it is escaped. Possibly not an '@', but we don't care.
+								}
+								else if(c == '@'){ //Split here.
+									packs.add(new String(chars, start, i - start)); //-1 because otherwise, the '@' symbol will go there.
+									start = i; //restart
+								}
+							}
+							packs.add(new String(chars, start, chars.length - start)); //This adds the last message to the list.
+							
+							for(String response : packs){
+								Packet packet;
+								try{
+									packet = Packet.unserialize(response);
+								}
+								catch(Exception e){
+									e.printStackTrace();
+									log("Ignoring bad packet: '" + response + "'");
+									continue;
+								}
+								if(privateOnPacket(packet) == false && isOpen()){
+									//The packet event
+									PacketEvent e = new PacketEvent(Connection.this, packet);
+									
+									//Each connection has a dynamic set of listeners.
+									Iterator<PacketListener> it = listeners.iterator();
+									while(it.hasNext()){
+										PacketListener pl = it.next();
+										if(pl.onPacket(e)) it.remove(); //If it returns true, it wants to be removed.
+										else if(e.isHandled() == false){
+											log("Unhandled packet: " + e.getPacket().serialize());
+										}
+										if(!isOpen()) break; //That last packet closed the connection! Stop cycling through them. (We're dead!)
 									}
-									if(!isOpen()) break; //That last packet closed the connection! Stop cycling through them. (We're dead!)
 								}
 							}
 						}

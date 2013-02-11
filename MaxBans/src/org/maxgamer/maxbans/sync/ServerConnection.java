@@ -49,22 +49,11 @@ public class ServerConnection extends Connection{
 			public boolean onPacket(PacketEvent e){
 				Packet packet = e.getPacket();
 				if(packet.getCommand().equals("connect")){
+					e.setHandled();
 					log("Server accepted!");
+					MaxBans.instance.getSyncer().onAuth();
 					return true;
 				}
-				/*
-				else if(packet.getCommand().equals("disconnect")){
-					//try {
-						String reason = packet.get("reason");
-						log("Server declined! :(" + (reason == null ? "" : " Reason: " + reason));
-						MaxBans.instance.getSyncer().stopReconnect();
-						MaxBans.instance.getSyncer().stop();
-					/*} catch (IOException ex) {
-						ex.printStackTrace();
-						log("Could not close connection after server refused it!");
-					}*/
-					//return true;
-				//}
 				return false;
 			}
 		});

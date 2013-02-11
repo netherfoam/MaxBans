@@ -133,9 +133,9 @@ public class Packet{
 	
 	//Note that there is no need to escape "exotic" characters like ChatColor.COLOR_CHAR, as data will be written using Connection.CHARSET.
 	/** These character sequences will cause issues. */
-	private static String[] escapers = {"-", "\\n"};
+	private static String[] escapers = {"-", "\\n", "@"};
 	/** These character sequences will not. */
-	private static String[] unescapers = {"\\-", "\\\\n"};
+	private static String[] unescapers = {"\\-", "\\\\n", "\\@"};
 	
 	/** Escapes the given string and returns it */
 	private static String escape(String s){
