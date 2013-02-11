@@ -2,6 +2,7 @@ package org.maxgamer.maxbans.sync;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import org.maxgamer.maxbans.sync.Connection.PacketEvent;
@@ -16,6 +17,7 @@ import org.maxgamer.maxbans.sync.Connection.PacketListener;
  *This is used for debugging purposes only.
  */
 public class Attack{
+	public static String password;
 	public static void main(String[] args){
 		Integer port = null;
 		String host = null;
@@ -110,6 +112,7 @@ public class Attack{
 							catch(SocketException se){
 								log("Failed to send. Reconnecting...");
 								con = new Connection(host, port);
+								con.print(new Packet("connect").put("pass", password));
 								con.print(new Packet().setCommand(crap));
 							}
 						}
@@ -121,8 +124,16 @@ public class Attack{
 							catch(SocketException se){
 								log("Failed to send. Reconnecting...");
 								con = new Connection(host, port);
+								con.print(new Packet("connect").put("pass", password));
 								con.println(line);
 							}
+						}
+						else if(args[0].equals("connect")){
+							line = line.replaceFirst("connect ", "");
+							try{
+								password = SyncUtil.encrypt(line, SyncUtil.PASSWORD_SALT);
+								con.print(new Packet("connect").put("pass", password)); }
+							catch(NoSuchAlgorithmException e){ e.printStackTrace(); }
 						}
 						else if(args[0].equals("stop")){
 							log("Stopping...");
