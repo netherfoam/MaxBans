@@ -101,9 +101,7 @@ public class SyncServer{
 							break;
 						}
 						else if(line.equals("status")){
-							StringBuilder sb = new StringBuilder(SyncServer.password.length());
-							for(int i = 0; i < SyncServer.password.length(); i++){ sb.append("*"); }
-							log("Port: " + server.server.getLocalPort() + ", Pass: " + sb.toString());
+							log("Port: " + server.server.getLocalPort() + ", Pass: " + SyncServer.password);
 							log("Connections: " + ClientConnection.getConnections().size());
 							
 							log("#ID -> Address:Port -> Time Connected");

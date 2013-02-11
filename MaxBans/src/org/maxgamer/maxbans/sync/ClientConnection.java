@@ -49,6 +49,11 @@ public class ClientConnection extends Connection{
 		return super.privateOnPacket(packet); //Let the other priority methods have at it.
 	}
 	
+	@Override
+	public void onClose(){
+		clients.remove(this);
+	}
+	
 	/** Sets this connection as "Authenticated", meaning it will receive messages from the server broadcasts */
 	private void setAuthenticated(){ if(authed == false) authed = true; clients.add(this); this.setMaxPacketLength(8192); }
 	/** @param return true if authenticated, false if not authenticated */

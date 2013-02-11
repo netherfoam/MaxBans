@@ -152,7 +152,7 @@ public class Connection{
 								}
 							}
 						}
-						catch(IOException e){
+						catch(IOException e){ //Thrown when the connection is closed forcefully.. E.g. remote crashes.
 							try{close();}catch(IOException ex){}
 						} catch (OverflowException e) {
 							e.printStackTrace();
