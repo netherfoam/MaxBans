@@ -293,6 +293,7 @@ public class Syncer{
 	
 	/** Called when the server connection is accepted */
 	public void onAuth(){
+		if(queue.isEmpty()) return;
 		log("Authenticated! Sending " + queue.size() + " old packets!");
 		while(!queue.isEmpty()){
 			Packet packet = queue.remove();
