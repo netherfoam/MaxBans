@@ -368,19 +368,19 @@ public class BanManager{
 				history.add(record);
 				
 				//TODO: This is partially a copy paste... Is there a way I can put this in some kind of (useful) method?
-				ArrayList<HistoryRecord> personal = personalHistory.get(record.getName()); //Insert it under the history for that person
+				ArrayList<HistoryRecord> personal = personalHistory.get(name); //Insert it under the history for that person
 				if(personal == null){
 					personal = new ArrayList<HistoryRecord>();
-					personalHistory.put(record.getName(), personal);
+					personalHistory.put(name, personal);
 				}
 				personal.add(0, record);
 				
-				if(record.getName().equals(record.getBanner())) continue; //If the player was the banner, there's no point in doing it twice!
+				if(record.getName().equals(banner)) continue; //If the player was the banner, there's no point in doing it twice!
 				
-				personal = personalHistory.get(record.getBanner()); //Insert it under the history for the banner
+				personal = personalHistory.get(banner); //Insert it under the history for the banner
 				if(personal == null){
 					personal = new ArrayList<HistoryRecord>();
-					personalHistory.put(record.getBanner(), personal);
+					personalHistory.put(banner, personal);
 				}
 				personal.add(0, record);
 			}
