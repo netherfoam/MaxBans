@@ -154,14 +154,6 @@ public class Packet{
 		return s;
 	}
 	
-	/** Prints this packet and all values to screen */
-	public void print(){
-		for(Entry<String, String> entry : values.entrySet()){
-			System.out.println("K: '" + entry.getKey() + "', V:'" + entry.getValue() + "'");
-		}
-		System.out.println("--- ---- ---");
-	}
-	
 	/**
 	 * Returns true if the given object is equal to this one.
 	 * @param o The object to compare with.

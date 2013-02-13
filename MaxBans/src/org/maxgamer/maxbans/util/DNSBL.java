@@ -27,9 +27,9 @@ public class DNSBL{
 	private ArrayList<String> servers = new ArrayList<String>();
 
 	/** Should we kick players who have proxy IPs? */
-	public boolean kick = false;
+	private boolean kick = false;
 	/** Should we notify online players with maxbans.notify perms when a DNSBL ip connects? */
-	public boolean notify = true;
+	private boolean notify = true;
 	
 	public DNSBL(MaxBans plugin){
 		this.plugin = plugin;

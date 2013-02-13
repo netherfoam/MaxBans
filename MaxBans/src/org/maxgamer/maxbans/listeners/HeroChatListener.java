@@ -19,7 +19,7 @@ import com.dthielke.herochat.Chatter.Result;
  *
  */
 public class HeroChatListener implements Listener{
-	MaxBans plugin;
+	private MaxBans plugin;
 	
 	public HeroChatListener(MaxBans plugin){
 		this.plugin = plugin;

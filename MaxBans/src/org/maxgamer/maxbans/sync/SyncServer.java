@@ -14,8 +14,6 @@ import org.maxgamer.maxbans.util.Util;
 
 public class SyncServer{
 	//Static Variables
-	/** The pause between socket checks */
-	public static final int REST_TIME = 500; //Pause every REST_TIME ms when checking sockets.
 	/** The desired interval between pings */
 	public static final int PING_INTERVAL = 5000; //Ping every PING_TIME ms.
 	/** The time allowed for responses (Such as Auth'ing) before giving up */
