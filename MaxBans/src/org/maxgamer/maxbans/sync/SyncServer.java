@@ -236,6 +236,7 @@ public class SyncServer{
 							@Override
 							public boolean onPacket(PacketEvent e) {
 								if(e.getPacket().has("broadcast")){
+									e.getPacket().remove("broadcast");
 									broadcast(e.getPacket().serialize(), (ClientConnection) e.getConnection());
 									e.setHandled();
 								}

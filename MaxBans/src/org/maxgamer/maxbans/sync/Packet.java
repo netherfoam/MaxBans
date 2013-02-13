@@ -32,6 +32,15 @@ public class Packet{
 		return this;
 	}
 	/**
+	 * Deletes the given key and its value from this packet.
+	 * @param key The key
+	 * @return This packet, for chaining.
+	 */
+	public Packet remove(String key){
+		values.remove(key);
+		return this;
+	}
+	/**
 	 * Puts the given key to the given value in this packet, ready for
 	 * sending.  These values are automatically escaped.
 	 * @param key The key
