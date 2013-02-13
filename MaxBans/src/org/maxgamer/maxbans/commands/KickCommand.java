@@ -36,7 +36,7 @@ public class KickCommand extends CmdSkeleton{
 				}
 				
 				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone.");
-				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + "everyone" + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
+				plugin.getBanManager().addHistory(name, banner, Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + "everyone" + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 				return true;
 			}
 			
@@ -44,7 +44,7 @@ public class KickCommand extends CmdSkeleton{
 			if(p != null){
 				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
 				plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
-				plugin.getBanManager().addHistory(Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
+				plugin.getBanManager().addHistory(name, banner, Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 			}
 			else{
 				sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);

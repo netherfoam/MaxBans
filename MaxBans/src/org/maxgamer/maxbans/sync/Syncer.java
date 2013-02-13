@@ -263,7 +263,9 @@ public class Syncer{
 			@Override
 			public void run(Packet props){
 				String message = props.get("string");
-				MaxBans.instance.getBanManager().addHistory(message);
+				String name = props.get("name");
+				String banner = props.get("banner");
+				MaxBans.instance.getBanManager().addHistory(name, banner, message);
 			}
 		};
 		commands.put("addhistory", addhistory);

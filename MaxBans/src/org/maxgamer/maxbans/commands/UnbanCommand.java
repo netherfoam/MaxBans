@@ -31,7 +31,7 @@ public class UnbanCommand extends CmdSkeleton{
 				if(ipban != null){
 					plugin.getBanManager().unbanip(ip);
 					plugin.getBanManager().announce(Formatter.secondary + ip + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
-					plugin.getBanManager().addHistory(banner + " unbanned " + ip);
+					plugin.getBanManager().addHistory(name, banner, banner + " unbanned " + ip);
 				}
 				else{
 					sender.sendMessage(Formatter.primary + "Could not find a ban for " + Formatter.secondary + ip + Formatter.primary + ".");
@@ -74,11 +74,11 @@ public class UnbanCommand extends CmdSkeleton{
 				
 				plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been unbanned by " + Formatter.secondary + banner + Formatter.primary + ".", silent, sender);
 				String message = Formatter.secondary + banner + Formatter.primary + " unbanned " + Formatter.secondary + name;
-				plugin.getBanManager().addHistory(message);
+				plugin.getBanManager().addHistory(name, banner, message);
 				
 				if(plugin.getServer() != null){
 					//Send the addhistory request.
-		    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+		    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 		    		plugin.getSyncer().broadcast(history);
 				}
 				

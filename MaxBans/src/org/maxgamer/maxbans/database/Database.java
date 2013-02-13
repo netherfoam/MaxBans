@@ -318,10 +318,19 @@ public class Database {
 				rs.close();
 			}
 		}
-		if(!this.hasColumn("warnings", "expires")){
+		if(!this.hasColumn("warnings", "expires")){ //1.2?
 			try {
-				this.getConnection().prepareStatement(" ALTER TABLE warnings ADD expires long").execute();
+				this.getConnection().prepareStatement("ALTER TABLE warnings ADD expires long").execute();
 			} catch (SQLException e) {} //Already has expires column. Just no record of warnings yet.
+		}
+		if(!this.hasColumn("history", "name")){
+			plugin.getLogger().info("History has no banner/name, adding them...");
+			try{
+				this.getConnection().prepareStatement("ALTER TABLE history ADD banner TEXT(30)").execute(); //Unfortunately, SQLite doesn't support adding
+				this.getConnection().prepareStatement("ALTER TABLE history ADD name TEXT(30)").execute();  //columns in a specific position.
+				this.getConnection().prepareStatement("UPDATE history SET banner = 'unknown', name = 'unknown'").execute();
+			}
+			catch(SQLException e){}
 		}
 	}
 	

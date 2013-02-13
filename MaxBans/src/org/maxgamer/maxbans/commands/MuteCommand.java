@@ -1,7 +1,6 @@
 package org.maxgamer.maxbans.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,6 +25,7 @@ public class MuteCommand extends CmdSkeleton{
 			
 			Mute mute = plugin.getBanManager().getMute(name);
 			if(mute != null){
+				/*
 				plugin.getBanManager().unmute(name);
 				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
 				
@@ -34,7 +34,12 @@ public class MuteCommand extends CmdSkeleton{
 		    		prop.setCommand("unmute");
 		    		prop.put("name", name);
 		    		plugin.getSyncer().send(prop);
-		    	}
+		    		
+		    		//Send the addhistory request.
+		    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
+		    		plugin.getSyncer().broadcast(history);
+		    	}*/
+				Bukkit.dispatchCommand(sender, "unmute");
 				
 				return true;
 			}
@@ -49,7 +54,7 @@ public class MuteCommand extends CmdSkeleton{
 			}
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name);
 			String message = Formatter.secondary + banner + Formatter.primary + " muted " + Formatter.secondary + name;
-			plugin.getBanManager().addHistory(message);
+			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();
@@ -59,7 +64,7 @@ public class MuteCommand extends CmdSkeleton{
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 			

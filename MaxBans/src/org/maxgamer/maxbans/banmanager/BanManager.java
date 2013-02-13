@@ -44,6 +44,8 @@ public class BanManager{
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
 	/** The recent actions that have occured */
 	private ArrayList<HistoryRecord> history = new ArrayList<HistoryRecord>(50);
+	/** The recent actions that have occured, per-player */
+	private HashMap<String, ArrayList<HistoryRecord>> personalHistory = new HashMap<String, ArrayList<HistoryRecord>>(); 
 	
 	/** Hashmap of Usernamep, IP address */
 	private HashMap<String, String> recentips = new HashMap<String, String>();
@@ -103,14 +105,38 @@ public class BanManager{
 	
 	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
 	public HistoryRecord[] getHistory(){ return history.toArray(new HistoryRecord[history.size()]); }
+	/** The things that have recently to the given user, or have been dealt by them.  [0] is the most recent thing that happened */
+	public HistoryRecord[] getHistory(String name){
+		ArrayList<HistoryRecord> history = personalHistory.get(name);
+		if(history != null) return history.toArray(new HistoryRecord[history.size()]);
+		return new HistoryRecord[0];
+	}
 	/**
 	 * Adds the given string as a history message.
 	 * @param s The string to add.
 	 * This method adds the message to the database records.
 	 */
-	public void addHistory(String s){
-		history.add(0, new HistoryRecord(s));
-		plugin.getDB().execute("INSERT INTO history (created, message) VALUES (?, ?)", System.currentTimeMillis(), s);
+	public void addHistory(String name, String banner, String message){
+		name = name.toLowerCase(); banner = banner.toLowerCase();
+		HistoryRecord record = new HistoryRecord(name, banner, message);
+		history.add(0, record); //Insert it into the ordered history
+		plugin.getDB().execute("INSERT INTO history (created, message, name, banner) VALUES (?, ?, ?, ?)", System.currentTimeMillis(), message, name, banner); //Insert into database
+		
+		ArrayList<HistoryRecord> personal = personalHistory.get(name); //Insert it under the history for that person
+		if(personal == null){
+			personal = new ArrayList<HistoryRecord>();
+			personalHistory.put(name, personal);
+		}
+		personal.add(0, record);
+		
+		if(name.equals(banner)) return; //If the player was the banner, there's no point in doing it twice!
+		
+		personal = personalHistory.get(banner); //Insert it under the history for the banner
+		if(personal == null){
+			personal = new ArrayList<HistoryRecord>();
+			personalHistory.put(banner, personal);
+		}
+		personal.add(0, record);
 	}
 	
 	/**
@@ -327,9 +353,36 @@ public class BanManager{
 			if(!db.isReadOnly()){
 				db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
 			}
-			rs = db.getConnection().prepareStatement("SELECT * FROM history ORDER BY created DESC").executeQuery();
+			query = "SELECT * FROM history ORDER BY created DESC";
+			rs = db.getConnection().prepareStatement(query).executeQuery();
 			while(rs.next()){
-				this.history.add(new HistoryRecord(rs.getString("message"), rs.getLong("created")));
+				String name = rs.getString("name");
+				String banner = rs.getString("banner");
+				String message = rs.getString("message");
+				long created = rs.getLong("created");
+				
+				if(name == null) name = "unknown";
+				if(banner == null) banner = "unknown";
+				
+				HistoryRecord record = new HistoryRecord(name, banner, message, created);
+				history.add(record);
+				
+				//TODO: This is partially a copy paste... Is there a way I can put this in some kind of (useful) method?
+				ArrayList<HistoryRecord> personal = personalHistory.get(record.getName()); //Insert it under the history for that person
+				if(personal == null){
+					personal = new ArrayList<HistoryRecord>();
+					personalHistory.put(record.getName(), personal);
+				}
+				personal.add(0, record);
+				
+				if(record.getName().equals(record.getBanner())) continue; //If the player was the banner, there's no point in doing it twice!
+				
+				personal = personalHistory.get(record.getBanner()); //Insert it under the history for the banner
+				if(personal == null){
+					personal = new ArrayList<HistoryRecord>();
+					personalHistory.put(record.getBanner(), personal);
+				}
+				personal.add(0, record);
 			}
 			rs.close();
 		}

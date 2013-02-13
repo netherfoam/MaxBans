@@ -27,7 +27,7 @@ public class WarnCommand extends CmdSkeleton{
 			plugin.getBanManager().warn(name, reason, banner);
 			
 			String message = Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(message);
+			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();
@@ -38,7 +38,7 @@ public class WarnCommand extends CmdSkeleton{
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 	    	

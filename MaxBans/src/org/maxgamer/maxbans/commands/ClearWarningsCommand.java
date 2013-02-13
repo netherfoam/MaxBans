@@ -53,7 +53,7 @@ public class ClearWarningsCommand extends CmdSkeleton{
 			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s warnings.");
 			
 			String message = Formatter.secondary + banner + Formatter.primary + " cleared " + Formatter.secondary + name + Formatter.primary + "'s warnings.";
-			plugin.getBanManager().addHistory(message);
+			plugin.getBanManager().addHistory(name, banner, message);
 			
 			if(plugin.getSyncer() != null){
 				//Send the clearwarnings request
@@ -64,7 +64,7 @@ public class ClearWarningsCommand extends CmdSkeleton{
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 			

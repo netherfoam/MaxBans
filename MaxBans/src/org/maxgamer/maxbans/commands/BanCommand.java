@@ -65,7 +65,7 @@ public class BanCommand extends CmdSkeleton{
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'", silent, sender);
 			
 			String message = Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(message);
+			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();
@@ -75,7 +75,7 @@ public class BanCommand extends CmdSkeleton{
 	    		prop.put("banner", banner);
 	    		plugin.getSyncer().broadcast(prop);
 	    		
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 	    	

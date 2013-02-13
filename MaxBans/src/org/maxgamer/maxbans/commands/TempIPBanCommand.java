@@ -90,7 +90,7 @@ public class TempIPBanCommand extends CmdSkeleton{
 			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
 			String message = Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(message);
+			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();
@@ -102,7 +102,7 @@ public class TempIPBanCommand extends CmdSkeleton{
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 			

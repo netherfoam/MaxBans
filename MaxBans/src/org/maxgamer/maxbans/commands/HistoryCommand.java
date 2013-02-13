@@ -9,22 +9,39 @@ import org.maxgamer.maxbans.util.Util;
 public class HistoryCommand extends CmdSkeleton{
     public HistoryCommand(){
         super("maxbans.history");
-        usage = Formatter.secondary + "Usage: /history <number of records>";
+        usage = Formatter.secondary + "Usage: /history [amount] | [name] [amount]";
         namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
-		int count;
-		if(args.length < 1) count = 20;
-		else{
+		int count = 20;
+		String name = null;
+		if(args.length > 0){
 			try{
 				count = Integer.parseInt(args[0]);				
 			}
 			catch(NumberFormatException e){
-				sender.sendMessage(Formatter.secondary + usage);
-				return true;
+				name = plugin.getBanManager().match(args[0]);
+				
+				if(args.length > 1){
+					try{
+						count = Integer.parseInt(args[1]);
+					}
+					catch(NumberFormatException ex){
+						sender.sendMessage(Formatter.secondary + usage);
+						return true;
+					}
+				}
 			}
 		}
-		HistoryRecord[] history = plugin.getBanManager().getHistory();
+		
+		HistoryRecord[] history;
+		if(name == null){
+			history= plugin.getBanManager().getHistory();
+		}
+		else{
+			history = plugin.getBanManager().getHistory(name);
+		}
+		
 		if(history.length <= 0){
 			sender.sendMessage(Formatter.primary + "No history.");
 		}

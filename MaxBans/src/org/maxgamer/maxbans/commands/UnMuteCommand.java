@@ -26,8 +26,9 @@ public class UnMuteCommand extends CmdSkeleton{
 			if(mute != null){
 				plugin.getBanManager().unmute(name);
 				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
-				String message = Formatter.secondary + Util.getName(sender) + Formatter.primary + " unmuted " + Formatter.secondary + name;
-				plugin.getBanManager().addHistory(message);
+				String banner = Util.getName(sender);
+				String message = Formatter.secondary + banner + Formatter.primary + " unmuted " + Formatter.secondary + name;
+				plugin.getBanManager().addHistory(name, banner, message);
 				
 		    	if(plugin.getSyncer() != null){
 		    		Packet prop = new Packet();
@@ -36,7 +37,7 @@ public class UnMuteCommand extends CmdSkeleton{
 		    		plugin.getSyncer().broadcast(prop);
 		    		
 		    		//Send the addhistory request.
-		    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+		    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 		    		plugin.getSyncer().broadcast(history);
 		    	}
 			}

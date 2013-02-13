@@ -59,7 +59,7 @@ public class TempMuteCommand extends CmdSkeleton{
 			}
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until);
 			String message = Formatter.secondary + banner + Formatter.primary + " temp muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until;
-			plugin.getBanManager().addHistory(message);
+			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();
@@ -70,7 +70,7 @@ public class TempMuteCommand extends CmdSkeleton{
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 			

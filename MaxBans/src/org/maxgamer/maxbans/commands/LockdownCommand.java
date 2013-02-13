@@ -45,8 +45,8 @@ public class LockdownCommand extends CmdSkeleton{
 		}
 		plugin.getBanManager().setLockdown(on, reason);
 		sender.sendMessage(Formatter.secondary + "Lockdown is now " + (on?"enabled. Reason: " + Formatter.primary + plugin.getBanManager().getLockdownReason() + Formatter.secondary:"disabled") + ".");
-		
-		plugin.getBanManager().addHistory(Util.getName(sender) + " set lockdown: " + plugin.getBanManager().isLockdown());
+		String banner = Util.getName(sender);
+		plugin.getBanManager().addHistory(banner, banner, banner + " set lockdown: " + plugin.getBanManager().isLockdown());
 		return true;
 	}
 }
