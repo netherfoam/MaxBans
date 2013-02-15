@@ -157,6 +157,7 @@ commands:
     mb:
         description: Displays MaxBans commands that you have access to
         usage: /mb
+        aliases: [maxbans]
     mbimport:
         description: Imports a set of bans
         usage: /mbimport nameOfPlugin
