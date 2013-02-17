@@ -167,3 +167,14 @@ commands:
     mbdebug:
         description: Print debug info to the console
         usage: /mbdebug
+    rangeban:
+        description: Rangeban command
+        usage: /rangeban
+        aliases: [mbrangeban, rb]
+    unrangeban:
+        description: Unrangeban command
+        usage: /unrangeban
+        aliases: [mbunrangeban, unrb]
+    mbwhitelist:
+        description: Whitelisting command, allowing players to bypass IP bans (Not regular bans)
+        usage: /mbwhitelist <user> [reason]

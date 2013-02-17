@@ -3,11 +3,9 @@ package org.maxgamer.maxbans.commands;
 import java.util.List;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.Mute;
@@ -18,11 +16,15 @@ import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
-public class CheckBanCommand implements CommandExecutor{
-    private MaxBans plugin = MaxBans.instance;
+public class CheckBanCommand extends CmdSkeleton{
+    public CheckBanCommand(){
+    	super("");
+    	namePos = 1;
+    	usage = Formatter.secondary + "Usage: /checkban <player>"; 
+    }
     
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!sender.hasPermission("maxbans.checkban")){
+	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
+		if(!sender.hasPermission("maxbans.checkban")){ //We know they're a player because console has all perms
 			if(sender.hasPermission("maxbans.checkban.self")){
 				args = new String[]{((Player) sender).getName()}; //Let them checkban themself, that's all.
 			}
@@ -31,8 +33,6 @@ public class CheckBanCommand implements CommandExecutor{
 				return true;
 			}
 		}
-		
-		String usage = Formatter.secondary + "Usage: /checkban <player>";
 		
 		if(args.length > 0){
 			String name = args[0];

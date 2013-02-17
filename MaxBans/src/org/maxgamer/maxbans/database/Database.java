@@ -283,6 +283,12 @@ public class Database {
 		if(!this.hasTable("history")){
 			this.createHistoryTable();
 		}
+		if(!this.hasTable("rangebans")){
+			this.createRangeBansTable();
+		}
+		if(!this.hasTable("whitelist")){
+			this.createWhitelistTable();
+		}
 		if(!this.hasTable("players")){
 			this.createPlayersTable();
 			ResultSet rs = this.getConnection().prepareStatement("SELECT * FROM iphistory").executeQuery();
@@ -331,6 +337,27 @@ public class Database {
 				this.getConnection().prepareStatement("UPDATE history SET banner = 'unknown', name = 'unknown'").execute();
 			}
 			catch(SQLException e){}
+		}
+	}
+	public void createWhitelistTable(){
+		String query = "CREATE TABLE whitelist (name TEXT(30) NOT NULL)";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create whitelist table.");
+		}
+	}
+	
+	public void createRangeBansTable(){
+		String query = "CREATE TABLE rangebans (banner TEXT(100) NOT NULL, reason TEXT(100), start TEXT(30), end TEXT(30), created BIGINT NOT NULL, expires BIGINT NOT NULL)";
+		try {
+			Statement st = this.getConnection().createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.plugin.getLogger().severe(ChatColor.RED + "Could not create rangebans table.");
 		}
 	}
 	

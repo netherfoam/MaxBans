@@ -68,6 +68,10 @@ public class MaxBans extends JavaPlugin{
     private MBImportCommand importCommand;
     private MBExportCommand exportCommand;
     private MBDebug mbDebugCommand;
+    
+    private RangeBanCommand rangeBan;
+    private UnbanRangeCommand unrangeBan;
+    private WhitelistCommand whitelistCommand;
             
     private JoinListener joinListener;
     private HeroChatListener herochatListener; 
@@ -79,6 +83,7 @@ public class MaxBans extends JavaPlugin{
     
     /** Should we filter players names onJoin? */
     public boolean filter_names;
+    
     /** The one plugin instance */
     public static MaxBans instance;
         
@@ -190,8 +195,8 @@ public class MaxBans extends JavaPlugin{
 			this.chatListener = new ChatListener(this);
 			Bukkit.getServer().getPluginManager().registerEvents(this.chatListener, this);
 		}
-		this.joinListener = new JoinListener(this);
-		this.chatCommandListener = new ChatCommandListener(this);
+		this.joinListener = new JoinListener();
+		this.chatCommandListener = new ChatCommandListener();
         
         Bukkit.getServer().getPluginManager().registerEvents(this.joinListener, this);
         Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
@@ -268,6 +273,9 @@ public class MaxBans extends JavaPlugin{
 		this.importCommand = new MBImportCommand();
 		this.exportCommand = new MBExportCommand();
 		this.mbDebugCommand = new MBDebug();
+		this.rangeBan = new RangeBanCommand();
+		this.unrangeBan = new UnbanRangeCommand();
+		this.whitelistCommand = new WhitelistCommand();
 		
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
@@ -299,6 +307,9 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("mbimport").setExecutor(importCommand);
 		this.getCommand("mbexport").setExecutor(exportCommand);
 		this.getCommand("mbdebug").setExecutor(mbDebugCommand);
+		this.getCommand("rangeban").setExecutor(rangeBan);
+		this.getCommand("unrangeban").setExecutor(unrangeBan);
+		this.getCommand("mbwhitelist").setExecutor(whitelistCommand);
     }
     
     public void startMetrics(){

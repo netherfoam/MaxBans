@@ -4,9 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
 import org.maxgamer.maxbans.util.Util;
@@ -16,13 +14,7 @@ import org.maxgamer.maxbans.util.Util;
  * @author Netherfoam
  *
  */
-public class ChatCommandListener implements Listener{
-	MaxBans plugin;
-	
-	public ChatCommandListener(MaxBans plugin){
-		this.plugin = plugin;
-	}
-	
+public class ChatCommandListener extends ListenerSkeleton{
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onCommand(PlayerCommandPreprocessEvent e){
 		if(e.isCancelled()) return;

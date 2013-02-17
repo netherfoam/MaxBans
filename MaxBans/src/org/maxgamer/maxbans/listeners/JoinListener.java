@@ -5,22 +5,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.*;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.IPAddress;
+import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
 
-public class JoinListener implements Listener{
-    private MaxBans plugin;
-    
-    public JoinListener(MaxBans plugin){
-        this.plugin = plugin;
-    }
-    
+public class JoinListener extends ListenerSkeleton{
     @EventHandler(priority = EventPriority.LOW)
 	public void onJoinLockdown(PlayerLoginEvent event) {
 		if(event.getResult() != Result.ALLOWED) return;
@@ -65,36 +59,72 @@ public class JoinListener implements Listener{
 	        }
         }
         
+        //Log that the player connected from that IP address.
+        if(plugin.getBanManager().logIP(player.getName(), address)){
+        	if(plugin.getSyncer() != null){
+	    		Packet ipUpdate = new Packet().setCommand("setip").put("name", player.getName());
+	    		ipUpdate.put("ip", address);
+	    		plugin.getSyncer().broadcast(ipUpdate);
+	    	}
+        }
+        
+        //Log the players actual case-sensitive name.
+        if(plugin.getBanManager().logActual(player.getName(), player.getName())){
+        	if(plugin.getSyncer() != null){
+	    		Packet nameUpdate = new Packet().setCommand("setname").put("name", player.getName());
+	    		plugin.getSyncer().broadcast(nameUpdate);
+	    	}
+        }
+        
         //Ban
         Ban ban = plugin.getBanManager().getBan(player.getName());
         
         //IP Ban
-        IPBan ipban= plugin.getBanManager().getIPBan(address);
+        IPBan ipban = null;
+        boolean whitelisted = plugin.getBanManager().isWhitelisted(player.getName());
+        if(!whitelisted){ //Only fetch the IP ban if the user is not whitelisted.
+        	 ipban = plugin.getBanManager().getIPBan(address); 
+        }
         
         //If they haven't been banned or IP banned, they can join.
-        if(ipban == null && ban == null){        	
-        	//DNS Blacklist handling.
-            if(plugin.getBanManager().getDNSBL() != null){
-            	plugin.getBanManager().getDNSBL().handle(event);
-            	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
-            }
-        	
-            //Log that the player connected from that IP address.
-            if(plugin.getBanManager().logIP(player.getName(), address)){
-            	if(plugin.getSyncer() != null){
-    	    		Packet ipUpdate = new Packet().setCommand("setip").put("name", player.getName());
-    	    		ipUpdate.put("ip", address);
-    	    		plugin.getSyncer().broadcast(ipUpdate);
-    	    	}
-            }
-            
-            //Log the players actual case-sensitive name.
-            if(plugin.getBanManager().logActual(player.getName(), player.getName())){
-            	if(plugin.getSyncer() != null){
-    	    		Packet nameUpdate = new Packet().setCommand("setname").put("name", player.getName());
-    	    		plugin.getSyncer().broadcast(nameUpdate);
-    	    	}
-            }
+        if(ipban == null && ban == null){
+        	if(!whitelisted){
+        		//Check for a rangeban
+	        	IPAddress ip = new IPAddress(address);
+	        	RangeBan rb = plugin.getBanManager().getRanger().getBan(ip);
+	        	if(rb != null){
+	        		String reason = Formatter.regular + "Your IP Address (" + Formatter.secondary + rb.toString() + Formatter.regular + ") is RangeBanned.\n";
+	        		if(rb instanceof Temporary){
+	        			reason += "The ban expires in " + Formatter.time + Util.getTimeUntil(((Temporary) rb).getExpires()) + Formatter.regular + ".\n"; 
+	        		}
+	        		reason += Formatter.regular + "Reason: " + Formatter.reason + rb.getReason() + "\n";
+	        		reason += Formatter.regular + "By: " + Formatter.banner + rb.getBanner();
+	        		
+	        		 //Append the appeal message, if necessary.
+	                String appeal = plugin.getBanManager().getAppealMessage();
+	                if(appeal != null && appeal.isEmpty() == false){
+	                	reason += "\n" + Formatter.regular + appeal;
+	                }
+	                event.disallow(Result.KICK_OTHER, reason);
+	                
+	                if(plugin.getConfig().getBoolean("notify", true)){
+	                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
+	        	        for(Player p : Bukkit.getOnlinePlayers()){
+	        	        	if(p.hasPermission("maxbans.notify")){
+	        	        		p.sendMessage(msg);
+	        	        	}
+	        	        }
+	                }
+	                
+	                return;
+	        	}
+	        	
+	        	//DNS Blacklist handling, only if NOT whitelisted
+	            if(plugin.getBanManager().getDNSBL() != null){
+	            	plugin.getBanManager().getDNSBL().handle(event);
+	            	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
+	            }
+        	}
         	
         	return;
         }

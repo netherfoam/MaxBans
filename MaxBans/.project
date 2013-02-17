@@ -16,7 +16,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/QuickShop build.xml [Builder] (3).launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/MaxBans Builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>

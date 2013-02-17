@@ -74,7 +74,7 @@ sync:
     #The password required to join.
     pass: ChangeMeNow
     #How many times should the Syncer try to ping the SyncServer
-    #Before giving up?
+    #Before giving up? Each try is 5 seconds apart... 12 tries = 1 minute.
     tries: 120
 
 database:

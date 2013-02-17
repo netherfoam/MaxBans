@@ -18,6 +18,7 @@ import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.util.DNSBL;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.Ranger;
 
 /**
  * The ban manager class.
@@ -39,6 +40,12 @@ public class BanManager{
 	private HashMap<String, TempBan> tempbans = new HashMap<String, TempBan>();
 	private HashMap<String, IPBan> ipbans = new HashMap<String, IPBan>();
 	private HashMap<String, TempIPBan> tempipbans = new HashMap<String, TempIPBan>();
+	
+	/** The IP Ranger, which is used for banning IP ranges */
+	private Ranger ranger;
+	
+	private HashSet<String> whitelist = new HashSet<String>();
+	
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
 	private HashMap<String, List<Warn>> warnings = new HashMap<String, List<Warn>>();
@@ -384,12 +391,24 @@ public class BanManager{
 				}
 				personal.add(0, record);
 			}
+			
+			//Phase 9: Load whitelisted users
+			query = "SELECT * FROM whitelist";
+			rs = db.getConnection().prepareStatement(query).executeQuery();
+			
+			while(rs.next()){
+				String name = rs.getString("name");
+				whitelist.add(name);
+			}
+			
 			rs.close();
 		}
 		catch(SQLException e){
 			plugin.getLogger().severe(Formatter.secondary + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
+		
+		ranger = new Ranger(plugin);
 		
 		if(plugin.getConfig().getBoolean("dnsbl.use", true)){
 			plugin.getLogger().info("Starting DNS blacklist");
@@ -410,6 +429,40 @@ public class BanManager{
 	 */
 	public DNSBL getDNSBL(){
 		return this.dnsbl;
+	}
+	
+	/** 
+	 * The Ranger object to handle banning IP address ranges.
+	 * @return The ranger object to handle banning IP address ranges.
+	 */
+	public Ranger getRanger(){
+		return this.ranger;
+	}
+	
+	/**
+	 * Returns true if the given username is whitelisted.
+	 * @param name The name to whitelist
+	 * @return true if the given username is whitelisted.
+	 */
+	public boolean isWhitelisted(String name){
+		name = name.toLowerCase();
+		return whitelist.contains(name);
+	}
+	/**
+	 * Sets the users status as whitelisted or not.
+	 * @param name The user to edit the status of
+	 * @param white True to add them to the list, false to remove them from it.
+	 */
+	public void setWhitelisted(String name, boolean white){
+		name = name.toLowerCase();
+		if(white){
+			whitelist.add(name);
+			db.execute("INSERT INTO whitelist (name) VALUES (?)", name);
+		}
+		else{
+			whitelist.remove(name);
+			db.execute("DELETE FROM whitelist WHERE name = ?", name);
+		}
 	}
     
 	/**
