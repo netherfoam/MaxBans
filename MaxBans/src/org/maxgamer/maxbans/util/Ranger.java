@@ -80,12 +80,20 @@ public class Ranger{
 	/**
 	 * Bans the given range of IPs so that isBanned(rb.getEnd() through to rb.getStart()) is banned.
 	 * @param rb The RangeBan to apply
-	 * @return True if success, false if the RangeBan already overlaps.
+	 * @return The RangeBan which is in the way of doing this. If this method returns null, then it has succeeded
 	 */
-	public boolean ban(RangeBan rb){
+	public RangeBan ban(RangeBan rb){
 		RangeBan previous = banned.floor(rb);
-		if(previous != null && previous.overlaps(rb)){
-			return false;
+		if(previous != null){
+			if(previous.overlaps(rb)){
+				return previous;
+			}
+		}
+		previous = banned.ceiling(rb);
+		if(previous != null){
+			if(previous.overlaps(rb)){
+				return previous;
+			}
 		}
 		
 		banned.add(rb);
@@ -94,7 +102,7 @@ public class Ranger{
 			expires = ((Temporary) rb).getExpires();
 		}
 		plugin.getDB().execute("INSERT INTO rangebans (banner, reason, start, end, created, expires) VALUES (?, ?, ?, ?, ?, ?)", rb.getBanner(), rb.getReason(), rb.getStart(), rb.getEnd(), rb.getCreated(), expires);
-		return true;
+		return null;
 	}
 	
 	/**

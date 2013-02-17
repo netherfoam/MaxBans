@@ -85,5 +85,6 @@ public class RangeBan extends Punishment implements Comparable<RangeBan>{
 	 */
 	public boolean contains(IPAddress address){
 		return address.compareTo(start) >= 0 && address.compareTo(end) <= 0;
+		//return address.equals(start) || address.equals(end) || (address.isGreaterThan(start) && address.isLessThan(end));
 	}
 }

@@ -42,9 +42,9 @@ public class RangeBanCommand extends CmdSkeleton{
 		IPAddress end = new IPAddress(ips[1]);
 		
 		RangeBan rb = new RangeBan(banner, reason, System.currentTimeMillis(), start, end);
-		boolean result = plugin.getBanManager().getRanger().ban(rb);
-		if(result == false){
-			sender.sendMessage(ChatColor.RED + "That RangeBan overlaps another RangeBan!");
+		RangeBan result = plugin.getBanManager().getRanger().ban(rb);
+		if(result != null){
+			sender.sendMessage(ChatColor.RED + "That RangeBan overlaps another RangeBan! (" + result.toString() + ")");
 			return true;
 		}
 		plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " RangeBanned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: " + Formatter.secondary + rb.getReason(), silent, sender);

@@ -40,6 +40,13 @@ public class IPAddress implements Comparable<IPAddress>{
 		return 0; //The same the whole way through.
 	}
 	
+	public boolean isGreaterThan(IPAddress ip){
+		return this.compareTo(ip) == 1;
+	}
+	public boolean isLessThan(IPAddress ip){
+		return this.compareTo(ip) == -1;
+	}
+	
 	@Override
 	public boolean equals(Object o){
 		if(this == o) return true;
