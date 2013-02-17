@@ -11,7 +11,7 @@ import org.maxgamer.maxbans.util.Util;
 public class RangeBanCommand extends CmdSkeleton{
 	public RangeBanCommand() {
 		super("maxbans.rangeban");
-		usage = "/rb IP1-IP2... Example: /rb 192.168.2.1-192.168.2.4 bans 192.168.2.1, .2, .3 and .4";
+		usage = Formatter.secondary + "Usage: /rangeban IP1-IP2... Example: /rb 192.168.2.1-192.168.2.4 bans 192.168.2.1, .2, .3 and .4";
 		minArgs = 1;
 	}
 
@@ -47,7 +47,7 @@ public class RangeBanCommand extends CmdSkeleton{
 			sender.sendMessage(ChatColor.RED + "That RangeBan overlaps another RangeBan!");
 			return true;
 		}
-		plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " RangeBanned " + Formatter.secondary + rb.toString() + Formatter.primary + ".", silent, sender);
+		plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " RangeBanned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: " + Formatter.secondary + rb.getReason(), silent, sender);
 		
 		return true;
 	}
