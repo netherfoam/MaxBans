@@ -14,6 +14,9 @@ import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.banmanager.TempMute;
 import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.IPAddress;
+import org.maxgamer.maxbans.util.RangeBan;
+import org.maxgamer.maxbans.util.TempRangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class CheckBanCommand extends CmdSkeleton{
@@ -36,6 +39,7 @@ public class CheckBanCommand extends CmdSkeleton{
 		
 		if(args.length > 0){
 			String name = args[0];
+			String ip;
 			
 			Ban ban = null;
 			IPBan ipBan = null;
@@ -46,7 +50,7 @@ public class CheckBanCommand extends CmdSkeleton{
 					name = args[0]; //Use exact name then.
 				}
 				ban = plugin.getBanManager().getBan(name);
-				String ip = plugin.getBanManager().getIP(name);
+				ip = plugin.getBanManager().getIP(name);
 				ipBan = plugin.getBanManager().getIPBan(ip);
 				
 				List<Warn> warnings = plugin.getBanManager().getWarnings(name);
@@ -58,10 +62,24 @@ public class CheckBanCommand extends CmdSkeleton{
 						sender.sendMessage(Formatter.secondary + name + Formatter.primary + " was warned for '" + Formatter.secondary + warn.getReason() + Formatter.primary + "' by " + Formatter.secondary + warn.getBanner() + " " + Util.getTimeUntil(amt) + Formatter.primary + " ago.");
 					}
 				}
+				sender.sendMessage(Formatter.primary + "Whitelisted: " + (plugin.getBanManager().isWhitelisted(name)));
 			}
 			else{
+				ip = name;
 				ipBan = plugin.getBanManager().getIPBan(name);
 			}
+			
+			RangeBan rb = plugin.getBanManager().getRanger().getBan(new IPAddress(ip));
+			if(rb != null){
+				if(rb instanceof TempRangeBan){
+					TempRangeBan trb = (TempRangeBan) rb;
+					sender.sendMessage(Formatter.primary + "RangeBan: " + Formatter.secondary + trb.toString() + Formatter.primary + ", Reason: " + Formatter.secondary + trb.getReason() + Formatter.primary + " expires: " + Formatter.secondary + Util.getTimeUntil(trb.getExpires()));
+				}
+				else{
+					sender.sendMessage(Formatter.primary + "RangeBan: " + rb.toString());
+				}
+			}
+			
 			if(ban != null){
 				if(ban instanceof TempBan){
 					TempBan tBan = (TempBan) ban;
