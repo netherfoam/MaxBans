@@ -76,7 +76,7 @@ public class UnbanCommand extends CmdSkeleton{
 				String message = Formatter.secondary + banner + Formatter.primary + " unbanned " + Formatter.secondary + name;
 				plugin.getBanManager().addHistory(name, banner, message);
 				
-				if(plugin.getServer() != null){
+				if(plugin.getSyncer() != null){
 					//Send the addhistory request.
 		    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 		    		plugin.getSyncer().broadcast(history);
