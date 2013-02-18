@@ -576,6 +576,7 @@ public class BanManager{
      * Fetches a list of all warnings the player currently has to their name.
      * @param name The name of the player to fetch. Case insensitive.
      * @return a list of all warnings the player currently has to their name.
+     * Returns null if they have no warnings frequently.
      */
     public List<Warn> getWarnings(String name){
     	name = name.toLowerCase();
@@ -784,6 +785,16 @@ public class BanManager{
     	
     	int warnsSize = warns.size();
     	if(warnsSize != 0 && warnsSize % maxWarns == 0){
+    		
+    		//Verify that they do not have a previous ban which will last longer.
+    		Ban ban = this.getBan(name);
+    		if(ban != null){
+	    		if(ban instanceof Temporary){
+	    			if(((Temporary) ban).getExpires() > System.currentTimeMillis() + 3600000) return;
+	    		}
+	    		else return;
+    		}
+    		
     		this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
     		Player p = Bukkit.getPlayerExact(name);
     		if(p != null){
