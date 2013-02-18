@@ -380,7 +380,7 @@ public class BanManager{
 					personal = new ArrayList<HistoryRecord>();
 					personalHistory.put(name, personal);
 				}
-				personal.add(0, record);
+				personal.add(record); //Add it to the END because we're doing SELECT ORDER BY **DESC** not ASC.
 				
 				if(record.getName().equals(banner)) continue; //If the player was the banner, there's no point in doing it twice!
 				
