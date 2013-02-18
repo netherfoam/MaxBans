@@ -1,7 +1,9 @@
 package org.maxgamer.maxbans.commands;
 
+import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,15 +11,14 @@ import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.Mute;
-import org.maxgamer.maxbans.banmanager.TempBan;
-import org.maxgamer.maxbans.banmanager.TempIPBan;
-import org.maxgamer.maxbans.banmanager.TempMute;
 import org.maxgamer.maxbans.banmanager.Warn;
+import org.maxgamer.maxbans.banmanager.Temporary;
+import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
 import org.maxgamer.maxbans.util.RangeBan;
-import org.maxgamer.maxbans.util.TempRangeBan;
 import org.maxgamer.maxbans.util.Util;
+import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 
 public class CheckBanCommand extends CmdSkeleton{
     public CheckBanCommand(){
@@ -36,90 +37,61 @@ public class CheckBanCommand extends CmdSkeleton{
 				return true;
 			}
 		}
-		
-		if(args.length > 0){
-			String name = args[0];
-			String ip;
-			
-			Ban ban = null;
-			IPBan ipBan = null;
-			
-			if(!Util.isIP(name)){
-				name = plugin.getBanManager().match(name);
-				if(name == null){
-					name = args[0]; //Use exact name then.
-				}
-				ban = plugin.getBanManager().getBan(name);
-				ip = plugin.getBanManager().getIP(name);
-				ipBan = plugin.getBanManager().getIPBan(ip);
-				
-				List<Warn> warnings = plugin.getBanManager().getWarnings(name);
-				
-				if(warnings != null){
-					int ttl = plugin.getConfig().getInt("warn-expirey-in-minutes") * 60000;
-					for(Warn warn : plugin.getBanManager().getWarnings(name)){
-						long amt = 2*System.currentTimeMillis() - warn.getExpires() + ttl; //2x system.now because util.getTimeUntil() subtracts it once.
-						sender.sendMessage(Formatter.secondary + name + Formatter.primary + " was warned for '" + Formatter.secondary + warn.getReason() + Formatter.primary + "' by " + Formatter.secondary + warn.getBanner() + " " + Util.getTimeUntil(amt) + Formatter.primary + " ago.");
-					}
-				}
-				sender.sendMessage(Formatter.primary + "Whitelisted: " + (plugin.getBanManager().isWhitelisted(name)));
-			}
-			else{
-				ip = name;
-				ipBan = plugin.getBanManager().getIPBan(name);
-			}
-			
-			RangeBan rb = plugin.getBanManager().getRanger().getBan(new IPAddress(ip));
-			if(rb != null){
-				if(rb instanceof TempRangeBan){
-					TempRangeBan trb = (TempRangeBan) rb;
-					sender.sendMessage(Formatter.primary + "RangeBan: " + Formatter.secondary + trb.toString() + Formatter.primary + ", Reason: " + Formatter.secondary + trb.getReason() + Formatter.primary + " expires: " + Formatter.secondary + Util.getTimeUntil(trb.getExpires()));
-				}
-				else{
-					sender.sendMessage(Formatter.primary + "RangeBan: " + rb.toString());
-				}
-			}
-			
-			if(ban != null){
-				if(ban instanceof TempBan){
-					TempBan tBan = (TempBan) ban;
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is temp banned for " + Formatter.secondary + tBan.getReason() + Formatter.primary + " by " + Formatter.secondary +  tBan.getBanner() + Formatter.primary + ". Remaining: " + Formatter.secondary + Util.getTimeUntil(tBan.getExpires())+ Formatter.primary + ".");
-				}
-				else{
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary +  " is banned for " + Formatter.secondary + ban.getReason() + Formatter.primary + " by " + Formatter.secondary + ban.getBanner() + Formatter.primary + ".");
-				}
-			}
-			
-			if(ipBan != null){
-				if(ipBan instanceof TempIPBan){
-					TempIPBan tipBan = (TempIPBan) ipBan;
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is temp IP banned for " + Formatter.secondary + tipBan.getReason() + Formatter.primary + " by " + Formatter.secondary + tipBan.getBanner() + Formatter.primary + ". Remaining: " + Formatter.secondary + Util.getTimeUntil(tipBan.getExpires())+ Formatter.primary + ".");
-				}
-				else{
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is IP banned for " + Formatter.secondary + ipBan.getReason() + Formatter.primary + " by " + Formatter.secondary +  ipBan.getBanner() + Formatter.primary + ".");
-				}
-			}
-			
-			Mute mute = plugin.getBanManager().getMute(name);
-			if(mute != null){
-				if(mute instanceof TempMute){
-					TempMute tMute = (TempMute) mute;
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is temp muted by " + Formatter.secondary + tMute.getBanner() + Formatter.primary + ". Remaining: " + Formatter.secondary +Util.getTimeUntil(tMute.getExpires()) + Formatter.primary + ".");
-				}
-				else{
-					sender.sendMessage(Formatter.secondary + name + Formatter.primary + " is muted by " + mute.getBanner() + Formatter.primary + ".");
-				}
-			}
-			
-			if(mute == null && ipBan == null && ban == null){
-				sender.sendMessage(Formatter.primary + "No IP ban, ban or mute records for " + Formatter.secondary + name);
-			}
-			
+		else if(args.length <= 0){
+			sender.sendMessage(ChatColor.RED + usage);
 			return true;
+		}
+		
+		String name = args[0];
+		String ip;
+		
+		if(!Util.isIP(name)){
+			name = plugin.getBanManager().match(name);
+			ip = plugin.getBanManager().getIP(name);
+			Ban ban = plugin.getBanManager().getBan(name);
+			Mute mute = plugin.getBanManager().getMute(name);
+			boolean white = plugin.getBanManager().isWhitelisted(name);
+			
+			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
+			sender.sendMessage(Formatter.primary + "User: " + Formatter.secondary + name);
+			sender.sendMessage(Formatter.primary + "Banned: " + Formatter.secondary + (ban == null ? "False" : "'" + ban.getReason() + Formatter.secondary + "' (" + ban.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) ban).getExpires() - System.currentTimeMillis()) : "")));
+			sender.sendMessage(Formatter.primary + "Muted: " + Formatter.secondary + (mute == null ? "False" : "True (" + mute.getBanner() + ")" + (mute instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) mute).getExpires() - System.currentTimeMillis()) : "")));
+			
+			List<Warn> warnings = plugin.getBanManager().getWarnings(name);
+			if(warnings == null || warnings.isEmpty()) sender.sendMessage(Formatter.primary + "Warnings: " + Formatter.secondary + "(0)");
+			else{
+				sender.sendMessage(Formatter.primary + "Warnings: " + Formatter.secondary + "(" + warnings.size() + ")");
+				for(Warn w : warnings){
+					sender.sendMessage(Formatter.secondary + "'" + w.getReason() + "' (" + w.getBanner() + ") Expires: " + Util.getShortTime(w.getExpires() - System.currentTimeMillis()));
+				}
+			}
+			
+			sender.sendMessage(Formatter.primary + "Whitelisted: " + Formatter.secondary + (white ? "True" : "False"));
 		}
 		else{
-			sender.sendMessage(usage);
-			return true;
+			ip = name;
 		}
+		if(ip != null){
+			IPBan ban = plugin.getBanManager().getIPBan(ip);
+			RangeBan rb = plugin.getBanManager().getRanger().getBan(new IPAddress(ip));
+			
+			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
+			sender.sendMessage(Formatter.primary + "IP: " + Formatter.secondary + ip);
+			sender.sendMessage(Formatter.primary + "IP Banned: " + Formatter.secondary + (ban == null ? "False" : "'" + ban.getReason() + Formatter.secondary + "' (" + ban.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) ban).getExpires() - System.currentTimeMillis()) : "")));
+			sender.sendMessage(Formatter.primary + "RangeBan: " + Formatter.secondary + (ban == null ? "False" : rb.toString() + " '" + rb.getReason() + Formatter.secondary + "' (" + rb.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) rb).getExpires() - System.currentTimeMillis()) : "")));
+			
+			if(plugin.getBanManager().getDNSBL() != null){
+				CacheRecord r = plugin.getBanManager().getDNSBL().getRecord(ip);
+				if(r != null){
+					sender.sendMessage(Formatter.primary + "Proxy: " + Formatter.secondary + (r.getStatus() == DNSStatus.ALLOWED ? "False" : "True"));
+				}
+			}
+			
+			HashSet<String> dupeip = plugin.getBanManager().getUsers(ip);
+			sender.sendMessage(Formatter.primary + "Users: " + Formatter.secondary + (dupeip == null ? "0" : dupeip.size()));
+		}
+		sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
+		
+		return true;
 	}
 }
