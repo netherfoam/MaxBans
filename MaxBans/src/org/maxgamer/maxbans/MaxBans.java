@@ -38,7 +38,7 @@ public class MaxBans extends JavaPlugin{
     private BanManager banManager;
     private Syncer syncer;
     private SyncServer syncServer;
-    
+    /*
     private BanCommand banCommand;
     private IPBanCommand ipBanCommand;
     private MuteCommand muteCommand;
@@ -71,7 +71,7 @@ public class MaxBans extends JavaPlugin{
     
     private RangeBanCommand rangeBan;
     private UnbanRangeCommand unrangeBan;
-    private WhitelistCommand whitelistCommand;
+    private WhitelistCommand whitelistCommand;*/
             
     private JoinListener joinListener;
     private HeroChatListener herochatListener; 
@@ -243,40 +243,40 @@ public class MaxBans extends JavaPlugin{
      */
     public void registerCommands(){
     	//Instances
-    	this.banCommand = new BanCommand();
-		this.ipBanCommand = new IPBanCommand();
-		this.muteCommand = new MuteCommand();
+    	new BanCommand();
+		new IPBanCommand();
+		new MuteCommand();
 		
-		this.tempBanCommand = new TempBanCommand();
-		this.tempIPBanCommand = new TempIPBanCommand();
-		this.tempMuteCommand = new TempMuteCommand();
+		new TempBanCommand();
+		new TempIPBanCommand();
+		new TempMuteCommand();
 		
-		this.unbanCommand = new UnbanCommand();
-		this.unMuteCommand = new UnMuteCommand();
+		new UnbanCommand();
+		new UnMuteCommand();
 		
-		this.checkIPCommand = new CheckIPCommand();
-		this.checkBanCommand = new CheckBanCommand();
-		this.dupeIPCommand = new DupeIPCommand();
+		new CheckIPCommand();
+		new CheckBanCommand();
+		new DupeIPCommand();
 		
-		this.warnCommand = new WarnCommand();
-		this.clearWarningsCommand = new ClearWarningsCommand();
+		new WarnCommand();
+		new ClearWarningsCommand();
 		
-		this.lockdownCommand = new LockdownCommand();
-		this.kickCommand = new KickCommand();
+		new LockdownCommand();
+		new KickCommand();
 		
-		this.forceSpawnCommand = new ForceSpawnCommand();
-		this.historyCommand = new HistoryCommand();
+		new ForceSpawnCommand();
+		new HistoryCommand();
 		
-		this.reloadCommand = new ReloadCommand();
-		this.mbCommand = new MBCommand();
+		new ReloadCommand();
+		new MBCommand();
 		
-		this.importCommand = new MBImportCommand();
-		this.exportCommand = new MBExportCommand();
-		this.mbDebugCommand = new MBDebug();
-		this.rangeBan = new RangeBanCommand();
-		this.unrangeBan = new UnbanRangeCommand();
-		this.whitelistCommand = new WhitelistCommand();
-		
+		new MBImportCommand();
+		new MBExportCommand();
+		new MBDebug();
+		new RangeBanCommand();
+		new UnbanRangeCommand();
+		new WhitelistCommand();
+		/*
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);
 		this.getCommand("ipban").setExecutor(ipBanCommand);
@@ -309,7 +309,7 @@ public class MaxBans extends JavaPlugin{
 		this.getCommand("mbdebug").setExecutor(mbDebugCommand);
 		this.getCommand("rangeban").setExecutor(rangeBan);
 		this.getCommand("unrangeban").setExecutor(unrangeBan);
-		this.getCommand("mbwhitelist").setExecutor(whitelistCommand);
+		this.getCommand("mbwhitelist").setExecutor(whitelistCommand);*/
     }
     
     public void startMetrics(){

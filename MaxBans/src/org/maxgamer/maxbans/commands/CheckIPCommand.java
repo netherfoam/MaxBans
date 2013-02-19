@@ -6,8 +6,8 @@ import org.maxgamer.maxbans.util.Formatter;
 
 public class CheckIPCommand extends CmdSkeleton{
     public CheckIPCommand(){
-        super("maxbans.checkip");
-        usage = Formatter.secondary + "Usage: /checkip <player>";
+        super("checkip", "maxbans.checkip");
+        //usage = Formatter.secondary + "Usage: /checkip <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -31,7 +31,7 @@ public class CheckIPCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

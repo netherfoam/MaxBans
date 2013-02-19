@@ -11,8 +11,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class RangeBanCommand extends CmdSkeleton{
 	public RangeBanCommand() {
-		super("maxbans.rangeban");
-		usage = Formatter.secondary + "Usage: /rangeban IP1-IP2... Example: /rb 192.168.2.1-192.168.2.4 bans 192.168.2.1, .2, .3 and .4";
+		super("rangeban", "maxbans.rangeban");
+		//usage = Formatter.secondary + "Usage: /rangeban IP1-IP2... Example: /rb 192.168.2.1-192.168.2.4 bans 192.168.2.1, .2, .3 and .4";
 		minArgs = 1;
 	}
 
@@ -25,7 +25,7 @@ public class RangeBanCommand extends CmdSkeleton{
 		String[] ips = args[0].split("-");
 		
 		if(ips.length != 2){
-			sender.sendMessage(ChatColor.RED + "Not enough IP addresses supplied! Usage: " + usage);
+			sender.sendMessage(ChatColor.RED + "Not enough IP addresses supplied! Usage: " + getUsage());
 			return true;
 		}
 		

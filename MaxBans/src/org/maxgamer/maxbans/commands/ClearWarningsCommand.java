@@ -12,8 +12,8 @@ import org.maxgamer.maxbans.util.Formatter;
 
 public class ClearWarningsCommand extends CmdSkeleton{
     public ClearWarningsCommand(){
-        super("maxbans.clearwarnings");
-        usage = Formatter.secondary + "Usage: /clearwarnings <player>";
+        super("clearwarnings", "maxbans.clearwarnings");
+        //usage = Formatter.secondary + "Usage: /clearwarnings <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -71,7 +71,7 @@ public class ClearWarningsCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

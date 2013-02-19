@@ -8,8 +8,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class WhitelistCommand extends CmdSkeleton{
 	public WhitelistCommand(){
-		super("maxbans.whitelist");
-		usage = "/mbwhitelist <user>";
+		super("mbwhitelist", "maxbans.whitelist");
+		//usage = "/mbwhitelist <user>";
 		minArgs = 1;
 		namePos = 1;
 	}

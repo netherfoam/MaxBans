@@ -11,8 +11,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class MuteCommand extends CmdSkeleton{
     public MuteCommand(){
-        super("maxbans.mute");
-        usage = Formatter.secondary + "Usage: /mute <player>";
+        super("mute", "maxbans.mute");
+        //usage = Formater.secondary + "Usage: /mute <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -71,7 +71,7 @@ public class MuteCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

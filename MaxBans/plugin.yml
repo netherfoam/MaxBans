@@ -84,27 +84,27 @@ permissions:
 
 commands:
     ban:
-        description: Bans a player
-        usage: /ban <player> [-s] <reason>
+        description: Bans a player permanently
+        usage: /ban <player|IP> [-s] <reason>
         aliases: [mbban]
     unban:
-        description: Unbans a player, includes ip bans
-        usage: /unban <player>
+        description: Unbans a player, includes IP bans
+        usage: /unban <player|IP>
         aliases: [mbunban]
     tempban:
         description: Bans a player temporarily
-        usage: /tempban <player> <time> <timeform> [-s] <reason>
+        usage: /tempban <player|IP> <time> <timeform> [-s] <reason>
         aliases: [mbtempban]
     tempipban:
-        description: Temporarily ip bans a player
-        usage: /tempipban <player> <time> <timeform> [-s] <reason>
+        description: Temporarily IP bans a player
+        usage: /tempipban <player|IP> <time> <timeform> [-s] <reason>
         aliases: [mbtempipban]
     ipban:
         description: IP bans a player
-        usage: /ipban <player> [-s] <reason>
+        usage: /ipban <player|IP> [-s] <reason>
         aliases: [mbipban]
     mute:
-        description: Toggles a players mute
+        description: Toggles a players mute status
         usage: /mute <player>
         aliases: [mbmute]
     unmute:
@@ -112,47 +112,47 @@ commands:
         usage: /unmute <player>
         aliases: [mbunmute]
     tempmute:
-        description: Mutes a player for a time
+        description: TempMutes a player
         usage: /tempmute <player> <time> <timeform>
         aliases: [mbtempmute]
     checkban:
-        description: Reports any mutes, bans or ipbans a player has
-        usage: /checkban <player>
+        description: Reports the status of a user or IP
+        usage: /checkban <player|IP>
         aliases: [mbcheckban]
     checkip:
         description: Reports a players IP address
         usage: /checkip <player>
         aliases: [mbcheckip]
     dupeip:
-        description: Scans a players IP address and reports anyone else who uses it.
-        usage: /dupeip <player>
+        description: Reports all players from the same IP
+        usage: /dupeip <player|IP>
         aliases: [mbdupeip]
     warn:
-        description: Warns a player
-        usage: /warn <player> <reason>
+        description: Warns a player.
+        usage: /warn <player> [reason]
         aliases: [mbwarn]
     clearwarnings:
-        description: Removes a players warning history
+        description: Clears a players warning history
         usage: /clearwarnings <player>
         aliases: [mbclearwarnings]
     kick:
-        description: Kicks a player from the game
+        description: Kicks a player from the game.
         usage: /kick <player> [reason]
         aliases: [mbkick]
     lockdown:
-        description: Prevents anyone without maxbans.lockdown.bypass from joining. Toggles if no reason given.
+        description: Prevents anyone without maxbans.lockdown.bypass from joining.
         usage: /lockdown [reason]
         aliases: [mblockdown]
     history:
-        description: Reports recent usage of MaxBans.
-        usage: /history <number>
+        description: Reports any recent bans etc
+        usage: /history [name] [records]
         aliases: [mbhistory]
     forcespawn:
         description: Teleports a player to the spawn.
         usage: /forcespawn <player>
         aliases: [mbforcespawn]
     mbreload:
-        description: Reloads MaxBans from the DB and config
+        description: Reloads MaxBans entirely
         usage: /mbreload
     mb:
         description: Displays MaxBans commands that you have access to
@@ -162,7 +162,7 @@ commands:
         description: Imports a set of bans
         usage: /mbimport nameOfPlugin
     mbexport:
-        description: Exports a set of bans
+        description: Exports a set of bans, also allows exporting to another database
         usage: /mbexport nameOfPlugin
     mbdebug:
         description: Print debug info to the console

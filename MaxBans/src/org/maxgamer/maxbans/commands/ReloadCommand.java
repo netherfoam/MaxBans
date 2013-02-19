@@ -8,7 +8,7 @@ import org.maxgamer.maxbans.util.Formatter;
 
 public class ReloadCommand extends CmdSkeleton{
     public ReloadCommand(){
-        super("maxbans.reload");
+        super("mbreload", "maxbans.reload");
         namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {

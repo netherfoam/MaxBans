@@ -12,8 +12,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class TempIPBanCommand extends CmdSkeleton{
     public TempIPBanCommand(){
-        super("maxbans.tempipban");
-        usage = Formatter.secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
+        super("tempipban", "maxbans.tempipban");
+        //usage = Formatter.secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 2){
@@ -27,7 +27,7 @@ public class TempIPBanCommand extends CmdSkeleton{
 			//Get expirey time
 			long time = Util.getTime(args);
 			if(time <= 0){
-				sender.sendMessage(usage);
+				sender.sendMessage(getUsage());
 				return true;
 			}
 			time += System.currentTimeMillis();
@@ -109,7 +109,7 @@ public class TempIPBanCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

@@ -14,12 +14,12 @@ import org.maxgamer.maxbans.util.Util;
 
 public class TempBanCommand extends CmdSkeleton{
     public TempBanCommand(){
-        super("maxbans.tempban");
-        usage = Formatter.secondary + "Usage: /tempban <player> <time> <time form> [-s] <reason>";
+        super("tempban", "maxbans.tempban");
+        //usage = Formatter.secondary + "Usage: /tempban <player> <time> <time form> [-s] <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length < 3){
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 		else{
@@ -32,7 +32,7 @@ public class TempBanCommand extends CmdSkeleton{
 			
 			long expires = Util.getTime(args);
 			if(expires <= 0){
-				sender.sendMessage(usage);
+				sender.sendMessage(getUsage());
 				return true;
 			}
 			expires += System.currentTimeMillis();

@@ -9,8 +9,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class KickCommand extends CmdSkeleton{
     public KickCommand(){
-        super("maxbans.kick");
-        usage = Formatter.secondary + "Usage: /kick <player> [-s] [reason]";
+        super("kick", "maxbans.kick");
+        //usage = Formatter.secondary + "Usage: /kick <player> [-s] [reason]";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -53,7 +53,7 @@ public class KickCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

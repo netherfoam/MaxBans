@@ -15,8 +15,8 @@ public class DupeIPCommand extends CmdSkeleton{
 	private ChatColor offline = ChatColor.GRAY;
     
     public DupeIPCommand(){
-        super("maxbans.dupeip");
-        usage = Formatter.secondary + "Usage: /dupeip <player>";
+        super("dupeip", "maxbans.dupeip");
+        //usage = Formatter.secondary + "Usage: /dupeip <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -63,7 +63,7 @@ public class DupeIPCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

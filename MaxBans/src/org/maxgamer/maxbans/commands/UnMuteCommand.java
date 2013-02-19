@@ -10,8 +10,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class UnMuteCommand extends CmdSkeleton{
     public UnMuteCommand(){
-        super("maxbans.unmute");
-        usage = Formatter.secondary + "Usage: /unmute <player>";
+        super("unmute", "maxbans.unmute");
+        //usage = Formatter.secondary + "Usage: /unmute <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -48,7 +48,7 @@ public class UnMuteCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

@@ -320,6 +320,7 @@ public class Syncer{
 				}
 				catch(ConnectException e){
 					if(tries < MAX_TRIES){
+						if(MaxBans.instance == null) return; //Plugin disabled
 						Bukkit.getScheduler().runTaskLaterAsynchronously(MaxBans.instance, this, DELAY_TICKS);
 					}
 					else{

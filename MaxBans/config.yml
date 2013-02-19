@@ -26,7 +26,11 @@ kick-colors:
     regular: f #"By"
     banner: f #"Netherfoam"
     time: f #4 hours 59 minutes remaining.
-    
+
+
+#Some plugins will register their commands before we do (Eg other ban/kick plugins).
+#This option allows users to try and force MaxBans to take those already-taken commands.    
+override-commands: true
 
 chat-commands:
     - me

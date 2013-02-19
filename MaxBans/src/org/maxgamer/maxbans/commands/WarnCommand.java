@@ -8,8 +8,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class WarnCommand extends CmdSkeleton{
     public WarnCommand(){
-        super("maxbans.warn");
-        usage = Formatter.secondary + "Usage: /warn <player> <reason>";
+        super("warn", "maxbans.warn");
+        //usage = Formatter.secondary + "Usage: /warn <player> <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 1){
@@ -45,7 +45,7 @@ public class WarnCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

@@ -10,7 +10,7 @@ import org.maxgamer.maxbans.util.Util;
 public class LockdownCommand extends CmdSkeleton{
     private String defaultReason = "Maintenance";
     public LockdownCommand(){
-        super("maxbans.lockdown.use");
+        super("lockdown", "maxbans.lockdown.use");
         namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {

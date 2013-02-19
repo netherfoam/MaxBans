@@ -8,7 +8,7 @@ import org.maxgamer.maxbans.util.Formatter;
 
 public class MBImportCommand extends CmdSkeleton{
     public MBImportCommand(){
-        super("maxbans.import");
+        super("mbimport", "maxbans.import");
         namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {

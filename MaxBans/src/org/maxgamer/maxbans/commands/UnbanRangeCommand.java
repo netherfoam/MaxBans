@@ -11,9 +11,9 @@ import org.maxgamer.maxbans.util.Util;
 
 public class UnbanRangeCommand extends CmdSkeleton{
 	public UnbanRangeCommand(){
-		super("maxbans.unbanrange");
+		super("unrangeban", "maxbans.unbanrange");
 		this.minArgs = 1;
-		this.usage = Formatter.secondary + "Usage: /unbanrange <IP>";
+		//this.usage = Formatter.secondary + "Usage: /unbanrange <IP>";
 	}
 
 	@Override

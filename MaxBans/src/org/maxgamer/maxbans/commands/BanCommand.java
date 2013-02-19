@@ -14,8 +14,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class BanCommand extends CmdSkeleton{
     public BanCommand(){
-        super("maxbans.ban");
-        usage = Formatter.secondary + "Usage: /ban <player> [-s] <reason>";
+        super("ban", "maxbans.ban");
+        //usage = Formatter.secondary + "Usage: /ban <player> [-s] <reason>";
     }
     
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
@@ -82,7 +82,7 @@ public class BanCommand extends CmdSkeleton{
 			return true;
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 
 public class MBDebug extends CmdSkeleton{
 	public MBDebug(){
-		super("maxbans.debug");
+		super("mbdebug", "maxbans.debug");
 		namePos = -1;
 	}
 	public boolean run(CommandSender sender, Command command, String label, String[] args) {

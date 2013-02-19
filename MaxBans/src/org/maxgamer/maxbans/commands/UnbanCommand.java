@@ -10,8 +10,8 @@ import org.maxgamer.maxbans.util.Util;
 
 public class UnbanCommand extends CmdSkeleton{
     public UnbanCommand(){
-        super("maxbans.unban");
-        usage = Formatter.secondary + "Usage: /unban <player>";
+        super("unban", "maxbans.unban");
+        //usage = Formatter.secondary + "Usage: /unban <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -86,7 +86,7 @@ public class UnbanCommand extends CmdSkeleton{
 			}
 		}
 		else{
-			sender.sendMessage(usage);
+			sender.sendMessage(getUsage());
 			return true;
 		}
 	}

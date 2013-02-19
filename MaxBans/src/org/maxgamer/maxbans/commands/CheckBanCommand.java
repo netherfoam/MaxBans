@@ -22,9 +22,9 @@ import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 
 public class CheckBanCommand extends CmdSkeleton{
     public CheckBanCommand(){
-    	super("");
+    	super("checkban", "");
     	namePos = 1;
-    	usage = Formatter.secondary + "Usage: /checkban <player>"; 
+    	//usage = Formatter.secondary + "Usage: /checkban <player>"; 
     }
     
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
@@ -38,7 +38,7 @@ public class CheckBanCommand extends CmdSkeleton{
 			}
 		}
 		else if(args.length <= 0){
-			sender.sendMessage(ChatColor.RED + usage);
+			sender.sendMessage(ChatColor.RED + getUsage());
 			return true;
 		}
 		
