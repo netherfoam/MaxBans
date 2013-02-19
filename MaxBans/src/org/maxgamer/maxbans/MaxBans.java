@@ -265,17 +265,25 @@ public class MaxBans extends JavaPlugin{
 		new KickCommand();
 		
 		new ForceSpawnCommand();
+		
+		//Help command
+		new MBCommand();
+		//History command
 		new HistoryCommand();
 		
-		new ReloadCommand();
-		new MBCommand();
-		
+		//Admin commands
 		new MBImportCommand();
 		new MBExportCommand();
 		new MBDebug();
-		new RangeBanCommand();
-		new UnbanRangeCommand();
+		new ReloadCommand();
+		
+		//MBWhitelist
 		new WhitelistCommand();
+		
+		//Rangeban
+		new RangeBanCommand();
+		new TempRangeBanCommand();
+		new UnbanRangeCommand();
 		/*
 		//Register commands
 		this.getCommand("ban").setExecutor(banCommand);

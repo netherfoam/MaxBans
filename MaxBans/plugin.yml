@@ -168,13 +168,17 @@ commands:
         description: Print debug info to the console
         usage: /mbdebug
     rangeban:
-        description: Rangeban command
-        usage: /rangeban
+        description: Ban IP Ranges
+        usage: /rangeban <IP1-IP2> [Reason]
         aliases: [mbrangeban, rb]
+    temprangeban:
+        description: 
+        usage: /temprangeban <IP1-IP2> <time> <timeform> [Reason]
+        aliases: [mbtemprangeban, temprb]
     unrangeban:
-        description: Unrangeban command
-        usage: /unrangeban
+        description: Unbans an IP range. The given IP only needs to be inside a range.
+        usage: /unrangeban <IP>
         aliases: [mbunrangeban, unrb]
     mbwhitelist:
         description: Whitelisting command, allowing players to bypass IP bans (Not regular bans)
-        usage: /mbwhitelist <user> [reason]
+        usage: /mbwhitelist <user>

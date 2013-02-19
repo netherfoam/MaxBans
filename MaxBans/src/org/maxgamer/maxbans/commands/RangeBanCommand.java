@@ -24,13 +24,14 @@ public class RangeBanCommand extends CmdSkeleton{
 		
 		String[] ips = args[0].split("-");
 		
-		if(ips.length != 2){
+		if(ips.length == 1 && ips[0].contains("*")){
+			//If they supplied us with /rangeban 127.0.0.*, then we know its actually 127.0.0.0-127.0.0.255.
+			ips = new String[]{ips[0].replace('*', '0'), ips[0].replace("*", "255")};
+		}
+		else if(ips.length != 2){
 			sender.sendMessage(ChatColor.RED + "Not enough IP addresses supplied! Usage: " + getUsage());
 			return true;
 		}
-		
-		ips[0] = ips[0].replace('*', '0');
-		ips[1] = ips[1].replace("*", "255");
 		
 		for(int i = 0; i < ips.length; i++){
 			if(!Util.isIP(ips[i])){
