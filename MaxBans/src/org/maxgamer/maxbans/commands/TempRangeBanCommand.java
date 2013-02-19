@@ -25,7 +25,6 @@ public class TempRangeBanCommand extends CmdSkeleton{
 		boolean silent = Util.isSilent(args);
 		String[] ips = args[0].split("-");
 		
-		sender.sendMessage(ips);
 		if(ips.length == 1 && ips[0].contains("*")){
 			//If they supplied us with /rangeban 127.0.0.*, then we know its actually 127.0.0.0-127.0.0.255.
 			ips = new String[]{ips[0].replace('*', '0'), ips[0].replace("*", "255")};
@@ -55,7 +54,6 @@ public class TempRangeBanCommand extends CmdSkeleton{
 		TempRangeBan rb = new TempRangeBan(banner, reason, System.currentTimeMillis(), expires, start, end);
 		RangeBan overlap = plugin.getBanManager().getRanger().ban(rb);
 		if(overlap == null){
-			sender.sendMessage(rb.getExpires() + "v" + System.currentTimeMillis());
 			plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "' Remaining: "+ Formatter.secondary + Util.getTimeUntil(rb.getExpires()), silent, sender);
 		}
 		else{
