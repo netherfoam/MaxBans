@@ -102,7 +102,19 @@ public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comp
 			return true;
 		}
 		
-		return run(sender, cmd, label, args);
+		try{
+			return run(sender, cmd, label, args);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			sender.sendMessage(ChatColor.RED + "Something went wrong when executing the command: ");
+			StringBuilder sb = new StringBuilder(args[0]); for(int i = 1; i < args.length; i++){ sb.append(" " + args[i]); }
+			sender.sendMessage(ChatColor.RED + "/" + label + " " + sb.toString());
+			sender.sendMessage(ChatColor.RED + "Exception: " + e.getMessage());
+			sender.sendMessage(ChatColor.RED + "The remainder of the exception is in the console.");
+			sender.sendMessage(ChatColor.RED + "Please report this to netherfoam: http://dev.bukkit.org/server-mods/maxbans and incldue the error in the console in your post.");
+			return true;
+		}
 	}
 	
 	/**
