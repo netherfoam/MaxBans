@@ -202,9 +202,6 @@ public class MaxBans extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
         
         startMetrics();
-        
-        //Bukkit.getPluginManager().ge
-        //super.
     }
 	
 	public void onDisable(){
