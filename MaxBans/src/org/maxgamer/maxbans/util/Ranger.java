@@ -11,6 +11,10 @@ public class Ranger{
 	private TreeSet<RangeBan> banned = new TreeSet<RangeBan>();
 	private MaxBans plugin;
 	
+	public TreeSet<RangeBan> getBans(){
+		return banned;
+	}
+	
 	public Ranger(MaxBans plugin){
 		this.plugin = plugin;
 		

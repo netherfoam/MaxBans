@@ -165,8 +165,8 @@ commands:
         description: Exports a set of bans, also allows exporting to another database
         usage: /mbexport nameOfPlugin
     mbdebug:
-        description: Print debug info to the console
-        usage: /mbdebug
+        description: Print debug info to Console/File/Chat.
+        usage: /mbdebug File|Chat|Console
     rangeban:
         description: Ban IP Ranges
         usage: /rangeban <IP1-IP2> [Reason]

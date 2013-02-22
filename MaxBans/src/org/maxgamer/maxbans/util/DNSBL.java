@@ -19,6 +19,10 @@ import org.maxgamer.maxbans.sync.Packet;
 
 public class DNSBL{
 	private HashMap<String, CacheRecord> history = new HashMap<String, CacheRecord>();
+	public HashMap<String, CacheRecord> getHistory(){
+		return history;
+	}
+	
 	private MaxBans plugin;
 	
 	/** How long it takes cache records to expire */
@@ -260,6 +264,10 @@ public class DNSBL{
     	}
     	public boolean hasExpired(){
     		return System.currentTimeMillis() > getExpires();
+    	}
+    	@Override
+    	public String toString(){
+    		return status.toString();
     	}
     }
     

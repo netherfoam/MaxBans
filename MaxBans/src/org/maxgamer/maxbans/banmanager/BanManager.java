@@ -44,7 +44,10 @@ public class BanManager{
 	/** The IP Ranger, which is used for banning IP ranges */
 	private Ranger ranger;
 	
+	/** A HashSet of lowercase usernames which are allowed to bypass IP bans / restrictions */
 	private HashSet<String> whitelist = new HashSet<String>();
+	/** A HashSet of lowercase usernames which are allowed to bypass IP bans / restrictions. You shouldn't edit these normally. */
+	public HashSet<String> getWhitelist(){ return whitelist; }
 	
 	private HashMap<String, Mute> mutes = new HashMap<String, Mute>();
 	private HashMap<String, TempMute> tempmutes = new HashMap<String, TempMute>();
