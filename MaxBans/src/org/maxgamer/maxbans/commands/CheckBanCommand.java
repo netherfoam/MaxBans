@@ -78,7 +78,7 @@ public class CheckBanCommand extends CmdSkeleton{
 			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
 			sender.sendMessage(Formatter.primary + "IP: " + Formatter.secondary + ip);
 			sender.sendMessage(Formatter.primary + "IP Banned: " + Formatter.secondary + (ban == null ? "False" : "'" + ban.getReason() + Formatter.secondary + "' (" + ban.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) ban).getExpires() - System.currentTimeMillis()) : "")));
-			sender.sendMessage(Formatter.primary + "RangeBan: " + Formatter.secondary + (ban == null ? "False" : rb.toString() + " '" + rb.getReason() + Formatter.secondary + "' (" + rb.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) rb).getExpires() - System.currentTimeMillis()) : "")));
+			sender.sendMessage(Formatter.primary + "RangeBan: " + Formatter.secondary + (rb == null ? "False" : rb.toString() + " '" + rb.getReason() + Formatter.secondary + "' (" + rb.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) rb).getExpires() - System.currentTimeMillis()) : "")));
 			
 			if(plugin.getBanManager().getDNSBL() != null){
 				CacheRecord r = plugin.getBanManager().getDNSBL().getRecord(ip);
