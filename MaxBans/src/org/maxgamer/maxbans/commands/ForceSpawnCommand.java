@@ -12,7 +12,6 @@ import org.maxgamer.maxbans.util.Formatter;
 public class ForceSpawnCommand extends CmdSkeleton{
     public ForceSpawnCommand(){
     	super("forcespawn", "maxbans.forcespawn");
-    	//usage = Formatter.secondary + "Usage: /forcespawn <player>";
     }
     
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
