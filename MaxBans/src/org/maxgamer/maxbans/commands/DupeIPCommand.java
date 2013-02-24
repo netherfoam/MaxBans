@@ -16,7 +16,6 @@ public class DupeIPCommand extends CmdSkeleton{
     
     public DupeIPCommand(){
         super("dupeip", "maxbans.dupeip");
-        //usage = Formatter.secondary + "Usage: /dupeip <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
