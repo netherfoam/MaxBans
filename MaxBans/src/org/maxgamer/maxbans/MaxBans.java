@@ -250,40 +250,6 @@ public class MaxBans extends JavaPlugin{
 		new RangeBanCommand();
 		new TempRangeBanCommand();
 		new UnbanRangeCommand();
-		/*
-		//Register commands
-		this.getCommand("ban").setExecutor(banCommand);
-		this.getCommand("ipban").setExecutor(ipBanCommand);
-		this.getCommand("mute").setExecutor(muteCommand);
-		
-		this.getCommand("tempban").setExecutor(tempBanCommand);
-		this.getCommand("tempipban").setExecutor(tempIPBanCommand);
-		this.getCommand("tempmute").setExecutor(tempMuteCommand);
-		
-		this.getCommand("unban").setExecutor(unbanCommand);
-		this.getCommand("unmute").setExecutor(unMuteCommand);
-		
-		this.getCommand("checkip").setExecutor(checkIPCommand);
-		this.getCommand("checkban").setExecutor(checkBanCommand);
-		this.getCommand("dupeip").setExecutor(dupeIPCommand);
-		
-		this.getCommand("warn").setExecutor(warnCommand);
-		this.getCommand("clearwarnings").setExecutor(clearWarningsCommand);
-		
-		this.getCommand("lockdown").setExecutor(lockdownCommand);
-		this.getCommand("kick").setExecutor(kickCommand);
-		this.getCommand("forcespawn").setExecutor(forceSpawnCommand);
-		this.getCommand("history").setExecutor(historyCommand);
-		
-		this.getCommand("mbreload").setExecutor(reloadCommand);
-		this.getCommand("mb").setExecutor(mbCommand);
-		
-		this.getCommand("mbimport").setExecutor(importCommand);
-		this.getCommand("mbexport").setExecutor(exportCommand);
-		this.getCommand("mbdebug").setExecutor(mbDebugCommand);
-		this.getCommand("rangeban").setExecutor(rangeBan);
-		this.getCommand("unrangeban").setExecutor(unrangeBan);
-		this.getCommand("mbwhitelist").setExecutor(whitelistCommand);*/
     }
     
     public void startMetrics(){
