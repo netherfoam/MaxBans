@@ -292,6 +292,6 @@ public class MaxBans extends JavaPlugin{
     }
     /** Returns the metrics object for MaxBans */
     public Metrics getMetrics(){ return metrics; }
-    
+    /** The syncer for sending messages to other SyncServers */
     public Syncer getSyncer(){ return this.syncer; }
 }
