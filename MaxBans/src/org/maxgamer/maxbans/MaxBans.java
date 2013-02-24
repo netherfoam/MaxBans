@@ -38,40 +38,6 @@ public class MaxBans extends JavaPlugin{
     private BanManager banManager;
     private Syncer syncer;
     private SyncServer syncServer;
-    /*
-    private BanCommand banCommand;
-    private IPBanCommand ipBanCommand;
-    private MuteCommand muteCommand;
-    
-    private TempBanCommand tempBanCommand;
-    private TempIPBanCommand tempIPBanCommand;
-    private TempMuteCommand tempMuteCommand;
-    
-    private UnbanCommand unbanCommand;
-    private UnMuteCommand unMuteCommand;
-    
-    private CheckIPCommand checkIPCommand;
-    private CheckBanCommand checkBanCommand;
-    private DupeIPCommand dupeIPCommand;
-    
-    private WarnCommand warnCommand;
-    private ClearWarningsCommand clearWarningsCommand;
-    
-    private LockdownCommand lockdownCommand;
-    private KickCommand kickCommand;
-    private HistoryCommand historyCommand;
-    private ForceSpawnCommand forceSpawnCommand;
-    
-    private ReloadCommand reloadCommand;
-    private MBCommand mbCommand;
-    
-    private MBImportCommand importCommand;
-    private MBExportCommand exportCommand;
-    private MBDebug mbDebugCommand;
-    
-    private RangeBanCommand rangeBan;
-    private UnbanRangeCommand unrangeBan;
-    private WhitelistCommand whitelistCommand;*/
             
     private JoinListener joinListener;
     private HeroChatListener herochatListener; 
