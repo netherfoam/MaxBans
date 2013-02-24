@@ -13,7 +13,6 @@ import org.maxgamer.maxbans.util.Util;
 public class IPBanCommand extends CmdSkeleton{
     public IPBanCommand(){
         super("ipban", "maxbans.ipban");
-        //usage = Formatter.secondary + "Usage: /ipban <player> [-s] <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		boolean silent = Util.isSilent(args);
