@@ -13,7 +13,6 @@ import org.maxgamer.maxbans.util.Formatter;
 public class ClearWarningsCommand extends CmdSkeleton{
     public ClearWarningsCommand(){
         super("clearwarnings", "maxbans.clearwarnings");
-        //usage = Formatter.secondary + "Usage: /clearwarnings <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
