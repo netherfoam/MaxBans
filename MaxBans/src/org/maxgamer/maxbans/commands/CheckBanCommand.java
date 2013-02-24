@@ -23,8 +23,7 @@ import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 public class CheckBanCommand extends CmdSkeleton{
     public CheckBanCommand(){
     	super("checkban", "");
-    	namePos = 1;
-    	//usage = Formatter.secondary + "Usage: /checkban <player>"; 
+    	namePos = 1; 
     }
     
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
