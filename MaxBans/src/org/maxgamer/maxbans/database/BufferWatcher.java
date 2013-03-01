@@ -15,19 +15,10 @@ public class BufferWatcher implements Runnable{
 		this.db = db;
 	}
 	public void run() {
-		while(buffer.locked){
-			try {
-				//1 millisecond
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		synchronized(buffer.queries){
+			buffer.queries.add(bs);
 		}
-		buffer.locked = true;
-		buffer.queries.add(bs);
-		buffer.locked = false;
-		
-		if(db.getTask() == null){
+		if(db.getTask() != null){
 			db.scheduleWatcher();
 		}
 	}

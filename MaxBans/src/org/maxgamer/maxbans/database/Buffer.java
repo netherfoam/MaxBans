@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 
 public class Buffer {
 	private Database db;
-	public boolean locked = false;
+	//public boolean locked = false;
 	
 	public ArrayList<BufferStatement> queries = new ArrayList<BufferStatement>(3);
 	

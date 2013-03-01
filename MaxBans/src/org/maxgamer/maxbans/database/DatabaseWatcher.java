@@ -1,6 +1,6 @@
 package org.maxgamer.maxbans.database;
 
-import java.sql.SQLException;
+import org.maxgamer.maxbans.MaxBans;
 
 public class DatabaseWatcher implements Runnable{
 	private Database db;
@@ -13,35 +13,24 @@ public class DatabaseWatcher implements Runnable{
 	 * - AKA, check buffer, run queries 
 	 */
 	public void run() {
-		while(db.getBuffer().locked){
-			try {
-				//1 millisecond
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		//Lock it to see the size of it
-		db.getBuffer().locked = true;
-		
-		if(!db.getBuffer().queries.isEmpty()){
-			try{
+		synchronized(db.getBuffer().queries){
+			if(db.getBuffer().queries.isEmpty() == false){
 				while(!db.getBuffer().queries.isEmpty()){
-					//db.getBuffer().queries.remove(0).execute();
-					BufferStatement bs = db.getBuffer().queries.remove(0);
-					bs.prepareStatement(db.getConnection()).execute();
+					try{
+						BufferStatement bs = db.getBuffer().queries.remove(0);
+						if(bs == null){ //NPE reported by Chalkie
+							MaxBans.instance.getLogger().warning("DatabaseWatcher discovered a null query in the buffer! Skipping!");
+							continue;
+						}
+						bs.prepareStatement(db.getConnection()).execute();
+					}
+					catch(Exception e){
+						e.printStackTrace();
+						db.getPlugin().getLogger().severe("Could not update database!");
+					}
 				}
-				//We can release this now
-				db.getBuffer().locked = false;
-			}
-			catch(SQLException e){
-				e.printStackTrace();
-				db.getPlugin().getLogger().severe("Could not update database!");
 			}
 		}
-		//Ensure it's released
-		db.getBuffer().locked = false;
 		db.setTask(null);
 		//Dont schedule the next one
 		//This will be scheduled by bufferWatcher when a query is added.
