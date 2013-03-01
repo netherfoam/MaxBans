@@ -16,8 +16,9 @@ public class DatabaseWatcher implements Runnable{
 		synchronized(db.getBuffer().queries){
 			if(db.getBuffer().queries.isEmpty() == false){
 				while(!db.getBuffer().queries.isEmpty()){
+					BufferStatement bs = null;
 					try{
-						BufferStatement bs = db.getBuffer().queries.remove(0);
+						bs = db.getBuffer().queries.remove(0);
 						if(bs == null){ //NPE reported by Chalkie
 							MaxBans.instance.getLogger().warning("DatabaseWatcher discovered a null query in the buffer! Skipping!");
 							continue;
@@ -27,6 +28,11 @@ public class DatabaseWatcher implements Runnable{
 					catch(Exception e){
 						e.printStackTrace();
 						db.getPlugin().getLogger().severe("Could not update database!");
+						
+						System.out.println("Creation stacktrace:");
+						for(StackTraceElement st : bs.getStackTrace()){
+							System.out.println(st.toString());
+						}
 					}
 				}
 			}

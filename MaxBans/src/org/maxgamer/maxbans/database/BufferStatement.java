@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class BufferStatement{
 	private Object[] values;
 	private String query;
+	private Exception stacktrace;
 	
 	/**
 	 * Represents a PreparedStatement in a state before preparing it (E.g. No file I/O Required)
@@ -17,6 +18,8 @@ public class BufferStatement{
 	public BufferStatement(String query, Object... values){
 		this.query = query;
 		this.values = values;
+		this.stacktrace = new Exception(); //For error handling
+		this.stacktrace.fillInStackTrace(); //We can declare where this statement came from.
 	}
 	/**
 	 * Returns a prepared statement using the given connection.
@@ -41,6 +44,10 @@ public class BufferStatement{
 			e.printStackTrace();
 			System.out.println("Could not do query!");
 			System.out.println(this.toString());
+			System.out.println("Creation stacktrace:");
+			for(StackTraceElement ste : getStackTrace()){
+				System.out.println(ste.toString());
+			}
 			
 		}
 		try {
@@ -48,9 +55,25 @@ public class BufferStatement{
 		} catch (SQLException e) {
 			System.out.println("Could not return an empty statement! Something is REALLY wrong!");
 			e.printStackTrace();
+			System.out.println("Creation stacktrace:");
+			for(StackTraceElement ste : getStackTrace()){
+				System.out.println(ste.toString());
+			}
 			return null;
 		}
 	}
+	
+	/**
+	 * Used for debugging. This stacktrace is recorded when the statement
+	 * is created, so printing it to the screen will provide useful debugging
+	 * information about where the query came from, if something went wrong
+	 * while executing it.
+	 * @return The stacktrace elements.
+	 */
+	public StackTraceElement[] getStackTrace(){
+		return stacktrace.getStackTrace();
+	}
+	
 	/**
 	 * @return A string representation of this statement. Returns <italic>"Query: " + query + ", values: " + Arrays.toString(values).</italic>
 	 */
