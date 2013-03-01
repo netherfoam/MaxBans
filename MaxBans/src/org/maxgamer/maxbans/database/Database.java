@@ -122,7 +122,8 @@ public class Database {
 	 * Reschedules the db watcher
 	 */
 	public void scheduleWatcher(){
-		this.task = Bukkit.getScheduler().runTaskLater(plugin, this.dbw, 300);
+		//?? Shouldn't this be async? It was sync :S
+		this.task = Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, this.dbw, 300);
 	}
 	
 	public BukkitTask getTask(){
