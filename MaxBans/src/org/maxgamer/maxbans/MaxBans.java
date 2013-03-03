@@ -183,7 +183,7 @@ public class MaxBans extends JavaPlugin{
 			syncer.stop();
 			syncer = null; //Required when reloading, if sync.use changes to false
 		}
-		
+		this.getLogger().info("Clearing buffer...");
 		this.db.getDatabaseWatcher().run(); //Empties buffer
 		this.getLogger().info("Cleared buffer...");
 		instance = null;
