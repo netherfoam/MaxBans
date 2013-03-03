@@ -181,7 +181,7 @@ public class Connection{
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream(128);
 		byte[] buffer = new byte[Math.min(getMaxPacketLength(), 1024)]; 
 		
-		while(true){
+		while(open){
 			int i = in.read(buffer);
 			if(i == -1){ //End of stream here.
 				return null;
@@ -196,6 +196,7 @@ public class Connection{
 				return bytes;
 			}
 		}
+		return null;
 	}
 	
 	/**

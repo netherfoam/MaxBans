@@ -360,7 +360,7 @@ public class Syncer{
 			log("Could not close connection to server! Possibly already closed?");
 		} catch(Exception e){
 			e.printStackTrace();
-			log("Something went wrong using Syncer.Stop()!");
+			log("Something went wrong using Syncer.stop()!");
 		}
 	}
 	
