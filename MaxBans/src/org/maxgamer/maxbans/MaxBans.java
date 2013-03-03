@@ -173,16 +173,17 @@ public class MaxBans extends JavaPlugin{
 	public void onDisable(){
 		this.getLogger().info("Disabling Maxbans...");
 		
-		if(syncServer != null){
-			syncServer.stop();
-			syncServer = null; //Required when reloading, if sync.server changes to false
-		}
-		
 		if(syncer != null){
 			syncer.stopReconnect();
 			syncer.stop();
 			syncer = null; //Required when reloading, if sync.use changes to false
 		}
+		
+		if(syncServer != null){
+			syncServer.stop();
+			syncServer = null; //Required when reloading, if sync.server changes to false
+		}
+		
 		this.getLogger().info("Clearing buffer...");
 		this.db.getDatabaseWatcher().run(); //Empties buffer
 		this.getLogger().info("Cleared buffer...");
