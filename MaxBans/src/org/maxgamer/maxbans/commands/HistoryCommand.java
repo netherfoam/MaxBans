@@ -9,7 +9,6 @@ import org.maxgamer.maxbans.util.Util;
 public class HistoryCommand extends CmdSkeleton{
     public HistoryCommand(){
         super("history", "maxbans.history");
-        //usage = Formatter.secondary + "Usage: /history [amount] | [name] [amount]";
         namePos = -1;
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {

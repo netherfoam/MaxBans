@@ -13,7 +13,6 @@ import org.maxgamer.maxbans.util.Util;
 public class TempIPBanCommand extends CmdSkeleton{
     public TempIPBanCommand(){
         super("tempipban", "maxbans.tempipban");
-        //usage = Formatter.secondary + "Usage: /tempipban <player> <time> <timeform> [-s] <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 2){

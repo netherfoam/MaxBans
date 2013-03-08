@@ -15,7 +15,6 @@ import org.maxgamer.maxbans.util.Util;
 public class TempBanCommand extends CmdSkeleton{
     public TempBanCommand(){
         super("tempban", "maxbans.tempban");
-        //usage = Formatter.secondary + "Usage: /tempban <player> <time> <time form> [-s] <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length < 3){

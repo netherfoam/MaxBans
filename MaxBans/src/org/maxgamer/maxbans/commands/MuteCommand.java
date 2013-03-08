@@ -12,7 +12,6 @@ import org.maxgamer.maxbans.util.Util;
 public class MuteCommand extends CmdSkeleton{
     public MuteCommand(){
         super("mute", "maxbans.mute");
-        //usage = Formater.secondary + "Usage: /mute <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -25,20 +24,6 @@ public class MuteCommand extends CmdSkeleton{
 			
 			Mute mute = plugin.getBanManager().getMute(name);
 			if(mute != null){
-				/*
-				plugin.getBanManager().unmute(name);
-				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
-				
-		    	if(plugin.getSyncer() != null){
-		    		Packet prop = new Packet();
-		    		prop.setCommand("unmute");
-		    		prop.put("name", name);
-		    		plugin.getSyncer().send(prop);
-		    		
-		    		//Send the addhistory request.
-		    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
-		    		plugin.getSyncer().broadcast(history);
-		    	}*/
 				Bukkit.dispatchCommand(sender, "unmute");
 				
 				return true;

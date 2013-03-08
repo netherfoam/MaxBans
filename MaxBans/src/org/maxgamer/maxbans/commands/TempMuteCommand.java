@@ -13,7 +13,6 @@ import org.maxgamer.maxbans.util.Util;
 public class TempMuteCommand extends CmdSkeleton{
     public TempMuteCommand(){
         super("tempmute", "maxbans.tempmute");
-        //usage = Formatter.secondary + "Usage: /tempmute <player> <time> <timeform>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 2){

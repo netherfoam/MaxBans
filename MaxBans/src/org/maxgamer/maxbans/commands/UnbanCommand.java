@@ -11,7 +11,6 @@ import org.maxgamer.maxbans.util.Util;
 public class UnbanCommand extends CmdSkeleton{
     public UnbanCommand(){
         super("unban", "maxbans.unban");
-        //usage = Formatter.secondary + "Usage: /unban <player>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){

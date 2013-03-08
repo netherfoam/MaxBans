@@ -13,7 +13,6 @@ public class UnbanRangeCommand extends CmdSkeleton{
 	public UnbanRangeCommand(){
 		super("unrangeban", "maxbans.unbanrange");
 		this.minArgs = 1;
-		//this.usage = Formatter.secondary + "Usage: /unbanrange <IP>";
 	}
 
 	@Override

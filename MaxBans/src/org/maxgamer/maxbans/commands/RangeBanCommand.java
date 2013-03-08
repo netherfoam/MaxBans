@@ -12,7 +12,6 @@ import org.maxgamer.maxbans.util.Util;
 public class RangeBanCommand extends CmdSkeleton{
 	public RangeBanCommand() {
 		super("rangeban", "maxbans.rangeban");
-		//usage = Formatter.secondary + "Usage: /rangeban IP1-IP2... Example: /rb 192.168.2.1-192.168.2.4 bans 192.168.2.1, .2, .3 and .4";
 		minArgs = 1;
 	}
 
