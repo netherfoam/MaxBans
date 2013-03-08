@@ -1,7 +1,9 @@
 package org.maxgamer.maxbans.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
@@ -9,10 +11,11 @@ import org.maxgamer.maxbans.util.Util;
 public class WarnCommand extends CmdSkeleton{
     public WarnCommand(){
         super("warn", "maxbans.warn");
-        //usage = Formatter.secondary + "Usage: /warn <player> <reason>";
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 1){
+			boolean silent = Util.isSilent(args);
+			
 			String name = args[0];
 			
 			name = plugin.getBanManager().match(name);
@@ -23,7 +26,13 @@ public class WarnCommand extends CmdSkeleton{
 			String reason = Util.buildReason(args);
 			String banner = Util.getName(sender);
 			
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been warned for '" + Formatter.secondary + reason + Formatter.primary + "' by " + Formatter.secondary + banner + Formatter.primary + ".");
+			String msg = Formatter.secondary + name + Formatter.primary + " has been warned for '" + Formatter.secondary + reason + Formatter.primary + "' by " + Formatter.secondary + banner + Formatter.primary + ".";
+			plugin.getBanManager().announce(msg, silent, sender);
+			if(silent){
+				Player targ = Bukkit.getPlayerExact(name);
+				if(targ != null) targ.sendMessage(msg);
+			}
+			
 			plugin.getBanManager().warn(name, reason, banner);
 			
 			String message = Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
