@@ -168,6 +168,17 @@ public class MaxBans extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(this.chatCommandListener, this);
         
         startMetrics();
+        
+        if(getConfig().getBoolean("update-check", true)){
+	        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable(){
+	        	public void run(){
+	        		if(UpdateCheck.hasUpdate()){
+	        			getLogger().info("There is a new update for MaxBans.");
+	        			getLogger().info("Please visit http://dev.bukkit.org/server-mods/MaxBans to download it.");
+	        		}
+	        	}
+        	}, 0);
+        }
     }
 	
 	public void onDisable(){
