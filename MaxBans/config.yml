@@ -3,7 +3,11 @@ lockdown-reason: ""
     
 max-warnings: 3
 #3 days
-warn-expirey-in-minutes: 4320 
+warn-expirey-in-minutes: 4320
+#Should we check that we're running the latest version of MaxBans?
+#This does NOT update it for you, it just notifies you in the console when
+#the server boots up if there is a new version available. 
+update-check: true
 
 #Accepts colorcodes. (v1.2)
 default-reason: "Misconduct"
