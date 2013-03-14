@@ -72,7 +72,7 @@ dnsbl:
 # This option is in BETA! I take no responsibility if it breaks, though I will endeaver to fix it.
 sync:
     #Should we use Sync? Setting this to false disables it entirely :)
-    use: true
+    use: false
     #Is this server the Sync server? Otherwise it's a client.
     server: false
     #The host of the Sync server, if this is a client.
