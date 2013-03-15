@@ -1,5 +1,7 @@
 package org.maxgamer.maxbans.database;
 
+import java.sql.PreparedStatement;
+
 import org.maxgamer.maxbans.MaxBans;
 
 public class DatabaseWatcher implements Runnable{
@@ -23,7 +25,9 @@ public class DatabaseWatcher implements Runnable{
 							MaxBans.instance.getLogger().warning("DatabaseWatcher discovered a null query in the buffer! Skipping!");
 							continue;
 						}
-						bs.prepareStatement(db.getConnection()).execute();
+						PreparedStatement ps = bs.prepareStatement(db.getConnection());
+						ps.execute();
+						ps.close();
 					}
 					catch(Exception e){
 						e.printStackTrace();
