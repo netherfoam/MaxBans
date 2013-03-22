@@ -29,6 +29,9 @@ public class UpdateCheck{
 		return false;
 	}
 	public static int getCurrentVersion(){
+		if(MaxBans.instance == null){
+			return Integer.MAX_VALUE;
+		}
 		return parse(MaxBans.instance.getDescription().getVersion()); //Deletes anything that's not 0-9.
 	}
 	private static int parse(String version){
