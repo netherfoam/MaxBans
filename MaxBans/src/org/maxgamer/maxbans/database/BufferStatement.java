@@ -31,36 +31,13 @@ public class BufferStatement{
 	 * @param con The connection to prepare this on using con.prepareStatement(..)
 	 * @return The prepared statement, ready for execution.
 	 */
-	public PreparedStatement prepareStatement(Connection con){
-		try {
-			PreparedStatement ps;
-			ps = con.prepareStatement(query);
-			for(int i = 1; i <= values.length; i++){
-				ps.setObject(i, values[i-1]);
-			}
-			return ps;
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Could not do query!");
-			System.out.println(this.toString());
-			System.out.println("Creation stacktrace:");
-			for(StackTraceElement ste : getStackTrace()){
-				System.out.println(ste.toString());
-			}
-			
+	public PreparedStatement prepareStatement(Connection con) throws SQLException{
+		PreparedStatement ps;
+		ps = con.prepareStatement(query);
+		for(int i = 1; i <= values.length; i++){
+			ps.setObject(i, values[i-1]);
 		}
-		try {
-			return con.prepareStatement("");
-		} catch (SQLException e) {
-			System.out.println("Could not return an empty statement! Something is REALLY wrong!");
-			e.printStackTrace();
-			System.out.println("Creation stacktrace:");
-			for(StackTraceElement ste : getStackTrace()){
-				System.out.println(ste.toString());
-			}
-			return null;
-		}
+		return ps;
 	}
 	
 	/**

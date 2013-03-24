@@ -15,8 +15,10 @@ import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.database.Database;
-import org.maxgamer.maxbans.database.MySQL;
-import org.maxgamer.maxbans.database.SQLite;
+import org.maxgamer.maxbans.database.DatabaseCore;
+import org.maxgamer.maxbans.database.MySQLCore;
+import org.maxgamer.maxbans.database.SQLiteCore;
+import org.maxgamer.maxbans.database.Database.ConnectionException;
 import org.maxgamer.maxbans.util.Formatter;
 
 public class MBExportCommand extends CmdSkeleton{
@@ -54,7 +56,7 @@ public class MBExportCommand extends CmdSkeleton{
 				sender.sendMessage(Formatter.secondary + "Success.");
 			}
 			else if(args[0].equalsIgnoreCase("mysql")){
-				if(plugin.getDB().getCore() instanceof MySQL){
+				if(plugin.getDB().getCore() instanceof MySQLCore){
 					sender.sendMessage(ChatColor.RED + "Database is already MySQL");
 					return true;
 				}
@@ -67,11 +69,17 @@ public class MBExportCommand extends CmdSkeleton{
 				String name = cfg.getString("name");
 				
 				try{
-					Database mysql = new Database(plugin, host, name, user, pass, port);
+					DatabaseCore dbCore = new MySQLCore(host, user, pass, name, port);
+					Database mysql = new Database(dbCore);
+					
 					plugin.getDB().copyTo(mysql);
 					
 					sender.sendMessage(ChatColor.GREEN + "Success - Exported to MySQL " + user + "@" + host + "." + name);
 					return true;
+				}
+				catch(ConnectionException e){
+					e.printStackTrace();
+					sender.sendMessage(ChatColor.RED + "Failed to connect to MySQL " + user + "@" + host + "." + name + ChatColor.DARK_RED + " Reason: " + e.getMessage());
 				}
 				catch(SQLException e){
 					e.printStackTrace();
@@ -79,18 +87,23 @@ public class MBExportCommand extends CmdSkeleton{
 				}
 			}
 			else if(args[0].equalsIgnoreCase("sqlite") || args[0].equalsIgnoreCase("sql") || args[0].equalsIgnoreCase("flatfile")){
-				if(plugin.getDB().getCore() instanceof SQLite){
+				if(plugin.getDB().getCore() instanceof SQLiteCore){
 					sender.sendMessage(ChatColor.RED + "Database is already SQLite");
 					return true;
 				}
 				
 				File file = new File(plugin.getDataFolder(), "bans.db");
 				try{
-					Database sqlite = new Database(plugin, file);
+					DatabaseCore dbCore = new SQLiteCore(file);
+					Database sqlite = new Database(dbCore);
 					plugin.getDB().copyTo(sqlite);
 					
 					sender.sendMessage(ChatColor.GREEN + "Success - Exported to SQLite " + file.getPath());
 					return true;
+				}
+				catch(ConnectionException e){
+					e.printStackTrace();
+					sender.sendMessage(ChatColor.RED + "Failed to connect to SQLite "+file.getPath() + " Reason: " + e.getMessage());
 				}
 				catch(SQLException e){
 					e.printStackTrace();

@@ -16,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
+import org.maxgamer.maxbans.database.DatabaseHelper;
 import org.maxgamer.maxbans.util.DNSBL;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Ranger;
@@ -157,13 +158,7 @@ public class BanManager{
 		//Check the database is the same instance
 		this.db = plugin.getDB();
 		
-		if(db.getTask() != null){
-			db.getTask().cancel();
-		}
-		if(db.getDatabaseWatcher() != null){
-			db.getDatabaseWatcher().run(); //Clears it. Does not restart it.
-		}
-		
+		db.getCore().flush();
 		
 		//Clear the memory cache
 		this.bans.clear();
@@ -178,6 +173,12 @@ public class BanManager{
 		
 		plugin.reloadConfig();
 		
+		try {
+			DatabaseHelper.createTables(db);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		this.lockdown = plugin.getConfig().getBoolean("lockdown");
 		this.lockdownReason = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("lockdown-reason", ""));
 		setAppealMessage(plugin.getConfig().getString("appeal-message", "")); //Default to empty string.
@@ -189,10 +190,11 @@ public class BanManager{
 			//Close any old connections (Possibly fix SQLITE_BUSY on reload?)
 			db.getConnection().close();
 			
-			//Phase 1: Load bans
+			boolean readOnly = plugin.getConfig().getBoolean("read-only", false);
 			
+			//Phase 1: Load bans
 			PreparedStatement ps;
-			if(!db.isReadOnly()){
+			if(!readOnly){
 				//Purge old temp bans
 				ps = db.getConnection().prepareStatement("DELETE FROM bans WHERE expires <> 0 AND expires < ?");
 				ps.setLong(1, System.currentTimeMillis());
@@ -224,7 +226,7 @@ public class BanManager{
 			
 			//Phase 2: Load IP Bans
 			
-			if(!db.isReadOnly()){
+			if(!readOnly){
 				//Purge old temp ip bans
 				ps = db.getConnection().prepareStatement("DELETE FROM ipbans WHERE expires <> 0 AND expires < ?");
 				ps.setLong(1, System.currentTimeMillis());
@@ -256,7 +258,7 @@ public class BanManager{
 			
 			//Phase 3: Load Mutes
 			
-			if(!db.isReadOnly()){
+			if(!readOnly){
 				//Purge old temp mutes
 				ps = db.getConnection().prepareStatement("DELETE FROM mutes WHERE expires <> 0 AND expires < ?");
 				ps.setLong(1, System.currentTimeMillis());
@@ -321,7 +323,7 @@ public class BanManager{
 			
 			//Phase 6 loading: Load Warn history
 			
-			if(!db.isReadOnly()){
+			if(!readOnly){
 				//Purge old warnings
 				ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
 				ps.setLong(1, System.currentTimeMillis());
@@ -360,9 +362,10 @@ public class BanManager{
 			//Phase 8 loading: Load history
 			plugin.getLogger().info("Loading history...");
 			
-			if(!db.isReadOnly()){
+			if(!readOnly){
 				db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
 			}
+			
 			query = "SELECT * FROM history ORDER BY created DESC";
 			rs = db.getConnection().prepareStatement(query).executeQuery();
 			while(rs.next()){
@@ -423,7 +426,7 @@ public class BanManager{
 		if(defaultReason == null || defaultReason.isEmpty()) defaultReason = "Misconduct";
 		this.defaultReason = ChatColor.translateAlternateColorCodes('&', defaultReason);
 
-		db.scheduleWatcher(); //Actually starts it.
+		//db.scheduleWatcher(); //Actually starts it.
 	}
 	
 	/**

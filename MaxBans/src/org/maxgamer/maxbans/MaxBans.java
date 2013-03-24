@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,6 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
 import org.maxgamer.maxbans.commands.*;
 import org.maxgamer.maxbans.database.Database;
+import org.maxgamer.maxbans.database.Database.ConnectionException;
+import org.maxgamer.maxbans.database.DatabaseCore;
+import org.maxgamer.maxbans.database.MySQLCore;
+import org.maxgamer.maxbans.database.SQLiteCore;
 import org.maxgamer.maxbans.listeners.*;
 import org.maxgamer.maxbans.sync.SyncServer;
 import org.maxgamer.maxbans.sync.Syncer;
@@ -82,6 +85,8 @@ public class MaxBans extends JavaPlugin{
 		Formatter.load(this);
 		
 		ConfigurationSection dbConfig = getConfig().getConfigurationSection("database");
+		
+		DatabaseCore dbCore;
 		if(getConfig().getBoolean("database.mysql", false)){
 			getLogger().info("Using MySQL");
 			String user = dbConfig.getString("user");
@@ -89,25 +94,29 @@ public class MaxBans extends JavaPlugin{
 			String host = dbConfig.getString("host");
 			String name = dbConfig.getString("name");
 			String port = dbConfig.getString("port");
-			db = new Database(this, host, name, user, pass, port);
+			//db = new Database(this, host, name, user, pass, port);
+			dbCore = new MySQLCore(host, user, pass, name, port);
 		}
 		else{
 			getLogger().info("Using SQLite");
 			//The database for bans
-			db = new Database(this, new File(this.getDataFolder(), "bans.db"));
+			dbCore = new SQLiteCore(new File(this.getDataFolder(), "bans.db"));
 		}
-		//Creates the tables if they don't exist
-		db.setReadOnly(dbConfig.getBoolean("read-only", false));
-		try{
-			//Note that this bypasses db.isReadOnly(), but this is okay
-			//Because if these tables exist, nothing will change.
-			//If they do not exist, errors are thrown when loading.
-			//So skipping db.isReadOnly() is necessary.
-			db.createTables();
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-			getLogger().severe("Could not create/check tables! Startup failed.");
+		final boolean readOnly = dbConfig.getBoolean("read-only", false);
+		
+		//Read-only hack
+		try {
+			this.db = new Database(dbCore){
+				@Override
+				public void execute(String query, Object... objs){
+					if(readOnly) return;
+					else super.execute(query, objs);
+				}
+			};
+		} catch (ConnectionException e1) {
+			e1.printStackTrace();
+			System.out.println("Failed to create connection to database. Disabling MaxBans :(");
+			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
 		
@@ -196,7 +205,8 @@ public class MaxBans extends JavaPlugin{
 		}
 		
 		this.getLogger().info("Clearing buffer...");
-		this.db.getDatabaseWatcher().run(); //Empties buffer
+		///this.db.getDatabaseWatcher().run(); //Empties buffer
+		this.db.close();
 		this.getLogger().info("Cleared buffer...");
 		instance = null;
 	}

@@ -2,20 +2,19 @@ package org.maxgamer.maxbans.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.maxgamer.maxbans.MaxBans;
 
-public class MySQL implements DatabaseCore{
-	private MaxBans plugin;
+public class MySQLCore implements DatabaseCore{
 	private String url;
 	/** The connection properties... user, pass, autoReconnect.. */
 	private Properties info;
 	/** The actual connection... possibly expired. */
 	private Connection connection;
 	
-	public MySQL(MaxBans plugin, String host, String user, String pass, String database, String port){
+	public MySQLCore(String host, String user, String pass, String database, String port){
 		info = new Properties();
 		info.put("autoReconnect", "true");
 		info.put("user", user);
@@ -23,7 +22,6 @@ public class MySQL implements DatabaseCore{
 		info.put("useUnicode", "true");
 		info.put("characterEncoding", "utf8");
 		this.url = "jdbc:mysql://"+host+":"+port+"/"+database;
-		this.plugin = plugin;
 	}
 	
 	
@@ -36,17 +34,16 @@ public class MySQL implements DatabaseCore{
 		try{
 			//If we have a current connection, fetch it
 			if(this.connection != null && !this.connection.isClosed()){
-				return this.connection;
+				if(this.connection.isValid(10)){
+					return this.connection;
+				}
+				//Else, it is invalid, so we return another connection.
 			}
-			else{
-				//this.connection = DriverManager.getConnection(this.url, user, pass);
-				this.connection = DriverManager.getConnection(this.url, info);
-				return this.connection;
-			}
+			this.connection = DriverManager.getConnection(this.url, info);
+			return this.connection;
 		}
 		catch(SQLException e){
 			e.printStackTrace();
-			plugin.getLogger().severe("Could not retrieve SQLite connection!");
 		}
 		return null;
 	}
@@ -60,5 +57,30 @@ public class MySQL implements DatabaseCore{
 		s = s.replace("\\", "\\\\");
 		s = s.replace("'", "\\'");
 		return s;
+	}
+
+
+	@Override
+	public void queue(BufferStatement bs) {
+		try{
+			PreparedStatement ps = bs.prepareStatement(this.getConnection());
+			ps.execute();
+			ps.close();
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			return;
+		}
+	}
+
+
+	@Override
+	public void close() {
+		//Nothing, because queries are executed immediately for MySQL
+	}
+	
+	@Override
+	public void flush(){
+		//Nothing, because queries are executed immediately for MySQL
 	}
 }

@@ -72,10 +72,6 @@ public class MBDebug extends CmdSkeleton{
 		out.print("Server String: " + Bukkit.getServer().toString());
 		out.print("Package: " + Bukkit.getServer().getClass().getCanonicalName());
 		
-		synchronized(plugin.getDB().getBuffer().queries){
-			out.print("Database Queue size: " + plugin.getDB().getBuffer().queries.size());
-		}
-		
 		out.print("=== Config File ===");
 		//We want to make sure the password isn't put in debug info..
 		String pass = plugin.getConfig().getString("database.pass"); //Store it
