@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import org.maxgamer.maxbans.sync.Connection.PacketEvent;
@@ -259,15 +260,20 @@ public class SyncServer{
 	
 	/** Stops the server and all active connections. */
 	public void stop(){
-		for(ClientConnection con : ClientConnection.getConnections()){
+		//for(ClientConnection con : ClientConnection.getConnections()){
+		Iterator<ClientConnection> cit = ClientConnection.getConnections().iterator();
+		while(cit.hasNext()){
+			ClientConnection con = cit.next();
 			try{
 				con.close("Server shutting down.");
+				cit.remove();
 			}
 			catch(IOException e){
 				e.printStackTrace();
 				log("SyncServer could not close ClientConnection #" + con.getID());
 			}
 		}
+		//}
 		try{
 			this.server.close();
 		}
