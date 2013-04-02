@@ -210,7 +210,7 @@ public class BanManager{
 				String name = rs.getString("name");
 				String reason = rs.getString("reason");
 				String banner = rs.getString("banner");
-				
+				players.add(name);
 				long expires = rs.getLong("expires");
 				long time = rs.getLong("time");
 				
@@ -273,6 +273,7 @@ public class BanManager{
 			while(rs.next()){
 				String name = rs.getString("name");
 				String banner = rs.getString("muter");
+				players.add(name);
 				
 				long expires = rs.getLong("expires");
 				long time = rs.getLong("time");
@@ -340,6 +341,8 @@ public class BanManager{
 				String name = rs.getString("name");
 				String reason = rs.getString("reason");
 				String banner = rs.getString("banner");
+				players.add(name);
+				
 				long expires = rs.getLong("expires");
 				
 				Warn warn = new Warn(reason,banner, expires);
@@ -370,6 +373,8 @@ public class BanManager{
 			rs = db.getConnection().prepareStatement(query).executeQuery();
 			while(rs.next()){
 				String name = rs.getString("name");
+				players.add(name);
+				
 				String banner = rs.getString("banner");
 				String message = rs.getString("message");
 				long created = rs.getLong("created");
@@ -611,6 +616,7 @@ public class BanManager{
     public void ban(String name, String reason, String banner){
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
+    	players.add(name);
     	
     	Ban ban = new Ban(name, reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
@@ -695,6 +701,7 @@ public class BanManager{
     public void tempban(String name, String reason, String banner, long expires){
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
+    	players.add(name);
     	
     	TempBan ban = new TempBan(name, reason, banner, System.currentTimeMillis(), expires);
     	this.tempbans.put(name, ban);
@@ -741,6 +748,7 @@ public class BanManager{
      */
     public void mute(String name, String banner){
     	name = name.toLowerCase();
+    	players.add(name);
     	
     	Mute mute = new Mute(name, banner, System.currentTimeMillis());
     	this.mutes.put(name, mute);
@@ -757,6 +765,7 @@ public class BanManager{
     public void tempmute(String name, String banner, long expires){
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
+    	players.add(name);
     	
     	TempMute tmute = new TempMute(name, banner, System.currentTimeMillis(), expires);
     	this.tempmutes.put(name, tmute);
@@ -772,6 +781,8 @@ public class BanManager{
     public void warn(String name, String reason, String banner){
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
+    	players.add(name);
+    	
     	long expires = System.currentTimeMillis() + plugin.getConfig().getInt("warn-expirey-in-minutes") * 60000;
     	
     	List<Warn> warns = this.getWarnings(name);
