@@ -2,18 +2,13 @@ package org.maxgamer.maxbans.commands;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.maxgamer.maxbans.banmanager.Ban;
-import org.maxgamer.maxbans.banmanager.IPBan;
-import org.maxgamer.maxbans.banmanager.TempBan;
-import org.maxgamer.maxbans.banmanager.TempIPBan;
+import org.maxgamer.maxbans.commands.bridge.MySQLBridge;
+import org.maxgamer.maxbans.commands.bridge.SQLiteBridge;
+import org.maxgamer.maxbans.commands.bridge.VanillaBridge;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.database.DatabaseCore;
 import org.maxgamer.maxbans.database.MySQLCore;
@@ -33,25 +28,8 @@ public class MBExportCommand extends CmdSkeleton{
 		}
 		else{
 			if(args[0].equalsIgnoreCase("vanilla")){
-				//Import vanilla.
-				for(Entry<String, Ban> entry : plugin.getBanManager().getBans().entrySet()){
-					if(entry.getValue() instanceof TempBan){
-						//So we skip it in good faith.
-						continue;
-					}
-					
-					OfflinePlayer p = Bukkit.getOfflinePlayer(entry.getKey());
-					if(!p.isBanned()) p.setBanned(true);
-				}
-				
-				for(Entry<String, IPBan> entry : plugin.getBanManager().getIPBans().entrySet()){
-					if(entry.getValue() instanceof TempIPBan){
-						//So we skip it in good faith.
-						continue;
-					}
-					
-					Bukkit.banIP(entry.getKey());
-				}
+				VanillaBridge bridge = new VanillaBridge();
+				bridge.export();
 				
 				sender.sendMessage(Formatter.secondary + "Success.");
 			}
@@ -72,7 +50,8 @@ public class MBExportCommand extends CmdSkeleton{
 					DatabaseCore dbCore = new MySQLCore(host, user, pass, name, port);
 					Database mysql = new Database(dbCore);
 					
-					plugin.getDB().copyTo(mysql);
+					MySQLBridge bridge = new MySQLBridge(mysql);
+					bridge.export();
 					
 					sender.sendMessage(ChatColor.GREEN + "Success - Exported to MySQL " + user + "@" + host + "." + name);
 					return true;
@@ -96,7 +75,9 @@ public class MBExportCommand extends CmdSkeleton{
 				try{
 					DatabaseCore dbCore = new SQLiteCore(file);
 					Database sqlite = new Database(dbCore);
-					plugin.getDB().copyTo(sqlite);
+					
+					SQLiteBridge bridge = new SQLiteBridge(sqlite);
+					bridge.export();
 					
 					sender.sendMessage(ChatColor.GREEN + "Success - Exported to SQLite " + file.getPath());
 					return true;

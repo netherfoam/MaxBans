@@ -205,7 +205,7 @@ public class MaxBans extends JavaPlugin{
 		}
 		
 		this.getLogger().info("Clearing buffer...");
-		///this.db.getDatabaseWatcher().run(); //Empties buffer
+		
 		this.db.close();
 		this.getLogger().info("Cleared buffer...");
 		instance = null;
