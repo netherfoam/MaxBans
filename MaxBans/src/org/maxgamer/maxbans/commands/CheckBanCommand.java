@@ -69,8 +69,6 @@ public class CheckBanCommand extends CmdSkeleton{
 		}
 		else{
 			ip = name;
-		}
-		if(ip != null){
 			IPBan ban = plugin.getBanManager().getIPBan(ip);
 			RangeBan rb = plugin.getBanManager().getRanger().getBan(new IPAddress(ip));
 			
@@ -90,6 +88,7 @@ public class CheckBanCommand extends CmdSkeleton{
 			sender.sendMessage(Formatter.primary + "Users: " + Formatter.secondary + (dupeip == null ? "0" : dupeip.size()));
 		}
 		sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
+		
 		
 		return true;
 	}

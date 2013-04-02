@@ -8,5 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="F:/lib/Herochat.jar"/>
+	<classpathentry kind="lib" path="F:/lib/DynamicBan.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
