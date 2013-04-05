@@ -1,9 +1,56 @@
+version: 1.6
+
 lockdown: false
 lockdown-reason: ""
+
+#Warnings config section
+#New in 1.6
+warnings:
+    #How long should warnings take to 'expire'?
+    #Set to 0 for never (...Honestly, I believe you should forgive them after a month at most...)
+    expirey-in-minutes: 4320
+    # This section looks scary, but really isn't... If you're scared,
+    # Just read the actual stuff and skip the comments unless you want to do some tricky things.
     
-max-warnings: 3
-#3 days
-warn-expirey-in-minutes: 4320
+    #What actions should we take when a player receives a warning?
+    #Format is like:
+    #<number of warnings>: 'commands to execute;seperated by semicolons'
+    #Examples:
+    #actions:
+    #   1: 'msg {name} You have been warned!'
+    #   2: 'strike {name};msg {name} You have angered Zeus!'
+    #   3: 'tempban {name} 1 hour Reached Max Warnings. Reasons:\n{reasons}\nBy: {banner}'
+    #Variables allowed:
+    #{name} the name of the player
+    #{ip} the last known IP of the player
+    #{reason} the last reason the player was warned
+    #{reasons} all the reasons (seperated by new lines) for this punishment. Example:
+    #Reason1: "Griefing"
+    #Reason2: "Spamming"
+    #Reason3: "Begging for items"
+    #Now, if I did
+    #3: 'tempban {name} 1 hour Reached Max Warnings:\n{reasons}'
+    #it would disconnect the user with this message:
+    #-------------------------------------
+    #You have been Temporarily Banned for:
+    #'Reached Max Warnings:
+    #Griefing
+    #Spamming
+    #Begging for items'
+    #By Console. Expires in 1 hour
+    #-------------------------------------
+    #If the command starts with a /, then the banner will execute the command
+    #Otherwise, the command will be executed by CONSOLE.
+    #You might want to use -s in these commands (To stop them broadcasting messages to players)
+    actions:
+        2: '/kick {name} Final Warning: \n{reason}'
+        3: '/tempban {name} 1 hour Reached Max Warnings:\n{reasons}'
+    #After receiving this many warnings, they will be all deleted.
+    #If 'actions' has an action for a number higher than this, then the action will never be
+    #done... Because this resets it to 0
+    #If you set this to <= 0, then it will be ignored, and warnings will never reset.
+    max: 3
+
 #Should we check that we're running the latest version of MaxBans?
 #This does NOT update it for you, it just notifies you in the console when
 #the server boots up if there is a new version available. 

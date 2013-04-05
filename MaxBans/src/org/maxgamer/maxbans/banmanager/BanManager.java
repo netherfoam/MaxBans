@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.database.Database;
@@ -600,6 +602,7 @@ public class BanManager{
     		//Expire old warnings
     		Warn w = it.next();
     		if(w.getExpires() < System.currentTimeMillis()){
+    			//TODO: Shouldn't I delete this from the database too?
     			it.remove();
     		}
     	}
@@ -783,7 +786,14 @@ public class BanManager{
     	banner = banner.toLowerCase();
     	players.add(name);
     	
-    	long expires = System.currentTimeMillis() + plugin.getConfig().getInt("warn-expirey-in-minutes") * 60000;
+    	ConfigurationSection cfg = plugin.getConfig().getConfigurationSection("warnings");
+    	long expires = 259200000; //4320 * 60,000
+    	int maxWarns = 3;
+    	if(cfg != null){
+    		expires = (long) (System.currentTimeMillis() + cfg.getDouble("expirey-in-minutes") * 60000);
+    		if(expires <= 0) expires = Long.MAX_VALUE; //Hacky, but works.
+    		maxWarns = cfg.getInt("max");
+    	}
     	
     	List<Warn> warns = this.getWarnings(name);
     	
@@ -797,11 +807,13 @@ public class BanManager{
     	
     	db.execute("INSERT INTO warnings (name, reason, banner, expires) VALUES (?, ?, ?, ?)", name, reason, banner, expires);
     	
-    	int maxWarns = plugin.getConfig().getInt("max-warnings");
+    	
     	if(maxWarns <= 0) return;
     	
     	int warnsSize = warns.size();
-    	if(warnsSize != 0 && warnsSize % maxWarns == 0){
+    	if(warnsSize != 0){
+    		int pos = warnsSize % maxWarns; //Which action(s) we should choose.
+    		if(pos == 0) pos = maxWarns; //If this is their final warning, warnSize % maxWarns == 0. We want it to be maxWarns instead!
     		
     		//Verify that they do not have a previous ban which will last longer.
     		Ban ban = this.getBan(name);
@@ -812,12 +824,84 @@ public class BanManager{
 	    		else return;
     		}
     		
-    		this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
+    		ConfigurationSection actions = cfg.getConfigurationSection("actions");
+    		if(actions == null) return; //No config actions set!
+    		
+    		for(String key : actions.getKeys(false)){
+    			try{
+    				if(pos != Integer.parseInt(key)) continue;
+    				
+    				String action = actions.getString(key);
+    				String[] cmds = action.split("[^\\\\];");
+    				for(String cmd : cmds){
+    					cmd = cmd.trim();
+    					CommandSender sender = Bukkit.getConsoleSender(); //Default to console
+    					if(cmd.startsWith("/")){
+    						cmd = cmd.replaceFirst("/", "");
+    						Player pBanner = Bukkit.getPlayerExact(banner);
+    						if(pBanner != null) sender = pBanner;
+    					}
+    					
+    					String lowercaseCmd = cmd.toLowerCase();
+    					int index;
+    					index = lowercaseCmd.indexOf("{name}");
+    					if(index >= 0){
+    						Pattern p = Pattern.compile("\\{name\\}", Pattern.CASE_INSENSITIVE);
+    						cmd = p.matcher(cmd).replaceAll(name);
+    					}
+    					
+    					String ip = getIP(name);
+    					index = lowercaseCmd.indexOf("{ip}");
+    					if(index >= 0 && ip != null){
+    						Pattern p = Pattern.compile("\\{ip\\}", Pattern.CASE_INSENSITIVE);
+    						cmd = p.matcher(cmd).replaceAll(name);
+    					}
+    					
+    					index = lowercaseCmd.indexOf("{reason}");
+    					if(index >= 0){
+    						Pattern p = Pattern.compile("\\{reason\\}", Pattern.CASE_INSENSITIVE);
+    						cmd = p.matcher(cmd).replaceAll(reason);
+    					}
+    					
+    					index = lowercaseCmd.indexOf("{banner}");
+    					if(index >= 0){
+    						Pattern p = Pattern.compile("\\{banner\\}", Pattern.CASE_INSENSITIVE);
+    						cmd = p.matcher(cmd).replaceAll(banner);
+    					}
+    					
+    					index = lowercaseCmd.indexOf("{reasons}");
+    					if(index >= 0){
+    						Pattern p = Pattern.compile("\\{reasons\\}", Pattern.CASE_INSENSITIVE);
+    						
+    						String msg = "";
+    						for(int i = warnsSize - 1; i >= warnsSize - pos; i--){
+    							Warn warn = warns.get(i);
+    							String rsn = warn.getReason();
+    							
+    							if(msg.isEmpty() == false) rsn += "\\\\n"; //Add newline at the end
+    							msg = rsn + msg; //Add the reason on the end of the line
+    						}
+    						
+    						cmd = p.matcher(cmd).replaceAll(msg);
+    					}
+    					
+    					Bukkit.dispatchCommand(sender, cmd);
+    				}
+    			}
+    			catch(NumberFormatException e){
+    				e.printStackTrace();
+    				System.out.println("Warning: " + key + " is not a valid number in plugins\\MaxBans\\config.yml! Please check your warnings configuration!");
+    			}
+    		}
+    		
+    		//this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
+    		//cfg.getL 
+    		/*
     		Player p = Bukkit.getPlayerExact(name);
     		if(p != null){
     			p.kickPlayer("Reached Max Warnings:\n" + reason);
-    		}
-    		announce(Formatter.secondary + name + Formatter.primary + " has reached max warnings.  One hour ban.");
+    		}*/
+    		//announce(Formatter.secondary + name + Formatter.primary + " has reached max warnings.  One hour ban.");
     	}
     }
     
