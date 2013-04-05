@@ -39,8 +39,6 @@ public class DupeIPCommand extends CmdSkeleton{
 				ip = name;
 			}
 			
-
-			
 			sender.sendMessage(getScanningString(name, ip));
 			
 			StringBuilder sb = new StringBuilder();
