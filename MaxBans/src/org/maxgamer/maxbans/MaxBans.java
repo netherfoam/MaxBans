@@ -78,7 +78,14 @@ public class MaxBans extends JavaPlugin{
 		 * it doesnt.  This makes it friendlier.
 		 */
 		this.reloadConfig();
+		
+		int result = UpdateCheck.compareVersion(getConfig().getString("version"), this.getDescription().getVersion());
+		
 		this.getConfig().options().copyDefaults();
+		if(result == -1){ //Config needs updating
+			getLogger().info("Updating config!");
+			this.saveConfig();
+		}
 		
 		this.filter_names = getConfig().getBoolean("filter-names");
 		

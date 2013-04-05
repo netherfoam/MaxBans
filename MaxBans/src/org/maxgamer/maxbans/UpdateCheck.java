@@ -15,9 +15,9 @@ public class UpdateCheck{
 		Scanner sc = new Scanner(s);
 		
 		try{
-			int version = getCurrentVersion();
-			int latest = parse(sc.nextLine());
-			if(latest > version){
+			int result = compareVersion(sc.nextLine(), MaxBans.instance.getDescription().getVersion());
+			
+			if(result > 0){
 				return true;
 			}
 		}
@@ -28,14 +28,48 @@ public class UpdateCheck{
 		}
 		return false;
 	}
-	public static int getCurrentVersion(){
-		if(MaxBans.instance == null){
-			return Integer.MAX_VALUE;
+	
+	/**
+	 * Compares two string versions
+	 * @param v1 The first version string eg 5.9
+	 * @param v2 The second version string eg 5.15
+	 * @return 0 if they're the same version (or one is invalid), 1 if v1 is newer, -1 if v2 is newer.
+	 */
+	public static int compareVersion(String v1, String v2){
+		v1 = v1.replaceAll("[^0-9\\.]", "");
+		v2 = v2.replaceAll("[^0-9\\.]", "");
+		
+		String[] v1s = v1.split("\\.");
+		String[] v2s = v2.split("\\.");
+		
+		int result = 0;
+		
+		int pos = 0;
+		while(result == 0){
+			if(pos >= v1s.length && pos >= v2s.length){
+				break; //Out of things to look at
+			}
+			else if(pos >= v1s.length){
+				//i1 is exhausted
+				result = -1;
+			}
+			else if(pos >= v2s.length){
+				//i2 is exhausted
+				result = 1;
+			}
+			else{
+				int i1;
+				int i2;
+				
+				i1 = Integer.parseInt(v1s[pos]);
+				i2 = Integer.parseInt(v2s[pos]);
+				
+				if(i1 > i2) result = 1;
+				else if(i2 > i1) result = -1;
+			}
+			pos++;
 		}
-		return parse(MaxBans.instance.getDescription().getVersion()); //Deletes anything that's not 0-9.
-	}
-	private static int parse(String version){
-		return Integer.parseInt(version.replaceAll("[^0-9]", "")); //Deletes anything that's not 0-9.
+		return result;
 	}
 	
 	public static String getURLContents(){
