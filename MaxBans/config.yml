@@ -3,6 +3,8 @@ version: 1.6
 lockdown: false
 lockdown-reason: ""
 
+auto-dupeip: false
+
 #Warnings config section
 #New in 1.6
 warnings:

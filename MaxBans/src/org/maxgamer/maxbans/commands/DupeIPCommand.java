@@ -6,13 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class DupeIPCommand extends CmdSkeleton{
-	private ChatColor banned = ChatColor.RED;
-	private ChatColor online = ChatColor.GREEN;
-	private ChatColor offline = ChatColor.GRAY;
+	private static ChatColor banned = ChatColor.RED;
+	private static ChatColor online = ChatColor.GREEN;
+	private static ChatColor offline = ChatColor.GRAY;
     
     public DupeIPCommand(){
         super("dupeip", "maxbans.dupeip");
@@ -40,7 +41,7 @@ public class DupeIPCommand extends CmdSkeleton{
 			
 
 			
-			sender.sendMessage(Formatter.primary + "Scanning " + getChatColor(name) + name + Formatter.primary + " on " + Formatter.secondary + ip + ChatColor.WHITE + ".  [" + banned + "Banned" + ChatColor.WHITE + "] [" + online + "Online" + ChatColor.WHITE + "] [" + offline + "Offline" + ChatColor.WHITE + "]");
+			sender.sendMessage(getScanningString(name, ip));
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -67,13 +68,17 @@ public class DupeIPCommand extends CmdSkeleton{
 		}
 	}
 	
-	public ChatColor getChatColor(String name){
+	public static String getScanningString(String name, String ip){
+		return Formatter.primary + "Scanning " + getChatColor(name) + name + Formatter.primary + " on " + Formatter.secondary + ip + ChatColor.WHITE + ".  [" + banned + "Banned" + ChatColor.WHITE + "] [" + online + "Online" + ChatColor.WHITE + "] [" + offline + "Offline" + ChatColor.WHITE + "]";
+	}
+	
+	public static ChatColor getChatColor(String name){
 		if(Util.isIP(name)){
-			if(plugin.getBanManager().getIPBan(name) != null) return banned;
+			if(MaxBans.instance.getBanManager().getIPBan(name) != null) return banned;
 			else return offline; //Well...
 		}
 		else{
-			if(plugin.getBanManager().getBan(name) != null) return banned;
+			if(MaxBans.instance.getBanManager().getBan(name) != null) return banned;
 			if(Bukkit.getPlayerExact(name) != null) return online;
 			return offline;
 		}

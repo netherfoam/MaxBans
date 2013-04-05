@@ -1,5 +1,7 @@
 package org.maxgamer.maxbans.listeners;
 
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.banmanager.*;
+import org.maxgamer.maxbans.commands.DupeIPCommand;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
@@ -15,6 +18,36 @@ import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class JoinListener extends ListenerSkeleton{
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onJoinDupeip(PlayerLoginEvent e){
+		if(plugin.getConfig().getBoolean("auto-dupeip") == false){
+			return;
+		}
+		
+		HashSet<String> dupes = plugin.getBanManager().getUsers(e.getAddress().getHostAddress());
+		if(dupes == null){
+			return;
+		}
+		dupes.remove(e.getPlayer().getName().toLowerCase());
+		if(dupes.isEmpty()){
+			return;
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for(String dupe : dupes){
+			sb.append(DupeIPCommand.getChatColor(dupe).toString()+ dupe + ", ");
+		}
+		
+		sb.replace(sb.length() - 2, sb.length(), "");
+		for(Player p : Bukkit.getOnlinePlayers()){
+			if(p.hasPermission("maxbans.notify")){
+				p.sendMessage(DupeIPCommand.getScanningString(e.getPlayer().getName().toLowerCase(), e.getAddress().getHostAddress()));
+				p.sendMessage(sb.toString());
+			}
+		}
+		
+	}
+	
     @EventHandler(priority = EventPriority.LOW)
 	public void onJoinLockdown(PlayerLoginEvent event) {
 		if(event.getResult() != Result.ALLOWED) return;
