@@ -45,9 +45,9 @@ public class DupeIPCommand extends CmdSkeleton{
 			
 			StringBuilder sb = new StringBuilder();
 			
-			HashSet<String> ips = plugin.getBanManager().getUsers(ip);
-			if(ips != null){ //Could be null if we're looking up an invalid IP
-				for(String dupe : ips){
+			HashSet<String> dupes = plugin.getBanManager().getUsers(ip);
+			if(dupes != null){ //Could be null if we're looking up an invalid IP
+				for(String dupe : dupes){
 					if(dupe.equalsIgnoreCase(name)) continue; //Same guy is not a duplicate of himself.
 					sb.append(getChatColor(dupe).toString()+ dupe + ", ");
 				}

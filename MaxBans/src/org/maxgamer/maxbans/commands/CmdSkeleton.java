@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.util.Formatter;
 
@@ -112,7 +114,7 @@ public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comp
 			sender.sendMessage(ChatColor.RED + "/" + label + " " + sb.toString());
 			sender.sendMessage(ChatColor.RED + "Exception: " + e.getMessage());
 			sender.sendMessage(ChatColor.RED + "The remainder of the exception is in the console.");
-			sender.sendMessage(ChatColor.RED + "Please report this to netherfoam: http://dev.bukkit.org/server-mods/maxbans and incldue the error in the console in your post.");
+			sender.sendMessage(ChatColor.RED + "Please report this to netherfoam: http://dev.bukkit.org/server-mods/maxbans and include the error in the console in your post.");
 			return true;
 		}
 	}
@@ -126,16 +128,23 @@ public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comp
     	ArrayList<String> results = new ArrayList<String>();
     	
     	if(args.length == namePos){
-        	String bestMatch = plugin.getBanManager().match(args[0]);
+    		String partial = args[namePos - 1];
+    				
+        	String bestMatch = plugin.getBanManager().match(partial);
         	if(bestMatch == null){
         		return results;
         	}
         	else{
-        		results.add(bestMatch); //Best one first.
+        		results.add(bestMatch); //Best one first. Regardless of if they're offline.
         		
-        		HashSet<String> all = plugin.getBanManager().matchAll(args[0]);
-        		all.remove(bestMatch); //Don't want this name here twice.
-        		results.addAll(all);
+        		//Rest of the matches
+        		for(Player p : Bukkit.getOnlinePlayers()){
+        			String name = p.getName().toLowerCase();
+        			if(name.equals(bestMatch)) continue;
+        			if(name.startsWith(partial)){
+        				results.add(name);
+        			}
+        		}
         	}
     	}
     	return results;

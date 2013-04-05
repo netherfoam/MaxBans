@@ -582,7 +582,8 @@ public class BanManager{
      * @return a HashSet of lower case users which have joined from the given IP address
      */
     public HashSet<String> getUsers(String ip){
-    	return this.iplookup.get(ip);
+    	if(ip == null) return null;
+    	return new HashSet<String>(this.iplookup.get(ip));
     }
     
     /**
@@ -924,6 +925,7 @@ public class BanManager{
      * @return The last IP they used to connect to the server, or null if they've never connected
      */
     public String getIP(String user){
+    	if(user == null) return null;
     	return this.recentips.get(user.toLowerCase());
     }
     
@@ -960,10 +962,37 @@ public class BanManager{
      */
     public boolean logIP(String name, String ip){
     	name = name.toLowerCase();
-    	
+    	//DEBUG
     	String oldIP = this.recentips.get(name);
-    	if(ip.equals(oldIP)) return false; //Nothing has changed.
+    	if(oldIP != null && ip.equals(oldIP)){
+    		return false; //Nothing has changed.
+    	}
     	
+    	boolean isNew = this.recentips.put(name, ip) == null;
+    	if(isNew == false){
+    		HashSet<String> usersFromOldIP = this.iplookup.get(oldIP);
+    		usersFromOldIP.remove(name);
+    	}
+    	else{
+    		players.add(name); //You're new! Add to autocomplete.
+    	}
+    	
+    	HashSet<String> usersFromNewIP = this.iplookup.get(ip);
+    	if(usersFromNewIP == null){
+    		usersFromNewIP = new HashSet<String>();
+    		this.iplookup.put(ip, usersFromNewIP);
+    	}
+    	usersFromNewIP.add(name);
+    	
+    	if(isNew == false){
+    		db.execute("UPDATE iphistory SET ip = ? WHERE name = ?", ip, name);
+    	}
+    	else{
+    		db.execute("INSERT INTO iphistory (name, ip) VALUES (?, ?)", name, ip);
+    	}
+    	
+    	return true;
+    	/*
     	if(!this.recentips.containsKey(name)){
     		//First time we've seen this player! Add them to the autocomplete list
     		this.players.add(name);
@@ -993,6 +1022,7 @@ public class BanManager{
     	
     	this.recentips.put(name, ip);
     	return true;
+    	*/
     }
 	
 	/**
