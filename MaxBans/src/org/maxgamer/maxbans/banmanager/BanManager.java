@@ -368,7 +368,9 @@ public class BanManager{
 			plugin.getLogger().info("Loading history...");
 			
 			if(!readOnly){
-				db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+				if(plugin.getConfig().getInt("history-expirey-minutes", 10080) > 0){
+					db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+				}
 			}
 			
 			query = "SELECT * FROM history ORDER BY created DESC";
