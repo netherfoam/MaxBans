@@ -5,6 +5,8 @@ lockdown-reason: ""
 
 auto-dupeip: false
 
+history-expirey-minutes: 10080 #1 week.
+
 #Warnings config section
 #New in 1.6
 warnings:
