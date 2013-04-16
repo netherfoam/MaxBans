@@ -585,7 +585,9 @@ public class BanManager{
      */
     public HashSet<String> getUsers(String ip){
     	if(ip == null) return null;
-    	return new HashSet<String>(this.iplookup.get(ip));
+    	HashSet<String> ips = this.iplookup.get(ip);
+    	if(ips == null) return null;
+    	return new HashSet<String>(ips);
     }
     
     /**
