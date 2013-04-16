@@ -20,7 +20,7 @@ import org.maxgamer.maxbans.util.Util;
 public class JoinListener extends ListenerSkeleton{
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onJoinDupeip(PlayerLoginEvent e){
-		if(plugin.getConfig().getBoolean("auto-dupeip") == false){
+		if(plugin.getConfig().getBoolean("auto-dupeip") == false || e.getResult() != Result.ALLOWED){
 			return;
 		}
 		
@@ -74,20 +74,24 @@ public class JoinListener extends ListenerSkeleton{
     }
     
     @EventHandler (priority = EventPriority.LOWEST)
-    public void onJoinHandler(PlayerLoginEvent event) {
-        final Player player = event.getPlayer();
-        final String address = event.getAddress().getHostAddress();
+    public void onJoinHandler(PlayerLoginEvent e) {
+    	if(e.getResult() != Result.ALLOWED){
+    		return;
+    	}
+    	
+        final Player player = e.getPlayer();
+        final String address = e.getAddress().getHostAddress();
         
         if(plugin.filter_names){
 	        String invalidChars = Util.getInvalidChars(player.getName());
 	        if(!invalidChars.isEmpty()){
-	        	event.setKickMessage("Kicked by MaxBans.\nYour name contains invalid characters:\n'" + invalidChars + "'");
-	        	event.setResult(Result.KICK_OTHER);
+	        	e.setKickMessage("Kicked by MaxBans.\nYour name contains invalid characters:\n'" + invalidChars + "'");
+	        	e.setResult(Result.KICK_OTHER);
 	        	return;
 	        }
 	        else if(player.getName().isEmpty()){
-	        	event.setKickMessage("Kicked by MaxBans.\nYour name is invalid!");
-	        	event.setResult(Result.KICK_OTHER);
+	        	e.setKickMessage("Kicked by MaxBans.\nYour name is invalid!");
+	        	e.setResult(Result.KICK_OTHER);
 	        	return;
 	        }
         }
@@ -138,7 +142,7 @@ public class JoinListener extends ListenerSkeleton{
 	                if(appeal != null && appeal.isEmpty() == false){
 	                	reason += "\n" + Formatter.regular + appeal;
 	                }
-	                event.disallow(Result.KICK_OTHER, reason);
+	                e.disallow(Result.KICK_OTHER, reason);
 	                
 	                if(plugin.getConfig().getBoolean("notify", true)){
 	                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
@@ -154,8 +158,8 @@ public class JoinListener extends ListenerSkeleton{
 	        	
 	        	//DNS Blacklist handling, only if NOT whitelisted
 	            if(plugin.getBanManager().getDNSBL() != null){
-	            	plugin.getBanManager().getDNSBL().handle(event);
-	            	if(event.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
+	            	plugin.getBanManager().getDNSBL().handle(e);
+	            	if(e.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
 	            }
         	}
         	
@@ -197,8 +201,8 @@ public class JoinListener extends ListenerSkeleton{
         	km.append("\n" + Formatter.regular + appeal);
         }
         
-        event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-        event.setKickMessage(km.toString());
+        e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+        e.setKickMessage(km.toString());
         
         if(plugin.getConfig().getBoolean("notify", true)){
         	String msg = (ban == null ? Formatter.secondary : ChatColor.RED) + player.getName() + Formatter.primary + " (" + (ipban == null ? Formatter.secondary : ChatColor.RED) + address + Formatter.primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 

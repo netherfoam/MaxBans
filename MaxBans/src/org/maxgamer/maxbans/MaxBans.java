@@ -101,7 +101,6 @@ public class MaxBans extends JavaPlugin{
 			String host = dbConfig.getString("host");
 			String name = dbConfig.getString("name");
 			String port = dbConfig.getString("port");
-			//db = new Database(this, host, name, user, pass, port);
 			dbCore = new MySQLCore(host, user, pass, name, port);
 		}
 		else{
