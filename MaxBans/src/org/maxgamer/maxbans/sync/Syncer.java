@@ -281,10 +281,15 @@ public class Syncer{
 		this.server.connect(password);
 		PacketListener pl = new PacketListener(){
 			@Override
-			public boolean onPacket(PacketEvent e) {
-				Command c = commands.get(e.getPacket().getCommand());
+			public boolean onPacket(final PacketEvent e) {
+				final Command c = commands.get(e.getPacket().getCommand());
 				if(c != null){
-					c.run(e.getPacket());
+					Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){
+						@Override
+						public void run(){
+							c.run(e.getPacket());
+						}
+					});
 					e.setHandled();
 				}
 				return false; //Never stop listening.
