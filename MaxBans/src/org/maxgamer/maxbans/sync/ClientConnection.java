@@ -51,7 +51,7 @@ public class ClientConnection extends Connection{
 	
 	@Override
 	public void onClose(){
-		clients.remove(this);
+		//clients.remove(this);
 	}
 	
 	/** Sets this connection as "Authenticated", meaning it will receive messages from the server broadcasts */

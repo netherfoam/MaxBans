@@ -260,7 +260,6 @@ public class SyncServer{
 	
 	/** Stops the server and all active connections. */
 	public void stop(){
-		//for(ClientConnection con : ClientConnection.getConnections()){
 		Iterator<ClientConnection> cit = ClientConnection.getConnections().iterator();
 		while(cit.hasNext()){
 			ClientConnection con = cit.next();
@@ -273,7 +272,6 @@ public class SyncServer{
 				log("SyncServer could not close ClientConnection #" + con.getID());
 			}
 		}
-		//}
 		try{
 			this.server.close();
 		}

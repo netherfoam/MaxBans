@@ -279,7 +279,7 @@ public class Connection{
 			try{
 				this.socket.close(); //If this throws an exception, we were already closed
 			}
-			catch(IOException e){e.printStackTrace();} //So die quietly.
+			catch(IOException e){} //So die quietly.
 		}
 	}
 	
