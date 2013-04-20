@@ -56,6 +56,7 @@ public class CheckIPCommand extends CmdSkeleton{
 			
 			HashSet<String> dupeip = plugin.getBanManager().getUsers(ip);
 			sender.sendMessage(Formatter.primary + "Users: " + Formatter.secondary + (dupeip == null ? "0" : dupeip.size()));
+			sender.sendMessage(Formatter.primary + "GeoIP: " + Formatter.secondary + "http://www.geoiptool.com/en/?IP=" + ip);
 			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
 			
 			return true;
