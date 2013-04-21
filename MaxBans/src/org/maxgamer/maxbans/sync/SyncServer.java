@@ -283,13 +283,19 @@ public class SyncServer{
 	
 	/** Broadcasts the given string to everyone except the given client (Eg a sender) */
 	public void broadcast(String message, ClientConnection exclude){
-		for(ClientConnection con : ClientConnection.getConnections()){
+		Iterator<ClientConnection> cit = ClientConnection.getConnections().iterator();
+		while(cit.hasNext()){
+			ClientConnection con = cit.next();
 			if(con == exclude) continue;
 			try {
 				con.println(message);
 			} catch (IOException e) {
 				e.printStackTrace();
-				log("Could not broadcast to: " + con.toString());
+				log("Could not broadcast to: " + con.toString() + ". Closing it.");
+				cit.remove();
+				try {
+					con.close();
+				} catch (IOException e1) {} //Die silently
 			}
 		}
 	}
