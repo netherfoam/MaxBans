@@ -39,6 +39,18 @@ public class KickCommand extends CmdSkeleton{
 				return true;
 			}
 			
+			if(Util.isIP(name)){
+				for(Player p : Bukkit.getOnlinePlayers()){
+					if(p.getAddress().getAddress().getHostAddress().equals(name)){
+						p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
+					}
+				}
+				
+				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone from " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'.");
+				plugin.getBanManager().addHistory(name, banner, Formatter.secondary + banner + Formatter.primary + " kicked everyone from " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
+				return true;
+			}
+			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
 				p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
