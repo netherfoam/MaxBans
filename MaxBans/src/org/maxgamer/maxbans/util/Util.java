@@ -57,6 +57,7 @@ public class Util{
 	public static String getShortTime(long ms){
 		String s = getTime(ms);
 		String[] vals = s.split(" ");
+		if(vals.length < 2) return s;
 		return vals[0] + " " + vals[1];
 	}
 	
@@ -74,7 +75,8 @@ public class Util{
     /**
      * Finds the time until a specific epoch.
      * @param epoch the epoch (Milliseconds) time to check
-     * @return The time (String format) of an epoch. Eg 3661 = 1 hours 1 minutes 1 seconds
+     * @return The time (String format) of an epoch. Eg 3661 = 1 hours 1 minutes 1 seconds.
+     * If the number of years is > 100, this returns "Never".
      */
     public static String getTime(long ms){
     	ms =  (long) Math.ceil(ms / 1000.0); //Work in seconds.
@@ -83,6 +85,8 @@ public class Util{
     	if(ms / 31449600 > 0){
     		//Years
     		long years = ms / 31449600;
+    		if(years > 100) return "Never";
+    		
     		sb.append(years + (years == 1 ? " year " : " years "));
     		ms -= years * 31449600;
     	}

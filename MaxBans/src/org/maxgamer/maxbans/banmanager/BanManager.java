@@ -602,15 +602,20 @@ public class BanManager{
     	
     	if(warnings == null) return null; //No warnings, return an empty list.
     	
+		boolean q = false; //Basically, we only want to do one query even if we expire multiple warnings, or no queries if there are no warnings.
     	Iterator<Warn> it = warnings.iterator();
     	while(it.hasNext()){
     		//Expire old warnings
     		Warn w = it.next();
     		if(w.getExpires() < System.currentTimeMillis()){
-    			//TODO: Shouldn't I delete this from the database too?
+    			System.out.println(w.getExpires() + " is less than " + System.currentTimeMillis() + " (" + (w.getExpires() - System.currentTimeMillis()) + ")");
     			it.remove();
+    			q = true;
     		}
     	}
+    	if(q){ //Untested
+			db.execute("DELETE FROM warnings WHERE name = ? AND expires < ?", name, System.currentTimeMillis());
+		}
     	
     	return warnings;
     }
@@ -792,11 +797,17 @@ public class BanManager{
     	players.add(name);
     	
     	ConfigurationSection cfg = plugin.getConfig().getConfigurationSection("warnings");
-    	long expires = 259200000; //4320 * 60,000
+    	long expires = 259200000; //4320 * 60,000 - 3 days
     	int maxWarns = 3;
     	if(cfg != null){
-    		expires = (long) (System.currentTimeMillis() + cfg.getDouble("expirey-in-minutes") * 60000);
-    		if(expires <= 0) expires = Long.MAX_VALUE; //Hacky, but works.
+    		expires = (long) (cfg.getLong("expirey-in-minutes") * 60000);
+    		if(expires <= 0){
+    			expires = Long.MAX_VALUE; //Hacky, but works.
+    		}
+    		else{
+    			expires += System.currentTimeMillis();
+    		}
+    		
     		maxWarns = cfg.getInt("max");
     	}
     	
@@ -898,15 +909,6 @@ public class BanManager{
     				System.out.println("Warning: " + key + " is not a valid number in plugins\\MaxBans\\config.yml! Please check your warnings configuration!");
     			}
     		}
-    		
-    		//this.tempban(name, "Reached Max Warnings:\n" + reason, banner, System.currentTimeMillis() + 3600000); //1 hour
-    		//cfg.getL 
-    		/*
-    		Player p = Bukkit.getPlayerExact(name);
-    		if(p != null){
-    			p.kickPlayer("Reached Max Warnings:\n" + reason);
-    		}*/
-    		//announce(Formatter.secondary + name + Formatter.primary + " has reached max warnings.  One hour ban.");
     	}
     }
     
@@ -966,7 +968,6 @@ public class BanManager{
      */
     public boolean logIP(String name, String ip){
     	name = name.toLowerCase();
-    	//DEBUG
     	String oldIP = this.recentips.get(name);
     	if(oldIP != null && ip.equals(oldIP)){
     		return false; //Nothing has changed.
@@ -996,37 +997,6 @@ public class BanManager{
     	}
     	
     	return true;
-    	/*
-    	if(!this.recentips.containsKey(name)){
-    		//First time we've seen this player! Add them to the autocomplete list
-    		this.players.add(name);
-    	}
-    	else{
-    		//List shouldn't be null, because they've been recorded already
-    		HashSet<String> list = this.iplookup.get(oldIP);
-    		list.remove(name);
-    	}
-    	
-    	//Get the list of users on their ip
-    	HashSet<String> list = this.iplookup.get(ip);
-    	if(list == null){
-    		//No history, so add the history object
-    		list = new HashSet<String>();
-    		this.iplookup.put(ip, list);
-    	}
-    	//Add them to the new or old history
-    	list.add(name);
-    	
-    	if(this.recentips.containsKey(name)){
-    		db.execute("UPDATE iphistory SET ip = ? WHERE name = ?", ip, name);
-    	}
-    	else{
-    		db.execute("INSERT INTO iphistory (name, ip) VALUES (?, ?)", name, ip);
-    	}
-    	
-    	this.recentips.put(name, ip);
-    	return true;
-    	*/
     }
 	
 	/**
