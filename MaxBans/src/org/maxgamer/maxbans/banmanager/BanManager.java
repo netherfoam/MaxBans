@@ -117,7 +117,9 @@ public class BanManager{
 	public HashMap<String, String> getPlayers(){ return actualNames; }
 	
 	/** The things that have happened recently. getHistory()[0] is the most recent thing that happened. */
-	public HistoryRecord[] getHistory(){ return history.toArray(new HistoryRecord[history.size()]); }
+	public HistoryRecord[] getHistory(){ 
+		return history.toArray(new HistoryRecord[history.size()]); 
+	}
 	/** The things that have recently to the given user, or have been dealt by them.  [0] is the most recent thing that happened */
 	public HistoryRecord[] getHistory(String name){
 		ArrayList<HistoryRecord> history = personalHistory.get(name);
