@@ -50,8 +50,23 @@ public class Syncer{
 		commands.put("msg", msg);
 		
 		/* *************************
+		 * Announces the given message
+		 * to everyone in the server
+		 * *************************/
+		Command announce = new Command(){
+			@Override
+			public void run(Packet prop){
+				String msg = prop.get("string");
+				boolean silent = prop.has("silent");
+				
+				MaxBans.instance.getBanManager().announce(msg, silent, null);
+			}
+		};
+		commands.put("announce", announce);
+		
+		/* *************************
 		 * Logs that a player joined
-		 * from teh given IP address
+		 * from the given IP address
 		 * *************************/
 		Command setip = new Command(){
 			@Override
@@ -284,7 +299,7 @@ public class Syncer{
 			public boolean onPacket(final PacketEvent e) {
 				final Command c = commands.get(e.getPacket().getCommand());
 				if(c != null){
-					Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){
+					Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){ //Run it in the main thread
 						@Override
 						public void run(){
 							c.run(e.getPacket());
@@ -404,7 +419,7 @@ public class Syncer{
 	
 	/** Represents a command the syncer can perform */
 	protected static abstract class Command{
-		/** Called when this command is asked for, with the packet that requested it. */
+		/** Called when this command is asked for, with the packet that requested it. This method is called in the main server thread. */
 		public abstract void run(Packet packet);
 	}
 	/**
