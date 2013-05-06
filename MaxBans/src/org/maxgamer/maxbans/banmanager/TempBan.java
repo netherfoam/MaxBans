@@ -1,5 +1,9 @@
 package org.maxgamer.maxbans.banmanager;
 
+import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.util.Util;
+
 public class TempBan extends Ban implements Temporary{
     private long expires;
         
@@ -28,5 +32,27 @@ public class TempBan extends Ban implements Temporary{
 	 */
 	public boolean hasExpired(){
 		return System.currentTimeMillis() > expires;
+	}
+	
+	/**
+	 * You're banned!<br/>
+	 * Reason: 'Misconduct'<br/>
+	 * By Console.
+	 */
+	@Override
+	public String getKickMessage(){
+		StringBuilder sb = new StringBuilder(50);
+		sb.append(Formatter.message + "You're temporarily banned!" + Formatter.regular + "\n Reason: '");
+		sb.append(Formatter.reason + reason);
+		sb.append(Formatter.regular + "'\n By ");
+		sb.append(Formatter.banner + banner + Formatter.regular + ". ");
+		
+    	sb.append("Expires in " + Formatter.time + Util.getTimeUntil(expires));
+		
+		String appeal = MaxBans.instance.getBanManager().getAppealMessage();
+        if(appeal != null && appeal.isEmpty() == false){
+        	sb.append("\n" + Formatter.regular + appeal);
+        }
+        return sb.toString();
 	}
 }

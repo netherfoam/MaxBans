@@ -8,7 +8,6 @@ auto-dupeip: false
 history-expirey-minutes: 10080 #1 week.
 
 #Warnings config section
-#New in 1.6
 warnings:
     #How long should warnings take to 'expire'?
     #Set to 0 for never (...Honestly, I believe you should forgive them after a month at most...)

@@ -640,6 +640,41 @@ public class BanManager{
     	this.bans.put(name, ban);
     	
     	db.execute("INSERT INTO bans (name, reason, banner, time) VALUES (?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis());
+    	kick(name, ban.getKickMessage());
+    }
+    
+    /**
+     * Disconnects the given user for the given reason, if they are online.
+     * If they are not online, this method returns false and does nothing.
+     * @param user The user to kick (exact, case insensitive)
+     * @param msg The message to kick them with
+     * @return True on success, false if the player was already offline.
+     */
+    private boolean kick(String user, String msg){
+    	Player p = Bukkit.getPlayerExact(user);
+    	if(p != null && p.isOnline()){
+    		p.kickPlayer(msg);
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * Disconnects all users from the given IP address, with the given
+     * message. If there are no users found on the IP, this returns false.
+     * @param ip The IP address to ban (E.g. 127.0.0.1)
+     * @param msg The message to kick them all with
+     * @return True on success, false if no players were online with the given IP
+     */
+    private boolean kickIP(String ip, String msg){
+    	short kicks = 0;
+    	for(Player p : Bukkit.getOnlinePlayers()){
+    		if(p.isOnline() && p.getAddress().getAddress().getHostAddress().equals(ip)){
+    			p.kickPlayer(msg); //For some reason, this OFTEN causes "End of stream error"'s!
+    			kicks++;
+    		}
+    	}
+    	return kicks != 0;
     }
     
     /**
@@ -727,6 +762,7 @@ public class BanManager{
     	this.tempbans.put(name, ban);
     	
     	db.execute("INSERT INTO bans (name, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", name, reason, banner, System.currentTimeMillis(), expires);
+    	kick(name, ban.getKickMessage());
     }
     
     /**
@@ -744,6 +780,7 @@ public class BanManager{
     	this.ipbans.put(ip, ipban);
     	
     	db.execute("INSERT INTO ipbans (ip, reason, banner, time) VALUES (?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis());
+    	kickIP(ip, ipban.getKickMessage());
     }
     
     /**
@@ -762,6 +799,7 @@ public class BanManager{
     	this.tempipbans.put(ip, tib);
     	
     	db.execute("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis(), expires);
+    	kickIP(ip, tib.getKickMessage());
     }
     
     /**

@@ -130,19 +130,7 @@ public class JoinListener extends ListenerSkeleton{
 	        	IPAddress ip = new IPAddress(address);
 	        	RangeBan rb = plugin.getBanManager().getRanger().getBan(ip);
 	        	if(rb != null){
-	        		String reason = Formatter.regular + "Your IP Address (" + Formatter.secondary + rb.toString() + Formatter.regular + ") is RangeBanned.\n";
-	        		if(rb instanceof Temporary){
-	        			reason += "The ban expires in " + Formatter.time + Util.getTimeUntil(((Temporary) rb).getExpires()) + Formatter.regular + ".\n"; 
-	        		}
-	        		reason += Formatter.regular + "Reason: " + Formatter.reason + rb.getReason() + "\n";
-	        		reason += Formatter.regular + "By: " + Formatter.banner + rb.getBanner();
-	        		
-	        		 //Append the appeal message, if necessary.
-	                String appeal = plugin.getBanManager().getAppealMessage();
-	                if(appeal != null && appeal.isEmpty() == false){
-	                	reason += "\n" + Formatter.regular + appeal;
-	                }
-	                e.disallow(Result.KICK_OTHER, reason);
+	                e.disallow(Result.KICK_OTHER, rb.getKickMessage());
 	                
 	                if(plugin.getConfig().getBoolean("notify", true)){
 	                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
@@ -166,46 +154,11 @@ public class JoinListener extends ListenerSkeleton{
         	return;
         }
         
-        String reason;
-        String banner;
-        long expires = 0;
-        
-        if (ipban != null){ 
-            if (ipban instanceof TempIPBan) {
-            	TempIPBan tempipban = (TempIPBan) ipban;
-            	expires = tempipban.getExpires(); //wish there was a better way to do this
-            }
-            reason = ipban.getReason();
-            banner = ipban.getBanner();
-            
-        } else{ //We dont need to check ban isn't null here. We already did.
-            if (ban instanceof TempBan) {
-            	TempBan tempban = (TempBan) ban;
-            	expires = tempban.getExpires();
-            }
-            reason = ban.getReason();
-            banner = ban.getBanner();
-        }
-        
-        StringBuilder km = new StringBuilder(25); //kickmessage
-        km.append(Formatter.message + "You're "+(ipban == null ? "" : "IP ")+"banned!" + Formatter.regular + "\n Reason: '");
-        km.append(Formatter.reason + reason);
-        km.append(Formatter.regular + "'\n By ");
-        km.append(Formatter.banner + banner + Formatter.regular + ". ");
-        if (expires > 0) {
-        	km.append("Expires in " + Formatter.time + Util.getTimeUntil(expires));
-        }
-        //Append the appeal message, if necessary.
-        String appeal = plugin.getBanManager().getAppealMessage();
-        if(appeal != null && appeal.isEmpty() == false){
-        	km.append("\n" + Formatter.regular + appeal);
-        }
-        
         e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-        e.setKickMessage(km.toString());
+        e.setKickMessage((ipban != null ? ipban.getKickMessage() : ban.getKickMessage()));
         
         if(plugin.getConfig().getBoolean("notify", true)){
-        	String msg = (ban == null ? Formatter.secondary : ChatColor.RED) + player.getName() + Formatter.primary + " (" + (ipban == null ? Formatter.secondary : ChatColor.RED) + address + Formatter.primary + ") tried to join, but is "+ (expires > 0 ? "temp banned" : "banned") +"!"; 
+        	String msg = (ban == null ? Formatter.secondary : ChatColor.RED) + player.getName() + Formatter.primary + " (" + (ipban == null ? Formatter.secondary : ChatColor.RED) + address + Formatter.primary + ") tried to join, but is "+ ((ban instanceof Temporary || ipban instanceof Temporary) ? "temp " : "banned") +"!"; 
 	        for(Player p : Bukkit.getOnlinePlayers()){
 	        	if(p.hasPermission("maxbans.notify")){
 	        		p.sendMessage(msg);

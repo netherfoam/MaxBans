@@ -1,9 +1,7 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.sync.Packet;
@@ -50,12 +48,6 @@ public class TempIPBanCommand extends CmdSkeleton{
 				}
 				
 				plugin.getBanManager().tempban(name, reason, banner, time); //User
-				
-				//Kick them
-				Player player = Bukkit.getPlayerExact(name);
-				if(player != null && player.isOnline()){
-					player.kickPlayer(Formatter.message + "You have been Temporarily IP Banned for: \n" + Formatter.regular + "'" + Formatter.reason + reason + Formatter.regular + "'\nBy " + Formatter.banner + banner + Formatter.regular + ". Expires in " + Formatter.time + Util.getTimeUntil(time));
-				}
 			}
 			else{
 				ip = name;

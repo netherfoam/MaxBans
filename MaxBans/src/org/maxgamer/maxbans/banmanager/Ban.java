@@ -1,5 +1,8 @@
 package org.maxgamer.maxbans.banmanager;
 
+import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.util.Formatter;
+
 /**
  * The ban class
  * This will be stored in a hashmap in BanManager <String, Ban>
@@ -15,5 +18,24 @@ public class Ban extends Punishment{
      */
 	public Ban(String user, String reason, String banner, long created){
 		super(user, reason, banner, created);
+	}
+	
+	/**
+	 * You're banned!<br/>
+	 * Reason: 'Misconduct'<br/>
+	 * By Console.
+	 */
+	public String getKickMessage(){
+		StringBuilder sb = new StringBuilder(50);
+		sb.append(Formatter.message + "You're banned!" + Formatter.regular + "\n Reason: '");
+		sb.append(Formatter.reason + reason);
+		sb.append(Formatter.regular + "'\n By ");
+		sb.append(Formatter.banner + banner + Formatter.regular + ". ");
+		
+		String appeal = MaxBans.instance.getBanManager().getAppealMessage();
+        if(appeal != null && appeal.isEmpty() == false){
+        	sb.append("\n" + Formatter.regular + appeal);
+        }
+        return sb.toString();
 	}
 }

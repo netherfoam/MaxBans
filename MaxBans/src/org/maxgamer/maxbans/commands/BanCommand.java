@@ -1,9 +1,7 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
@@ -45,12 +43,6 @@ public class BanCommand extends CmdSkeleton{
 				}
 				
 				plugin.getBanManager().ban(name, reason, banner);
-				
-				//Kick them
-				Player player = Bukkit.getPlayerExact(name);
-				if(player != null){
-					player.kickPlayer(Formatter.message + "You have been permanently banned for: \n'" + Formatter.reason + reason + Formatter.regular + "'\nBy " + Formatter.banner + banner);
-				}
 			}
 			else{
 				IPBan ipban = plugin.getBanManager().getIPBan(name);
