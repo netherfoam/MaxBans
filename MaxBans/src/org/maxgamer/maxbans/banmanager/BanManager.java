@@ -120,6 +120,7 @@ public class BanManager{
 	public HistoryRecord[] getHistory(){ 
 		return history.toArray(new HistoryRecord[history.size()]); 
 	}
+	
 	/** The things that have recently to the given user, or have been dealt by them.  [0] is the most recent thing that happened */
 	public HistoryRecord[] getHistory(String name){
 		ArrayList<HistoryRecord> history = personalHistory.get(name);
@@ -633,6 +634,8 @@ public class BanManager{
     	banner = banner.toLowerCase();
     	players.add(name);
     	
+    	this.unban(name); //Ensure they're unbanned first.
+    	
     	Ban ban = new Ban(name, reason, banner, System.currentTimeMillis());
     	this.bans.put(name, ban);
     	
@@ -718,6 +721,8 @@ public class BanManager{
     	banner = banner.toLowerCase();
     	players.add(name);
     	
+    	this.unban(name); //Ensure they're unbanned first.
+    	
     	TempBan ban = new TempBan(name, reason, banner, System.currentTimeMillis(), expires);
     	this.tempbans.put(name, ban);
     	
@@ -732,6 +737,8 @@ public class BanManager{
      */
     public void ipban(String ip, String reason, String banner){
     	banner = banner.toLowerCase();
+    	
+    	this.unbanip(ip); //Ensure it's unbanned first.
     	
     	IPBan ipban = new IPBan(ip, reason, banner, System.currentTimeMillis());
     	this.ipbans.put(ip, ipban);
@@ -749,8 +756,9 @@ public class BanManager{
     public void tempipban(String ip, String reason, String banner, long expires){
     	banner = banner.toLowerCase();
     	
-    	TempIPBan tib = new TempIPBan(ip, reason, banner, System.currentTimeMillis(), expires);
+    	this.unbanip(ip); //Ensure it's unbanned first.
     	
+    	TempIPBan tib = new TempIPBan(ip, reason, banner, System.currentTimeMillis(), expires);
     	this.tempipbans.put(ip, tib);
     	
     	db.execute("INSERT INTO ipbans (ip, reason, banner, time, expires) VALUES (?, ?, ?, ?, ?)", ip, reason, banner, System.currentTimeMillis(), expires);
@@ -764,6 +772,8 @@ public class BanManager{
     public void mute(String name, String banner){
     	name = name.toLowerCase();
     	players.add(name);
+    	
+    	this.unmute(name); //Esnure they're unmuted first.
     	
     	Mute mute = new Mute(name, banner, System.currentTimeMillis());
     	this.mutes.put(name, mute);
@@ -781,6 +791,8 @@ public class BanManager{
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
     	players.add(name);
+    	
+    	this.unmute(name); //Esnure they're unmuted first.
     	
     	TempMute tmute = new TempMute(name, banner, System.currentTimeMillis(), expires);
     	this.tempmutes.put(name, tmute);
