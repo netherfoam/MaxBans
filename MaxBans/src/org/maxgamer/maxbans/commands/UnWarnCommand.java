@@ -10,9 +10,9 @@ import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 
-public class ClearWarningsCommand extends CmdSkeleton{
-    public ClearWarningsCommand(){
-        super("clearwarnings", "maxbans.clearwarnings");
+public class UnWarnCommand extends CmdSkeleton{
+    public UnWarnCommand(){
+        super("unwarn", "maxbans.clearwarnings");
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
@@ -39,21 +39,21 @@ public class ClearWarningsCommand extends CmdSkeleton{
 				return true;
 			}
 			
-			plugin.getBanManager().clearWarnings(name);
+			plugin.getBanManager().deleteWarning(name, warnings.get(warnings.size() - 1));
 			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
-				p.sendMessage(Formatter.primary + "Your previous warnings have been pardoned by " + Formatter.secondary + banner);
+				p.sendMessage(Formatter.primary + "Your previous warning has been pardoned by " + Formatter.secondary + banner);
 			}
-			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s warnings.");
+			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s most recent warning.");
 			
-			String message = Formatter.secondary + banner + Formatter.primary + " cleared " + Formatter.secondary + name + Formatter.primary + "'s warnings.";
+			String message = Formatter.secondary + banner + Formatter.primary + " pardoned one of " + Formatter.secondary + name + Formatter.primary + "'s warnings.";
 			plugin.getBanManager().addHistory(name, banner, message);
 			
 			if(plugin.getSyncer() != null){
 				//Send the clearwarnings request
 	    		Packet prop = new Packet();
-	    		prop.setCommand("clearwarnings");
+	    		prop.setCommand("unwarn");
 	    		prop.put("name", name);
 	    		prop.put("banner", banner);
 	    		plugin.getSyncer().broadcast(prop);

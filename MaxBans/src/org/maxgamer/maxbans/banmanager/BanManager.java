@@ -597,7 +597,8 @@ public class BanManager{
      * Fetches a list of all warnings the player currently has to their name.
      * @param name The name of the player to fetch. Case insensitive.
      * @return a list of all warnings the player currently has to their name.
-     * Returns null if they have no warnings frequently.
+     * Returns null if they have no warnings frequently. The list is in order,
+     * so that [0] is the first warning, and [size-1] is the most recent warning.
      */
     public List<Warn> getWarnings(String name){
     	name = name.toLowerCase();
@@ -620,6 +621,23 @@ public class BanManager{
 		}
     	
     	return warnings;
+    }
+    
+    /**
+     * Deletes the given warning from the given users warning set.
+     * @param name The name of the player, any case.
+     * @param warn The warning object to remove (Eg, from getWarnings(name)).
+     * @return True if the warning was removed successfully, false if it had
+     * already expired, did not exist, or was invalid.
+     */
+    public boolean deleteWarning(String name, Warn warn){
+    	List<Warn> warnings = getWarnings(name);
+    	if(warnings != null && warnings.remove(warn)){
+    		db.execute("DELETE FROM warnings WHERE name = ? AND expires = ? AND reason = ?", name.toLowerCase(), warn.getExpires(), warn.getReason());
+    		return true;
+    	}
+    	//Warning not found
+    	return false;
     }
     
     /**

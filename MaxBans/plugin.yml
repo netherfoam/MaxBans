@@ -48,6 +48,9 @@ permissions:
     maxbans.warn:
         description: Allows a player to give out warnings to others.
         default: op
+    maxbans.unwarn:
+        description: Removes the most recent warning from a player
+        default: op
     maxbans.clearwarnings:
         description: Allows a player to delete all warnings for a given player.
         default: op
@@ -131,6 +134,10 @@ commands:
         description: Warns a player.
         usage: /warn <player> [reason]
         aliases: [mbwarn]
+    unwarn:
+        description: Removes a players most recent warning
+        usage: /unwarn <player>
+        aliases: [mbunwarn]
     clearwarnings:
         description: Clears a players warning history
         usage: /clearwarnings <player>

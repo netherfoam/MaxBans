@@ -253,6 +253,7 @@ public class MaxBans extends JavaPlugin{
 		new DupeIPCommand();
 		
 		new WarnCommand();
+		new UnWarnCommand();
 		new ClearWarningsCommand();
 		
 		new LockdownCommand();
@@ -278,6 +279,7 @@ public class MaxBans extends JavaPlugin{
 		new RangeBanCommand();
 		new TempRangeBanCommand();
 		new UnbanRangeCommand();
+		
     }
     
     public void startMetrics(){
