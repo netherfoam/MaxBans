@@ -7,9 +7,11 @@ import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.sync.Connection.PacketEvent;
 import org.maxgamer.maxbans.sync.Connection.PacketListener;
 import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
@@ -63,6 +65,21 @@ public class Syncer{
 			}
 		};
 		commands.put("announce", announce);
+		
+		/* *************************
+		 * Removes a players latest
+		 * warning.
+		 * *************************/
+		Command unwarn = new Command(){
+			@Override
+			public void run(Packet prop){
+				String name = prop.get("name");
+				List<Warn> warnings = MaxBans.instance.getBanManager().getWarnings(name);
+				if(warnings == null) return;
+				MaxBans.instance.getBanManager().deleteWarning(name, warnings.get(warnings.size() - 1));
+			}
+		};
+		commands.put("unwarn", unwarn);
 		
 		/* *************************
 		 * Logs that a player joined
