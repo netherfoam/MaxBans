@@ -611,7 +611,6 @@ public class BanManager{
     		//Expire old warnings
     		Warn w = it.next();
     		if(w.getExpires() < System.currentTimeMillis()){
-    			System.out.println(w.getExpires() + " is less than " + System.currentTimeMillis() + " (" + (w.getExpires() - System.currentTimeMillis()) + ")");
     			it.remove();
     			q = true;
     		}
