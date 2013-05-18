@@ -2,7 +2,9 @@ package org.maxgamer.maxbans;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -19,8 +21,19 @@ public class Msg{
 				cfg.load(f);
 			}
 			else{
-				cfg.load(MaxBans.instance.getResource("messages.yml"));
-				cfg.save(f);
+				FileOutputStream out = new FileOutputStream(f);
+				InputStream in = MaxBans.instance.getResource("messages.yml");
+				cfg.load(in);
+				in.close();
+				in = MaxBans.instance.getResource("messages.yml");
+				byte[] buffer = new byte[1024];
+				int len = in.read(buffer);
+				while (len != -1) {
+				    out.write(buffer, 0, len);
+				    len = in.read(buffer);
+				}
+				in.close();
+				out.close();
 			}
 		} catch(FileNotFoundException e){
 			e.printStackTrace();
