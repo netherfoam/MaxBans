@@ -1,7 +1,7 @@
 package org.maxgamer.maxbans.banmanager;
 
 import org.maxgamer.maxbans.MaxBans;
-import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempIPBan extends IPBan implements Temporary{
@@ -38,6 +38,7 @@ public class TempIPBan extends IPBan implements Temporary{
 	 */
 	@Override
 	public String getKickMessage(){
+		/*
 		StringBuilder sb = new StringBuilder(50);
 		sb.append(Formatter.message + "You're temporarily IP Banned!" + Formatter.regular + "\n Reason: '");
 		sb.append(Formatter.reason + reason);
@@ -50,6 +51,7 @@ public class TempIPBan extends IPBan implements Temporary{
         if(appeal != null && appeal.isEmpty() == false){
         	sb.append("\n" + Formatter.regular + appeal);
         }
-        return sb.toString();
+        return sb.toString();*/
+		return Msg.get("disconnection.you-are-temp-ipbanned", new String[]{"reason", "banner", "time", "appeal-message"}, new String[]{getReason(), getBanner(), Util.getTimeUntil(expires), MaxBans.instance.getBanManager().getAppealMessage()});
 	}
 }

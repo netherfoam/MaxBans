@@ -1,11 +1,9 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.sync.Packet;
-import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class WarnCommand extends CmdSkeleton{
@@ -23,9 +21,15 @@ public class WarnCommand extends CmdSkeleton{
 				name = args[0]; //Use exact name then.
 			}
 			
+			if(name.isEmpty()){
+				sender.sendMessage(Msg.get("error.no-player-given"));
+				return true;
+			}
+			
 			String reason = Util.buildReason(args);
 			String banner = Util.getName(sender);
 			
+			/*
 			String msg = Formatter.secondary + name + Formatter.primary + " has been warned for '" + Formatter.secondary + reason + Formatter.primary + "' by " + Formatter.secondary + banner + Formatter.primary + ".";
 			plugin.getBanManager().announce(msg, silent, sender);
 			if(silent){
@@ -36,7 +40,11 @@ public class WarnCommand extends CmdSkeleton{
 			plugin.getBanManager().warn(name, reason, banner);
 			
 			String message = Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(name, banner, message);
+			plugin.getBanManager().addHistory(name, banner, message);*/
+			plugin.getBanManager().warn(name, reason, banner);
+			String msg = Msg.get("announcement.player-was-warned", new String[]{"banner", "name", "reason"}, new String[]{banner, name, reason});
+			plugin.getBanManager().announce(msg, silent, sender);
+			plugin.getBanManager().addHistory(name, banner, msg);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();
@@ -47,7 +55,7 @@ public class WarnCommand extends CmdSkeleton{
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
+	    		Packet history = new Packet().setCommand("addhistory").put("string", msg).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
 	    	}
 	    	

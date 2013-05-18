@@ -1,7 +1,7 @@
 package org.maxgamer.maxbans.banmanager;
 
 import org.maxgamer.maxbans.MaxBans;
-import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.Msg;
 
 /**
  * The ban class
@@ -26,6 +26,7 @@ public class Ban extends Punishment{
 	 * By Console.
 	 */
 	public String getKickMessage(){
+		/*
 		StringBuilder sb = new StringBuilder(50);
 		sb.append(Formatter.message + "You're banned!" + Formatter.regular + "\n Reason: '");
 		sb.append(Formatter.reason + reason);
@@ -36,6 +37,7 @@ public class Ban extends Punishment{
         if(appeal != null && appeal.isEmpty() == false){
         	sb.append("\n" + Formatter.regular + appeal);
         }
-        return sb.toString();
+        return sb.toString();*/
+		return Msg.get("disconnection.you-are-banned", new String[]{"reason", "banner", "appeal-message"}, new String[]{getReason(), getBanner(), MaxBans.instance.getBanManager().getAppealMessage()});
 	}
 }

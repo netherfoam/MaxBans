@@ -31,6 +31,7 @@ public class DupeIPCommand extends CmdSkeleton{
 				ip = plugin.getBanManager().getIP(name);
 				
 				if(ip == null){
+					//No-ip-known
 					sender.sendMessage(Formatter.primary + "Player " + Formatter.secondary + name + Formatter.primary + " has no IP history.");
 					return true;
 				}

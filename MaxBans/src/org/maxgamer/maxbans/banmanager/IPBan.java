@@ -1,7 +1,7 @@
 package org.maxgamer.maxbans.banmanager;
 
 import org.maxgamer.maxbans.MaxBans;
-import org.maxgamer.maxbans.util.Formatter;
+import org.maxgamer.maxbans.Msg;
 
 public class IPBan extends Ban{ // I think its just luck that you can do this.
 	/**
@@ -16,6 +16,8 @@ public class IPBan extends Ban{ // I think its just luck that you can do this.
 	
 	@Override
 	public String getKickMessage(){
+		/*
+	}
         StringBuilder sb = new StringBuilder(50); //kickmessage
         sb.append(Formatter.message + "You're IP Banned!" + Formatter.regular + "\n Reason: '");
 		sb.append(Formatter.reason + reason);
@@ -26,6 +28,8 @@ public class IPBan extends Ban{ // I think its just luck that you can do this.
         if(appeal != null && appeal.isEmpty() == false){
         	sb.append("\n" + Formatter.regular + appeal);
         }
-        return sb.toString();
+        return sb.toString();*/
+		
+		return Msg.get("disconnection.you-are-ipbanned", new String[]{"reason", "banner", "appeal-message"}, new String[]{getReason(), getBanner(), MaxBans.instance.getBanManager().getAppealMessage()});
 	}
 }

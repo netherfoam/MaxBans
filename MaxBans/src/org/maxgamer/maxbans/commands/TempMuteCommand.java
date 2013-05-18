@@ -1,13 +1,11 @@
 package org.maxgamer.maxbans.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.banmanager.TempMute;
 import org.maxgamer.maxbans.sync.Packet;
-import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempMuteCommand extends CmdSkeleton{
@@ -20,6 +18,13 @@ public class TempMuteCommand extends CmdSkeleton{
 			name = plugin.getBanManager().match(name);
 			if(name == null){
 				name = args[0]; //Use exact name then.
+			}
+			
+			boolean silent = Util.isSilent(args);
+			if(name.isEmpty()){
+				//sender.sendMessage(Formatter.primary + " No name given.");
+				sender.sendMessage(Msg.get("error.no-player-given"));
+				return true;
 			}
 			
 			String banner = Util.getName(sender);
@@ -38,27 +43,35 @@ public class TempMuteCommand extends CmdSkeleton{
 				if(mute instanceof TempMute){
 					TempMute tMute = (TempMute) mute;
 					if(tMute.getExpires() > time){
-						sender.sendMessage(Formatter.primary + "That player already has a mute which lasts longer than the one you tried to give.");
+						//sender.sendMessage(Formatter.primary + "That player already has a mute which lasts longer than the one you tried to give.");
+						String msg = Msg.get("tempmute-shorter-than-last");
+						sender.sendMessage(msg);
 						return true;
 					}
 					//else: Continue normally.
 				}
 				else{
-					sender.sendMessage(Formatter.primary + "That player is already permantly muted.");
+					//sender.sendMessage(Formatter.primary + "That player already has a mute which lasts longer than the one you tried to give.");
+					String msg = Msg.get("tempmute-shorter-than-last");
+					sender.sendMessage(msg);
 					return true;
 				}
 			}
 			
 			plugin.getBanManager().tempmute(name, banner, time);
 			
-			String until = Util.getTimeUntil(time/1000*1000);
+			String until = Util.getTimeUntil(time/*/1000*1000*/);
+			/*
 			Player p = Bukkit.getPlayerExact(name);
 			if(p != null){
 				p.sendMessage(Formatter.secondary + "You have been muted for " + until);
-			}
+			}*
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until);
 			String message = Formatter.secondary + banner + Formatter.primary + " temp muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until;
+			plugin.getBanManager().addHistory(name, banner, message);*/
+			String message = Msg.get("announcement.player-was-temp-muted", new String[]{"banner", "name", "time"}, new String[]{banner, name, until});
 			plugin.getBanManager().addHistory(name, banner, message);
+			plugin.getBanManager().announce(message, silent, sender);
 			
 	    	if(plugin.getSyncer() != null){
 	    		Packet prop = new Packet();

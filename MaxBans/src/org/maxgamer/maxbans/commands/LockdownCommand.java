@@ -8,7 +8,8 @@ import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class LockdownCommand extends CmdSkeleton{
-    private String defaultReason = "Maintenance";
+    private static String defaultReason = "Maintenance";
+    
     public LockdownCommand(){
         super("lockdown", "maxbans.lockdown.use");
         namePos = -1;

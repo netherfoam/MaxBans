@@ -3,10 +3,9 @@ package org.maxgamer.maxbans.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Mute;
 import org.maxgamer.maxbans.sync.Packet;
-import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class MuteCommand extends CmdSkeleton{
@@ -15,7 +14,12 @@ public class MuteCommand extends CmdSkeleton{
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
+			boolean silent = Util.isSilent(args);
 			String name = args[0];
+			if(name.isEmpty()){
+				sender.sendMessage(Msg.get("error.no-player-given"));
+				return true;
+			}
 			
 			name = plugin.getBanManager().match(name);
 			if(name == null){
@@ -25,7 +29,6 @@ public class MuteCommand extends CmdSkeleton{
 			Mute mute = plugin.getBanManager().getMute(name);
 			if(mute != null){
 				Bukkit.dispatchCommand(sender, "unmute");
-				
 				return true;
 			}
 			
@@ -33,12 +36,13 @@ public class MuteCommand extends CmdSkeleton{
 			
 			plugin.getBanManager().mute(name, banner);
 			
-			Player p = Bukkit.getPlayerExact(name);
-			if(p != null){
-				p.sendMessage(Formatter.secondary + " You have been muted.");
-			}
+			
+			String message = Msg.get("announcement.player-was-muted", new String[]{"banner", "name"}, new String[]{banner, name});
+			/*
 			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name);
 			String message = Formatter.secondary + banner + Formatter.primary + " muted " + Formatter.secondary + name;
+			plugin.getBanManager().addHistory(name, banner, message);*/
+			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){

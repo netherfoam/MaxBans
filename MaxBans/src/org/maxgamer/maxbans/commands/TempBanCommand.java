@@ -2,12 +2,12 @@ package org.maxgamer.maxbans.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
 import org.maxgamer.maxbans.sync.Packet;
-import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempBanCommand extends CmdSkeleton{
@@ -23,7 +23,8 @@ public class TempBanCommand extends CmdSkeleton{
 			boolean silent = Util.isSilent(args);
 			String name = args[0];
 			if(name.isEmpty()){
-				sender.sendMessage(Formatter.primary + " No name given.");
+				//sender.sendMessage(Formatter.primary + " No name given.");
+				sender.sendMessage(Msg.get("error.no-player-given"));
 				return true;
 			}
 			
@@ -52,7 +53,9 @@ public class TempBanCommand extends CmdSkeleton{
 						TempBan tBan = (TempBan) ban;
 						if(tBan.getExpires() > expires){
 							//Their old ban lasts longer than this one!
-							sender.sendMessage(Formatter.secondary + "That player has a tempban which will last longer than the one you supplied!");
+							//sender.sendMessage(Formatter.secondary + "That player has a tempban which will last longer than the one you supplied!");
+							String msg = Msg.get("error.tempban-shorter-than-last");
+							sender.sendMessage(msg);
 							return true;
 						}
 						else{
@@ -62,7 +65,9 @@ public class TempBanCommand extends CmdSkeleton{
 					}
 					else{
 						//Already perma banned
-						sender.sendMessage(Formatter.secondary + "That player is already banned.");
+						//sender.sendMessage(Formatter.secondary + "That player is already banned.");
+						String msg = Msg.get("error.tempban-shorter-than-last");
+						sender.sendMessage(msg);
 						return true;
 					}
 				}
@@ -77,7 +82,9 @@ public class TempBanCommand extends CmdSkeleton{
 						TempIPBan tiBan = (TempIPBan) ipban;
 						if(tiBan.getExpires() > expires){
 							//Their old ban lasts longer than this one!
-							sender.sendMessage(Formatter.secondary + "That IP has a tempban which will last longer than the one you supplied!");
+							//sender.sendMessage(Formatter.secondary + "That IP has a tempban which will last longer than the one you supplied!");
+							String msg = Msg.get("error.tempipban-shorter-than-last");
+							sender.sendMessage(msg);
 							return true;
 						}
 						else{
@@ -89,9 +96,12 @@ public class TempBanCommand extends CmdSkeleton{
 				plugin.getBanManager().tempipban(ip, reason, banner, expires);
 			}
 			
-			
+			/*
 			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp banned ("+Util.getTimeUntil(expires)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
 			String message = Formatter.secondary + banner + Formatter.primary + " tempbanned " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + Util.getTimeUntil(expires) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
+			plugin.getBanManager().addHistory(name, banner, message);*/
+			String message = Msg.get("announcement.player-was-tempbanned", new String[]{"banner", "name", "reason", "time"}, new String[]{banner, name, reason, Util.getTimeUntil(expires)});
+			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
 			
 	    	if(plugin.getSyncer() != null){
