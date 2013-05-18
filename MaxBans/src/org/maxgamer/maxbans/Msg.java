@@ -1,0 +1,71 @@
+package org.maxgamer.maxbans;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+public class Msg{
+	private static YamlConfiguration cfg;
+	
+	public static void reload(){
+		File f = new File(MaxBans.instance.getDataFolder(), "messages.yml");
+		cfg = new YamlConfiguration();
+		try{
+			if(f.exists()){
+				cfg.load(f);
+			}
+			else{
+				cfg.load(MaxBans.instance.getResource("messages.yml"));
+				cfg.save(f);
+			}
+		} catch(FileNotFoundException e){
+			e.printStackTrace();
+		} catch(InvalidConfigurationException e){
+			e.printStackTrace();
+			System.out.println("Invalid messages.yml config. Using defaults.");
+			try {
+				cfg.load(MaxBans.instance.getResource("messages.yml"));
+			} catch (Exception ex){
+				ex.printStackTrace();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String get(String loc, String[] keys, String[] values){
+		String msg = cfg.getString(loc);
+		
+		if(msg == null || msg.isEmpty()){
+			return "Unknown message in config: " + loc;
+		}
+		
+		if(keys != null && values != null){
+			if(keys.length != values.length){ //Dirty, but we don't want to break a ban or something.
+				try{
+					throw new IllegalArgumentException("Invalid message request. keys.length should equal values.length!");
+				}
+				catch(IllegalArgumentException e){
+					e.printStackTrace();
+				}
+			}
+			
+			for(int i = 0; i < keys.length; i++){
+				msg = msg.replace("{"+keys[i]+"}", values[i]); //I could do case insensitive, but nty.
+			}
+		}
+		
+		return ChatColor.translateAlternateColorCodes('&', msg);
+	}
+	public static String get(String loc){
+		return get(loc, (String[])null, (String[])null);
+	}
+	public static String get(String loc, String key, String value){
+		return get(loc, new String[]{key}, new String[]{value});
+	}
+	
+}

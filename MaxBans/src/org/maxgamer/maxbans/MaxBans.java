@@ -9,13 +9,42 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
-import org.maxgamer.maxbans.commands.*;
+import org.maxgamer.maxbans.commands.BanCommand;
+import org.maxgamer.maxbans.commands.CheckBanCommand;
+import org.maxgamer.maxbans.commands.CheckIPCommand;
+import org.maxgamer.maxbans.commands.ClearWarningsCommand;
+import org.maxgamer.maxbans.commands.DupeIPCommand;
+import org.maxgamer.maxbans.commands.ForceSpawnCommand;
+import org.maxgamer.maxbans.commands.HistoryCommand;
+import org.maxgamer.maxbans.commands.IPBanCommand;
+import org.maxgamer.maxbans.commands.KickCommand;
+import org.maxgamer.maxbans.commands.LockdownCommand;
+import org.maxgamer.maxbans.commands.MBCommand;
+import org.maxgamer.maxbans.commands.MBDebug;
+import org.maxgamer.maxbans.commands.MBExportCommand;
+import org.maxgamer.maxbans.commands.MBImportCommand;
+import org.maxgamer.maxbans.commands.MuteCommand;
+import org.maxgamer.maxbans.commands.RangeBanCommand;
+import org.maxgamer.maxbans.commands.ReloadCommand;
+import org.maxgamer.maxbans.commands.TempBanCommand;
+import org.maxgamer.maxbans.commands.TempIPBanCommand;
+import org.maxgamer.maxbans.commands.TempMuteCommand;
+import org.maxgamer.maxbans.commands.TempRangeBanCommand;
+import org.maxgamer.maxbans.commands.UnMuteCommand;
+import org.maxgamer.maxbans.commands.UnWarnCommand;
+import org.maxgamer.maxbans.commands.UnbanCommand;
+import org.maxgamer.maxbans.commands.UnbanRangeCommand;
+import org.maxgamer.maxbans.commands.WarnCommand;
+import org.maxgamer.maxbans.commands.WhitelistCommand;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.database.Database.ConnectionException;
 import org.maxgamer.maxbans.database.DatabaseCore;
 import org.maxgamer.maxbans.database.MySQLCore;
 import org.maxgamer.maxbans.database.SQLiteCore;
-import org.maxgamer.maxbans.listeners.*;
+import org.maxgamer.maxbans.listeners.ChatCommandListener;
+import org.maxgamer.maxbans.listeners.ChatListener;
+import org.maxgamer.maxbans.listeners.HeroChatListener;
+import org.maxgamer.maxbans.listeners.JoinListener;
 import org.maxgamer.maxbans.sync.SyncServer;
 import org.maxgamer.maxbans.sync.Syncer;
 import org.maxgamer.maxbans.util.Formatter;
@@ -78,6 +107,7 @@ public class MaxBans extends JavaPlugin{
 		 * it doesnt.  This makes it friendlier.
 		 */
 		this.reloadConfig();
+		Msg.reload();
 		
 		int result = UpdateCheck.compareVersion(getConfig().getString("version"), this.getDescription().getVersion());
 		
