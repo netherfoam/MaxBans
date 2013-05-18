@@ -12,8 +12,8 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.sync.Packet;
 
@@ -115,7 +115,9 @@ public class DNSBL{
 						Bukkit.getScheduler().runTask(plugin, new Runnable(){
 							public void run(){
 								if(kick && player.isOnline()){
-									player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+									String msg = Msg.get("disconnection.you-are-proxied", "ip", address);
+									//player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+									player.kickPlayer(msg);
 								}
 								if(notify){ 
 									String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
@@ -143,7 +145,9 @@ public class DNSBL{
     		}
 			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
     		if(kick){
-    			event.disallow(Result.KICK_OTHER, Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+    			String msg = Msg.get("disconnection.you-are-proxied", "ip", address);
+				//player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
+				player.kickPlayer(msg);
     			return;
     		}
     	}

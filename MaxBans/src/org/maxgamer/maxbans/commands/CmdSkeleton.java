@@ -12,6 +12,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.util.Formatter;
 
 public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comparable<CmdSkeleton>{
@@ -94,7 +95,8 @@ public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comp
 	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(hasPermission(sender) == false){
-			sender.sendMessage(ChatColor.RED + "You don't have the permission: " + perm + " to do that.");
+			//sender.sendMessage(ChatColor.RED + "You don't have the permission: " + perm + " to do that.");
+			sender.sendMessage(Msg.get("no-permission"));
 			return true;
 		}
 		

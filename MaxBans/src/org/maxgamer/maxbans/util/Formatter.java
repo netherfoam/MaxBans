@@ -17,8 +17,6 @@ public class Formatter{
 	public static ChatColor reason;
 	/** The time remaining - E.g. "4 hours 6 minutes" remaining */
 	public static ChatColor time;
-	/** The color of the message. E.g. "You have been banned/kicked for" */
-	public static ChatColor message;
 	
 	public static void load(Plugin plugin){
 		primary = getColor(plugin.getConfig().getString("color.primary"));
@@ -29,7 +27,6 @@ public class Formatter{
 		banner = getColor(cfg.getString("banner"));
 		reason = getColor(cfg.getString("reason"));
 		time = getColor(cfg.getString("time"));
-		message = getColor(cfg.getString("message"));
 	}
 	
 	public static ChatColor getColor(String s){

@@ -75,7 +75,6 @@ color:
 #This applies to kick, ban, and anything else.
 kick-colors:
     #0-9,a-f are valid. Also any Bukkit ChatColor is valid (Eg RED, AQUA, DARK_GRAY)
-    message: f #"You have been banned for:"
     reason: f #"Misconduct"
     regular: f #"By"
     banner: f #"Netherfoam"

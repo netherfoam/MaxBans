@@ -5,6 +5,8 @@ disconnection:
     you-are-temp-banned: "&fYou're temporarily banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\nExpires in: {time}.\n{appeal-message}"
     you-are-temp-ipbanned: "&fYou're temporarily IP Banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\nExpires in: {time}.\n{appeal-message}"
     
+    you-are-proxied: "Kicked by Maxbans:\n Your IP ({ip}) is listed as a proxy."
+    
     lockdown-active: "&fServer is in lockdown mode. Try again shortly. Reason: \n{reason}"
     invalid-letters: "&fKicked by MaxBans.\nYour name contains invalid characters:\n&c'{letters}'&f"
     invalid-name: "&fKicked by MaxBans.\nYour name is invalid!"
@@ -13,36 +15,36 @@ disconnection:
 announcement:
     player-was-kicked: "&a{name}&f was kicked by &a{banner}&f for &a'{reason}'&f."
     player-was-banned: "&a{banner}&f banned &a{name}&f for &a'{reason}'&f."
-    player-was-ip-banned: "&a{banner}&f IP banned &a{name}&f ('{ip}') for &a'{reason}'&f."
+    player-was-ip-banned: "&a{banner}&f IP banned &a{name}&f ('&a{ip}&f') for &a'{reason}'&f."
     player-was-muted: "&a{banner}&f muted &a{name}&f"
     player-was-tempbanned: "&a{banner}&f tempbanned &a{name}&f for {time} for &a'{reason}'&f"
-    player-was-tempipbanned: "&a{banner}&f temp IP banned &a{name}&f ('{ip}') for {time} for &a'{reason}'&f"
+    player-was-tempipbanned: "&a{banner}&f temp IP banned &a{name}&f ('&a{ip}&f') for {time} for &a'{reason}'&f"
     player-was-temp-muted: "&a{banner}&f temp muted &a{name}&f for {time}."
     player-was-unbanned: "&a{banner}&f unbanned &a{name}&f"
     player-was-unmuted: "&a{banner}&f unmuted &a{name}&f"
     player-was-warned: "&a{banner}&f warned &a{name}&f for &a'{reason}'&f"
-    ip-was-unbanned: "&f{ip} has been unbanned by &a{banner}&f."
+    ip-was-unbanned: "&f&a{ip}&f has been unbanned by &a{banner}&f."
     player-warnings-cleared: "&a{banner}&f cleared &a{name}&f's warnings."
     unwarn-success: "&a{banner}&f pardoned one of &a{name}&f's warnings."
     
 error:
-    no-player-given: "&fNo name given."
-    no-permission: "&fYou don't have permission to do that."
-    no-ip-known: "&fThat player has no IP history!"
-    no-ipban-found: "&fCould not find a ban for {ip}."
-    no-ban-found: "&fCould not find a ban for &a{name}&f."
-    no-mute-found: "&a{name}&f is not muted."
+    no-player-given: "&cNo name given."
+    no-permission: "&cYou don't have permission to do that."
+    no-ip-known: "&cThat player has no IP history!"
+    no-ipban-found: "&cCould not find a ban for &a{ip}&f."
+    no-ban-found: "&cCould not find a ban for &a{name}&f."
+    no-mute-found: "&a{name}&c is not muted."
     no-dupeip-duplicates: "&fNo duplicates!"
     no-history: "&fNo history."
-    no-warnings: "&a{name}&f has no warnings to their name."
+    no-warnings: "&a{name}&c has no warnings to their name."
     
-    unknown-player: "&fNo player found: &a{name}&f"
-    player-already-banned: "&fThat player is already banned."
-    ip-already-banned: "&fThat IP is already banned."
+    unknown-player: "&cNo player found: &a{name}&f"
+    player-already-banned: "&cThat player is already banned."
+    ip-already-banned: "&cThat IP is already banned."
     
     
-    tempban-shorter-than-last: "&fThat player has a tempban which will last longer than the one you supplied!"
-    tempipban-shorter-than-last: "&fThat IP has a tempban which will last longer than the one you supplied!"
-    tempmute-shorter-than-last: "&fThat player already has a mute which lasts longer than the one you tried to give."
+    tempban-shorter-than-last: "&cThat player has a tempban which will last longer than the one you supplied!"
+    tempipban-shorter-than-last: "&cThat IP has a tempban which will last longer than the one you supplied!"
+    tempmute-shorter-than-last: "&cThat player already has a mute which lasts longer than the one you tried to give."
 
     
