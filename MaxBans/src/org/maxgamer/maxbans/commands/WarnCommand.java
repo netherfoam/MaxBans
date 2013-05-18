@@ -29,18 +29,6 @@ public class WarnCommand extends CmdSkeleton{
 			String reason = Util.buildReason(args);
 			String banner = Util.getName(sender);
 			
-			/*
-			String msg = Formatter.secondary + name + Formatter.primary + " has been warned for '" + Formatter.secondary + reason + Formatter.primary + "' by " + Formatter.secondary + banner + Formatter.primary + ".";
-			plugin.getBanManager().announce(msg, silent, sender);
-			if(silent){
-				Player targ = Bukkit.getPlayerExact(name);
-				if(targ != null) targ.sendMessage(msg);
-			}
-			
-			plugin.getBanManager().warn(name, reason, banner);
-			
-			String message = Formatter.secondary + banner + Formatter.primary + " warned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(name, banner, message);*/
 			plugin.getBanManager().warn(name, reason, banner);
 			String msg = Msg.get("announcement.player-was-warned", new String[]{"banner", "name", "reason"}, new String[]{banner, name, reason});
 			plugin.getBanManager().announce(msg, silent, sender);
