@@ -36,7 +36,7 @@ public class UnMuteCommand extends CmdSkeleton{
 				String message = Formatter.secondary + banner + Formatter.primary + " unmuted " + Formatter.secondary + name;
 				plugin.getBanManager().addHistory(name, banner, message);
 				*/
-				String message = Msg.get("player-was-unmuted", new String[]{"banner", "name"}, new String[]{banner, name});
+				String message = Msg.get("announcement.player-was-unmuted", new String[]{"banner", "name"}, new String[]{banner, name});
 				plugin.getBanManager().announce(message, silent, sender);
 				
 		    	if(plugin.getSyncer() != null){
@@ -50,8 +50,7 @@ public class UnMuteCommand extends CmdSkeleton{
 		    		plugin.getSyncer().broadcast(history);
 		    	}
 			}
-			else{
-				//sender.sendMessage(ChatColor.GREEN + name + " is not muted.");
+			else{;
 				sender.sendMessage(Msg.get("error.no-mute-found", "name", name));
 			}
 			
