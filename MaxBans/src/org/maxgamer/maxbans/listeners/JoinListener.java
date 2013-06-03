@@ -9,7 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
-import org.maxgamer.maxbans.banmanager.*;
+import org.maxgamer.maxbans.banmanager.Ban;
+import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.banmanager.Temporary;
 import org.maxgamer.maxbans.commands.DupeIPCommand;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
@@ -158,7 +160,7 @@ public class JoinListener extends ListenerSkeleton{
         e.setKickMessage((ipban != null ? ipban.getKickMessage() : ban.getKickMessage()));
         
         if(plugin.getConfig().getBoolean("notify", true)){
-        	String msg = (ban == null ? Formatter.secondary : ChatColor.RED) + player.getName() + Formatter.primary + " (" + (ipban == null ? Formatter.secondary : ChatColor.RED) + address + Formatter.primary + ") tried to join, but is "+ ((ban instanceof Temporary || ipban instanceof Temporary) ? "temp " : "banned") +"!"; 
+        	String msg = (ban == null ? Formatter.secondary : ChatColor.RED) + player.getName() + Formatter.primary + " (" + (ipban == null ? Formatter.secondary : ChatColor.RED) + address + Formatter.primary + ") tried to join, but is "+ ((ban instanceof Temporary || ipban instanceof Temporary) ? "temp " : "") +"banned!"; 
 	        for(Player p : Bukkit.getOnlinePlayers()){
 	        	if(p.hasPermission("maxbans.notify")){
 	        		p.sendMessage(msg);

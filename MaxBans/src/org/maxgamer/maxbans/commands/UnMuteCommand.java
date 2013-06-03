@@ -31,11 +31,6 @@ public class UnMuteCommand extends CmdSkeleton{
 				plugin.getBanManager().unmute(name);
 				String banner = Util.getName(sender);
 				
-				/*
-				sender.sendMessage(ChatColor.GREEN + "Unmuted " + name);
-				String message = Formatter.secondary + banner + Formatter.primary + " unmuted " + Formatter.secondary + name;
-				plugin.getBanManager().addHistory(name, banner, message);
-				*/
 				String message = Msg.get("announcement.player-was-unmuted", new String[]{"banner", "name"}, new String[]{banner, name});
 				plugin.getBanManager().announce(message, silent, sender);
 				
