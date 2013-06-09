@@ -13,7 +13,6 @@ import org.maxgamer.maxbans.util.Util;
 public class BanCommand extends CmdSkeleton{
     public BanCommand(){
         super("ban", "maxbans.ban");
-        //usage = Formatter.secondary + "Usage: /ban <player> [-s] <reason>";
     }
     
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
@@ -22,7 +21,6 @@ public class BanCommand extends CmdSkeleton{
 			
 			String name = args[0];
 			if(name.isEmpty()){
-				//sender.sendMessage(Formatter.primary + " No name given.");
 				sender.sendMessage(Msg.get("error.no-player-given"));
 				return true;
 			}
@@ -30,8 +28,12 @@ public class BanCommand extends CmdSkeleton{
 			//Build reason
 			String reason = Util.buildReason(args);
 			String banner = Util.getName(sender);
+			//The message we will log in history, send to online players, and send across the sync server (if applicable)
+			String message = Msg.get("announcement.player-was-banned", new String[]{"banner", "name", "reason"}, new String[]{banner, name, reason});
+			Packet request = new Packet();
 			
 			if(!Util.isIP(name)){
+				//They supplied us with a username
 				name = plugin.getBanManager().match(name);
 				if(name == null){
 					name = args[0]; //Use exact name then.
@@ -39,44 +41,39 @@ public class BanCommand extends CmdSkeleton{
 				
 				Ban ban = plugin.getBanManager().getBan(name);
 				if(ban != null && !(ban instanceof TempBan)){
-					//sender.sendMessage(Formatter.secondary + "That player is already banned.");
 					sender.sendMessage(Msg.get("error.player-already-banned"));
 					return true;
 				}
 				
 				plugin.getBanManager().ban(name, reason, banner);
+				//Request to ban the username if required.
+				if(plugin.getSyncer() != null){
+					request.setCommand("ban").put("name", name).put("reason", reason).put("banner", banner);
+		    	}
 			}
 			else{
 				IPBan ipban = plugin.getBanManager().getIPBan(name);
 				if(ipban != null && !(ipban instanceof TempIPBan)){
-					//sender.sendMessage(Formatter.secondary + "That IP is already banned.");
 					sender.sendMessage(Msg.get("error.ip-already-banned"));
 					return true;
 				}
 				
 				plugin.getBanManager().ipban(name, reason, banner);
+				//Request to ban the IP if required
+				if(plugin.getSyncer() != null){
+					request.setCommand("ipban").put("ip", name).put("reason", reason).put("banner", banner);
+		    	}
 			}
-			
-			/*
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'", silent, sender);
-			
-			String message = Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(name, banner, message);*/
-			String message = Msg.get("announcement.player-was-banned", new String[]{"banner", "name", "reason"}, new String[]{banner, name, reason});
 			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
 			
-	    	if(plugin.getSyncer() != null){
-	    		Packet prop = new Packet();
-	    		prop.setCommand("ban");
-	    		prop.put("name", name);
-	    		prop.put("reason", reason);
-	    		prop.put("banner", banner);
-	    		plugin.getSyncer().broadcast(prop);
-	    		
+			if(plugin.getSyncer() != null){
+				plugin.getSyncer().broadcast(request);
 	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
-	    	}
+	    		Packet msg = new Packet().setCommand("announce").put("string", message).put("silent", silent);
+	    		plugin.getSyncer().broadcast(msg);
+			}
 	    	
 			return true;
 		}

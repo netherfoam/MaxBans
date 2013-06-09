@@ -18,18 +18,15 @@ public class IPBanCommand extends CmdSkeleton{
 		
 		//Build the reason
 		String reason = Util.buildReason(args);
-
 		String banner = Util.getName(sender);
 		
 		if(args.length > 0){
 			String ip;
 			String name = args[0];
 			if(name.isEmpty()){
-				//sender.sendMessage(Formatter.primary + " No name/IP given.");
 				sender.sendMessage(Msg.get("error.no-player-given"));
 				return true;
 			}
-			
 			if(!Util.isIP(name)){
 				name = plugin.getBanManager().match(name);
 				if(name == null){
@@ -52,17 +49,13 @@ public class IPBanCommand extends CmdSkeleton{
 			
 			IPBan ban = plugin.getBanManager().getIPBan(ip);
 			if(ban != null && !(ban instanceof TempIPBan)){
-				sender.sendMessage(Formatter.secondary + "That player is already IP banned.");
+				sender.sendMessage(Msg.get("error.ip-already-banned"));
 				return true;
 			}
 			
 			//Ban them
 			plugin.getBanManager().ipban(ip, reason, banner); //IP
 			
-			/*
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been banned by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
-			String message = Formatter.secondary + banner + Formatter.primary + " IP banned " + Formatter.secondary + name + Formatter.primary + " (" + Formatter.secondary + ip + Formatter.primary + ") for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(name, banner, message);*/
 			String message = Msg.get("announcement.player-was-ip-banned", new String[]{"banner", "name", "reason", "ip"}, new String[]{banner, name, reason, ip});
 			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
@@ -78,6 +71,9 @@ public class IPBanCommand extends CmdSkeleton{
 	    		//Send the addhistory request.
 	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
 	    		plugin.getSyncer().broadcast(history);
+	    		
+	    		Packet msg = new Packet().setCommand("announce").put("string", message).put("silent", silent);
+	    		plugin.getSyncer().broadcast(msg);
 	    	}
 			
 			return true;

@@ -224,13 +224,7 @@ public class Util{
 			sb.append(args[i]);
 			sb.append(" ");
 		}
-		/*
 		//Trim off trailing spaces
-		int i = sb.length() - 1;
-		while(i >= 0 && sb.charAt(i) == ' '){
-			i--;
-		}
-		sb.replace(i + 1, sb.length(), "");*/
 		String s = sb.toString().trim();
 		s = s.replaceAll("\\\\n", "\n");
 		
