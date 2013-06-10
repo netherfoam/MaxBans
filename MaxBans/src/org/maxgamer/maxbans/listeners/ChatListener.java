@@ -22,6 +22,9 @@ public class ChatListener implements Listener {
         
         Mute mute = plugin.getBanManager().getMute(p.getName());
         if (mute != null) {
+        	if(plugin.getBanManager().hasImmunity(p.getName())){
+        		return; 
+        	}
         	if(mute instanceof TempMute){
         		TempMute tMute = (TempMute) mute;
         		p.sendMessage(ChatColor.RED+"You're muted for another " + Util.getTimeUntil(tMute.getExpires()));

@@ -24,6 +24,9 @@ permissions:
     maxbans.ipban:
         description: Allows a player to IP ban others
         default: op
+    maxbans.immune:
+        description: Allows a player to grant/remove admin immunity to punishments
+        default: op
     maxbans.mute:
         description: Allows a player to mute/unmute others.
         default: op
@@ -189,3 +192,7 @@ commands:
     mbwhitelist:
         description: Whitelisting command, allowing players to bypass IP bans (Not regular bans)
         usage: /mbwhitelist <user>
+    immune:
+        description: Allows/Disallows punishment immunity for a user
+        usage: /immune <user> <true|false>
+        aliases: [mbimmune]

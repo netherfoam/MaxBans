@@ -17,6 +17,7 @@ import org.maxgamer.maxbans.commands.DupeIPCommand;
 import org.maxgamer.maxbans.commands.ForceSpawnCommand;
 import org.maxgamer.maxbans.commands.HistoryCommand;
 import org.maxgamer.maxbans.commands.IPBanCommand;
+import org.maxgamer.maxbans.commands.ImmuneCommand;
 import org.maxgamer.maxbans.commands.KickCommand;
 import org.maxgamer.maxbans.commands.LockdownCommand;
 import org.maxgamer.maxbans.commands.MBCommand;
@@ -304,6 +305,7 @@ public class MaxBans extends JavaPlugin{
 		
 		//MBWhitelist
 		new WhitelistCommand();
+		new ImmuneCommand();
 		
 		//Rangeban
 		new RangeBanCommand();

@@ -20,10 +20,13 @@ public class ChatCommandListener extends ListenerSkeleton{
 		if(e.isCancelled()) return;
 		String cmd = e.getMessage().split(" ")[0].replaceFirst("/", "");
 		
-		if(plugin.getBanManager().isChatCommand(cmd)){
+		if(this.getPlugin().getBanManager().isChatCommand(cmd)){
 			Player p = e.getPlayer();
-	        Mute mute = plugin.getBanManager().getMute(p.getName());
+	        Mute mute = this.getPlugin().getBanManager().getMute(p.getName());
 	        if (mute != null) {
+	        	if(this.getPlugin().getBanManager().hasImmunity(p.getName())){
+	        		return; 
+	        	}
 	        	if(mute instanceof TempMute){
 	        		TempMute tMute = (TempMute) mute;
 	        		p.sendMessage(ChatColor.RED+"You're muted for another " + Util.getTimeUntil(tMute.getExpires()));

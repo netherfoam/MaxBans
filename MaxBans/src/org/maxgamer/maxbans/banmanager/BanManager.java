@@ -1,5 +1,8 @@
 package org.maxgamer.maxbans.banmanager;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
@@ -438,7 +442,7 @@ public class BanManager{
 		if(defaultReason == null || defaultReason.isEmpty()) defaultReason = "Misconduct";
 		this.defaultReason = ChatColor.translateAlternateColorCodes('&', defaultReason);
 
-		//db.scheduleWatcher(); //Actually starts it.
+		this.loadImmunities();
 	}
 	
 	/**
@@ -667,9 +671,9 @@ public class BanManager{
      * @param msg The message to kick them with
      * @return True on success, false if the player was already offline.
      */
-    private boolean kick(String user, String msg){
+    public boolean kick(String user, String msg){
     	Player p = Bukkit.getPlayerExact(user);
-    	if(p != null && p.isOnline()){
+    	if(p != null && p.isOnline() && hasImmunity(user) == false){
     		p.kickPlayer(msg);
     		return true;
     	}
@@ -683,10 +687,10 @@ public class BanManager{
      * @param msg The message to kick them all with
      * @return True on success, false if no players were online with the given IP
      */
-    private boolean kickIP(String ip, String msg){
+    public boolean kickIP(String ip, String msg){
     	short kicks = 0;
     	for(Player p : Bukkit.getOnlinePlayers()){
-    		if(p.isOnline() && p.getAddress().getAddress().getHostAddress().equals(ip)){
+    		if(p.isOnline() && p.getAddress().getAddress().getHostAddress().equals(ip) && hasImmunity(p.getName()) == false){
     			p.kickPlayer(msg); //For some reason, this OFTEN causes "End of stream error"'s!
     			kicks++;
     		}
@@ -1229,5 +1233,69 @@ public class BanManager{
 	public boolean isChatCommand(String s){
 		s = s.toLowerCase();
 		return this.chatCommands.contains(s);
+	}
+	
+	private HashSet<String> immunities = new HashSet<String>();
+	private void loadImmunities(){
+		File f = new File(MaxBans.instance.getDataFolder(), "immunities.txt");
+		if(f.exists()){
+			try{
+				Scanner sc = new Scanner(f);
+				while(sc.hasNext()){
+					String name = sc.nextLine();
+					name = name.toLowerCase();
+					immunities.add(name);
+				}
+				sc.close();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+				System.out.println("Failed to load immunities.txt file!");
+			}
+		}
+	}
+	private void saveImmunities(){
+		File f = new File(MaxBans.instance.getDataFolder(), "immunities.txt");
+		try{
+			f.createNewFile();
+			PrintStream ps = new PrintStream(f);
+			for(String s : immunities){
+				ps.println(s);
+			}
+			ps.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			System.out.println("Failed to save immunities.txt file!");
+		}
+	}
+	/**
+	 * Returns true if the give user is immune to all punishments.
+	 * @param user The user to check
+	 * @return true if the give user is immune to all punishments.
+	 */
+	public boolean hasImmunity(String user){
+		if(user == null) return false;
+		return immunities.contains(user.toLowerCase());
+	}
+	/**
+	 * Sets the immunity to bans, kicks, mutes, etc on the given user from MaxBans.
+	 * @param user The user to modify
+	 * @param immune True to set them immune, false to disable it.
+	 * @return True for success, false if nothing has changed
+	 */
+	public boolean setImmunity(String user, boolean immune){
+		user = user.toLowerCase();
+		boolean success;
+		if(immune){
+			success = immunities.add(user);
+		}
+		else{
+			success = immunities.remove(user);
+		}
+		if(success){
+			saveImmunities();
+		}
+		return success;
 	}
 }

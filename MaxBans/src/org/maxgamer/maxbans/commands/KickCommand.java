@@ -32,12 +32,9 @@ public class KickCommand extends CmdSkeleton{
 			
 			if(name.equals("*") && sender.hasPermission("maxbans.kick.all")){
 				for(Player p : Bukkit.getOnlinePlayers()){
-					//p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
 					String message = Msg.get("disconnection.you-were-kicked", new String[]{"banner", "reason"}, new String[]{banner, reason});
-					p.kickPlayer(message);
+					plugin.getBanManager().kick(p.getName(), message);
 				}
-				//plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone.");
-				//plugin.getBanManager().addHistory(name, banner, Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + "everyone" + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
 				String message = Msg.get("announcement.player-was-kicked", new String[]{"name", "banner", "reason"}, new String[]{"everyone", banner, reason});
 				plugin.getBanManager().announce(message, silent, sender);
 				plugin.getBanManager().addHistory(name, banner, message);
@@ -45,18 +42,10 @@ public class KickCommand extends CmdSkeleton{
 			}
 			
 			if(Util.isIP(name)){
-				for(Player p : Bukkit.getOnlinePlayers()){
-					if(p.getAddress().getAddress().getHostAddress().equals(name)){
-						//p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
-						String message = Msg.get("disconnection.you-were-kicked", new String[]{"banner", "reason"}, new String[]{banner, reason});
-						p.kickPlayer(message);
-					}
-				}
-				/*
-				plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " has kicked everyone from " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'.");
-				plugin.getBanManager().addHistory(name, banner, Formatter.secondary + banner + Formatter.primary + " kicked everyone from " + Formatter.secondary + name + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");
-				*/
-				String message = Msg.get("announcement.player-was-kicked", new String[]{"name", "banner", "reason"}, new String[]{name, banner, reason});
+				String message = Msg.get("disconnection.you-were-kicked", new String[]{"banner", "reason"}, new String[]{banner, reason});
+				plugin.getBanManager().kickIP(name, message);
+				
+				message = Msg.get("announcement.player-was-kicked", new String[]{"name", "banner", "reason"}, new String[]{name, banner, reason});
 				plugin.getBanManager().announce(message, silent, sender);
 				plugin.getBanManager().addHistory(name, banner, message);
 				return true;
@@ -64,18 +53,13 @@ public class KickCommand extends CmdSkeleton{
 			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
-				//p.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + banner + Formatter.regular + " - Reason: \n'" + Formatter.reason + reason + Formatter.regular + "'");
 				String message = Msg.get("disconnection.you-were-kicked", new String[]{"banner", "reason"}, new String[]{banner, reason});
-				p.kickPlayer(message);
+				plugin.getBanManager().kick(name, message);
 				message = Msg.get("announcement.player-was-kicked", new String[]{"name", "banner", "reason"}, new String[]{name, banner, reason});
-				/*
-				plugin.getBanManager().announce(Formatter.secondary + p.getName() + Formatter.primary + " was kicked by " + Formatter.secondary + banner + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
-				plugin.getBanManager().addHistory(name, banner, Formatter.secondary + banner + Formatter.primary + " kicked " + Formatter.secondary + p.getName() + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'");*/
 				plugin.getBanManager().announce(message, silent, sender);
 				plugin.getBanManager().addHistory(name, banner, message);
 			}
 			else{
-				//sender.sendMessage(Formatter.primary + "No player found: " + Formatter.secondary + name);
 				String message = Msg.get("error.unknown-player", new String[]{"name"}, new String[]{name});
 				sender.sendMessage(message);
 			}
