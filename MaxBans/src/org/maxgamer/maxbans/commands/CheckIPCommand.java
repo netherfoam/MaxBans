@@ -6,12 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.Temporary;
+import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
+import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
 import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
-import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
-import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 
 public class CheckIPCommand extends CmdSkeleton{
     public CheckIPCommand(){
@@ -57,6 +57,7 @@ public class CheckIPCommand extends CmdSkeleton{
 			HashSet<String> dupeip = plugin.getBanManager().getUsers(ip);
 			sender.sendMessage(Formatter.primary + "Users: " + Formatter.secondary + (dupeip == null ? "0" : dupeip.size()));
 			sender.sendMessage(Formatter.primary + "GeoIP: " + Formatter.secondary + "http://www.geoiptool.com/en/?IP=" + ip);
+			if(plugin.getGeoDB() != null) sender.sendMessage(Formatter.primary + "Country: " + Formatter.secondary + plugin.getGeoDB().getCountry(ip));
 			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
 			
 			return true;

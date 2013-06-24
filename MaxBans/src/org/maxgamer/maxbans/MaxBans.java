@@ -1,8 +1,11 @@
 package org.maxgamer.maxbans;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
 import org.bukkit.Bukkit;
@@ -42,6 +45,7 @@ import org.maxgamer.maxbans.database.Database.ConnectionException;
 import org.maxgamer.maxbans.database.DatabaseCore;
 import org.maxgamer.maxbans.database.MySQLCore;
 import org.maxgamer.maxbans.database.SQLiteCore;
+import org.maxgamer.maxbans.geoip.GeoIPDatabase;
 import org.maxgamer.maxbans.listeners.ChatCommandListener;
 import org.maxgamer.maxbans.listeners.ChatListener;
 import org.maxgamer.maxbans.listeners.HeroChatListener;
@@ -71,6 +75,7 @@ public class MaxBans extends JavaPlugin{
     private BanManager banManager;
     private Syncer syncer;
     private SyncServer syncServer;
+    private GeoIPDatabase geoIPDB;
             
     private JoinListener joinListener;
     private HeroChatListener herochatListener; 
@@ -85,7 +90,11 @@ public class MaxBans extends JavaPlugin{
     
     /** The one plugin instance */
     public static MaxBans instance;
-        
+    
+    public GeoIPDatabase getGeoDB(){
+    	return geoIPDB;
+    }
+    
 	public void onEnable(){
 		instance = this;
 		
@@ -115,7 +124,41 @@ public class MaxBans extends JavaPlugin{
 		this.getConfig().options().copyDefaults();
 		if(result == -1){ //Config needs updating
 			getLogger().info("Updating config!");
+			this.getConfig().set("version", this.getDescription().getVersion());
 			this.saveConfig();
+		}
+		
+		final File geoCSV = new File(this.getDataFolder(), "geoip.csv");
+		if(!geoCSV.exists()){
+			Runnable download = new Runnable(){
+				@Override
+				public void run(){
+					String url = "http://maxgamer.org/plugins/maxbans/geoip.csv";
+					
+					getLogger().info("Downloading geoIPDatabase...");
+					try{
+						FileOutputStream out = new FileOutputStream(geoCSV);
+						BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+					    byte data[] = new byte[1024];
+					    int count;
+					    while((count = in.read(data,0,1024)) != -1){
+					    	out.write(data, 0, count);
+						}
+					    getLogger().info("Download complete.");
+					    out.close();
+					    in.close();
+					    geoIPDB = new GeoIPDatabase(geoCSV);
+					}
+					catch(Exception e){
+						e.printStackTrace();
+						System.out.println("Failed to download MaxBans GeoIPDatabase");
+					}
+				}
+			};
+			Bukkit.getScheduler().runTaskAsynchronously(this, download);
+		}
+		else{
+			this.geoIPDB = new GeoIPDatabase(geoCSV);
 		}
 		
 		this.filter_names = getConfig().getBoolean("filter-names");
