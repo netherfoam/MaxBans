@@ -60,6 +60,9 @@ permissions:
     maxbans.kick:
         description: Allows a player to kick others with a reason
         default: op
+    maxbans.whitelist:
+        description: Allows a player to use /mbwhitelist command.
+        default: op
     maxbans.lockdown.use:
         description: Allows a player to use /lockdown on|off.
         default: op
