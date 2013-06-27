@@ -35,7 +35,7 @@ public class HistoryCommand extends CmdSkeleton{
 		
 		HistoryRecord[] history;
 		if(name == null){
-			history= plugin.getBanManager().getHistory();
+			history = plugin.getBanManager().getHistory();
 		}
 		else{
 			history = plugin.getBanManager().getHistory(name);

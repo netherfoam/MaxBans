@@ -411,7 +411,7 @@ public class BanManager{
 					personal = new ArrayList<HistoryRecord>();
 					personalHistory.put(banner, personal);
 				}
-				personal.add(0, record);
+				personal.add(record);
 			}
 			
 			//Phase 9: Load whitelisted users
