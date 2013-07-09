@@ -29,6 +29,9 @@ public class DatabaseHelper{
 		if(!db.hasTable("mutes")){
 			createMuteTable(db);
 		}
+		else if(!db.hasColumn("mutes", "reason")){
+			db.getConnection().prepareStatement("ALTER TABLE mutes ADD COLUMN reason TEXT(100)");
+		}
 		if(!db.hasTable("iphistory")){
 			createIPHistoryTable(db);
 		}
@@ -187,7 +190,7 @@ public class DatabaseHelper{
 	 * Creates the mutes table
 	 */
 	public static void createMuteTable(Database db){
-		String query = "CREATE TABLE mutes ( name  TEXT(30) NOT NULL, muter  TEXT(30), time  BIGINT DEFAULT 0, expires  BIGINT DEFAULT 0 );";
+		String query = "CREATE TABLE mutes ( name  TEXT(30) NOT NULL, muter  TEXT(30), time  BIGINT DEFAULT 0, expires  BIGINT DEFAULT 0, reason  TEXT(100) NOT NULL );";
 		try {
 			Statement st = db.getConnection().createStatement();
 			st.execute(query);
@@ -221,7 +224,7 @@ public class DatabaseHelper{
 			st.execute(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(ChatColor.RED + "Could not create iphistory table.");
+			System.out.println(ChatColor.RED + "Could not create warnings table.");
 		}
 	}
 }

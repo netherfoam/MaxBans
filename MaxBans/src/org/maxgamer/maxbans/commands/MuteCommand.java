@@ -32,16 +32,15 @@ public class MuteCommand extends CmdSkeleton{
 				return true;
 			}
 			
+			String reason = Util.buildReason(args);
+			
 			String banner = Util.getName(sender);
 			
-			plugin.getBanManager().mute(name, banner);
+			plugin.getBanManager().mute(name, banner, reason);
 			
 			
-			String message = Msg.get("announcement.player-was-muted", new String[]{"banner", "name"}, new String[]{banner, name});
-			/*
-			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name);
-			String message = Formatter.secondary + banner + Formatter.primary + " muted " + Formatter.secondary + name;
-			plugin.getBanManager().addHistory(name, banner, message);*/
+			String message = Msg.get("announcement.player-was-muted", new String[]{"banner", "name", "reason"}, new String[]{banner, name, reason});
+			
 			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
 			
@@ -50,6 +49,7 @@ public class MuteCommand extends CmdSkeleton{
 	    		prop.setCommand("mute");
 	    		prop.put("name", name);
 	    		prop.put("banner", banner);
+	    		prop.put("reason", reason);
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.

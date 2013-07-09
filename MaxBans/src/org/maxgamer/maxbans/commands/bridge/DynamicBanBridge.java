@@ -60,7 +60,7 @@ public class DynamicBanBridge implements Bridge{
 		Set<String> mutes = cfg.getKeys(false);
 		System.out.println("Loading " + mutes.size() + " players.");
 		for(String s : mutes){
-			plugin.getBanManager().tempmute(s, "Console", cfg.getLong(s) * 1000);
+			plugin.getBanManager().tempmute(s, "Console", "DynamicBan Mute", cfg.getLong(s) * 1000);
 		}
 	}
 	

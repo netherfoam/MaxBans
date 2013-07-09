@@ -7,18 +7,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.Mute;
-import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.banmanager.Temporary;
+import org.maxgamer.maxbans.banmanager.Warn;
+import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
 import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
-import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 
 public class CheckBanCommand extends CmdSkeleton{
     public CheckBanCommand(){
@@ -54,7 +53,7 @@ public class CheckBanCommand extends CmdSkeleton{
 			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
 			sender.sendMessage(Formatter.primary + "User: " + Formatter.secondary + name);
 			sender.sendMessage(Formatter.primary + "Banned: " + Formatter.secondary + (ban == null ? "False" : "'" + ban.getReason() + Formatter.secondary + "' (" + ban.getBanner() + ")" + (ban instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) ban).getExpires() - System.currentTimeMillis()) : "")));
-			sender.sendMessage(Formatter.primary + "Muted: " + Formatter.secondary + (mute == null ? "False" : "True (" + mute.getBanner() + ")" + (mute instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) mute).getExpires() - System.currentTimeMillis()) : "")));
+			sender.sendMessage(Formatter.primary + "Muted: " + Formatter.secondary + (mute == null ? "False" : "'" + mute.getReason() + Formatter.secondary + "' (" + mute.getBanner() + ")" + (mute instanceof Temporary ? " Ends: " + Util.getShortTime(((Temporary) mute).getExpires() - System.currentTimeMillis()) : "")));
 			
 			List<Warn> warnings = plugin.getBanManager().getWarnings(name);
 			if(warnings == null || warnings.isEmpty()) sender.sendMessage(Formatter.primary + "Warnings: " + Formatter.secondary + "(0)");

@@ -7,7 +7,7 @@ public class Mute extends Punishment{
      * @param muter The admin who muted them
      * @param time The time the mute was created
      */
-	public Mute(String muted, String muter, long created){
-		super(muted, "", muter, created);
+	public Mute(String muted, String muter, String reason, long created){
+		super(muted, reason, muter, created);
 	}
 }

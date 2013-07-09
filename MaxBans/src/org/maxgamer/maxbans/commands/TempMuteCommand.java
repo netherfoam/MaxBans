@@ -58,18 +58,12 @@ public class TempMuteCommand extends CmdSkeleton{
 				}
 			}
 			
-			plugin.getBanManager().tempmute(name, banner, time);
+			String reason = Util.buildReason(args);
 			
-			String until = Util.getTimeUntil(time/*/1000*1000*/);
-			/*
-			Player p = Bukkit.getPlayerExact(name);
-			if(p != null){
-				p.sendMessage(Formatter.secondary + "You have been muted for " + until);
-			}*
-			sender.sendMessage(Formatter.primary + "Muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until);
-			String message = Formatter.secondary + banner + Formatter.primary + " temp muted " + Formatter.secondary + name + Formatter.primary + " for " + Formatter.secondary + until;
-			plugin.getBanManager().addHistory(name, banner, message);*/
-			String message = Msg.get("announcement.player-was-temp-muted", new String[]{"banner", "name", "time"}, new String[]{banner, name, until});
+			plugin.getBanManager().tempmute(name, banner, reason, time);
+			
+			String until = Util.getTimeUntil(time);
+			String message = Msg.get("announcement.player-was-temp-muted", new String[]{"banner", "name", "time", "reason"}, new String[]{banner, name, until, reason});
 			plugin.getBanManager().addHistory(name, banner, message);
 			plugin.getBanManager().announce(message, silent, sender);
 			
@@ -79,6 +73,7 @@ public class TempMuteCommand extends CmdSkeleton{
 	    		prop.put("name", name);
 	    		prop.put("banner", banner);
 	    		prop.put("expires", time);
+	    		prop.put("reason", reason);
 	    		plugin.getSyncer().broadcast(prop);
 	    		
 	    		//Send the addhistory request.

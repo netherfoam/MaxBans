@@ -9,8 +9,8 @@ public class TempMute extends Mute implements Temporary{
      * @param time The time the mute was created
      * @param expires The time the mute expires
      */
-	public TempMute(String muted, String muter, long created, long expires){
-		super(muted, muter, created);
+	public TempMute(String muted, String muter, String reason, long created, long expires){
+		super(muted, muter, reason, created);
         this.expires = expires;
 	}
     

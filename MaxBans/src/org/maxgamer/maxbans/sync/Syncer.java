@@ -224,8 +224,9 @@ public class Syncer{
 			public void run(Packet props){
 				String name = props.get("name");
 				String banner = props.get("banner");
+				String reason = props.get("reason");
 				
-				MaxBans.instance.getBanManager().mute(name, banner);
+				MaxBans.instance.getBanManager().mute(name, banner, reason);
 			}
 		};
 		
@@ -239,9 +240,10 @@ public class Syncer{
 			public void run(Packet props){
 				String name = props.get("name");
 				String banner = props.get("banner");
+				String reason = props.get("reason");
 				long expires = Long.parseLong(props.get("expires"));
 				
-				MaxBans.instance.getBanManager().tempmute(name, banner, expires);
+				MaxBans.instance.getBanManager().tempmute(name, banner, reason, expires);
 			}
 		};
 		commands.put("tempmute", tempmute);

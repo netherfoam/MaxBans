@@ -282,17 +282,18 @@ public class BanManager{
 			while(rs.next()){
 				String name = rs.getString("name");
 				String banner = rs.getString("muter");
+				String reason = rs.getString("reason");
 				players.add(name);
 				
 				long expires = rs.getLong("expires");
 				long time = rs.getLong("time");
 				
 				if(expires != 0){
-					TempMute tmute = new TempMute(name, banner, time, expires);
+					TempMute tmute = new TempMute(name, banner, reason, time, expires);
 					this.tempmutes.put(name.toLowerCase(), tmute);
 				}
 				else{
-					Mute mute = new Mute(name, banner, time);
+					Mute mute = new Mute(name, banner, reason, time);
 					this.mutes.put(name.toLowerCase(), mute);
 				}
 			}
@@ -828,13 +829,13 @@ public class BanManager{
      * @param name The name of the player to mute
      * @param banner The admin who muted them
      */
-    public void mute(String name, String banner){
+    public void mute(String name, String banner, String reason){
     	name = name.toLowerCase();
     	players.add(name);
     	
     	this.unmute(name); //Esnure they're unmuted first.
     	
-    	Mute mute = new Mute(name, banner, System.currentTimeMillis());
+    	Mute mute = new Mute(name, banner, reason, System.currentTimeMillis());
     	this.mutes.put(name, mute);
     	
     	db.execute("INSERT INTO mutes (name, muter, time) VALUES (?, ?, ?)", name, banner, System.currentTimeMillis());
@@ -846,14 +847,14 @@ public class BanManager{
      * @param banner The admin who muted them
      * @param expires The time the mute expires
      */
-    public void tempmute(String name, String banner, long expires){
+    public void tempmute(String name, String banner, String reason, long expires){
     	name = name.toLowerCase();
     	banner = banner.toLowerCase();
     	players.add(name);
     	
     	this.unmute(name); //Esnure they're unmuted first.
     	
-    	TempMute tmute = new TempMute(name, banner, System.currentTimeMillis(), expires);
+    	TempMute tmute = new TempMute(name, banner, reason, System.currentTimeMillis(), expires);
     	this.tempmutes.put(name, tmute);
     	
     	db.execute("INSERT INTO mutes (name, muter, time, expires) VALUES (?, ?, ?, ?)", name, banner, System.currentTimeMillis(), expires);
