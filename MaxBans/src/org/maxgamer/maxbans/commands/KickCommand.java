@@ -53,6 +53,7 @@ public class KickCommand extends CmdSkeleton{
 			
 			Player p = Bukkit.getPlayer(name);
 			if(p != null){
+				name = p.getName().toLowerCase();
 				String message = Msg.get("disconnection.you-were-kicked", new String[]{"banner", "reason"}, new String[]{banner, reason});
 				plugin.getBanManager().kick(name, message);
 				message = Msg.get("announcement.player-was-kicked", new String[]{"name", "banner", "reason"}, new String[]{name, banner, reason});
