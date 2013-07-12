@@ -200,231 +200,274 @@ public class BanManager{
 			db.getConnection().close();
 			
 			boolean readOnly = plugin.getConfig().getBoolean("read-only", false);
+			PreparedStatement ps = null;
+			ResultSet rs = null;
 			
-			//Phase 1: Load bans
-			PreparedStatement ps;
-			if(!readOnly){
-				//Purge old temp bans
-				ps = db.getConnection().prepareStatement("DELETE FROM bans WHERE expires <> 0 AND expires < ?");
-				ps.setLong(1, System.currentTimeMillis());
-				ps.execute(); 
-			}
-			
-			plugin.getLogger().info("Loading bans");
-			query = "SELECT * FROM bans";
-			ps = db.getConnection().prepareStatement(query);
-			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next()){
-				String name = rs.getString("name");
-				String reason = rs.getString("reason");
-				String banner = rs.getString("banner");
-				players.add(name);
-				long expires = rs.getLong("expires");
-				long time = rs.getLong("time");
+			try{
+				//Phase 1: Load bans
+				if(!readOnly){
+					//Purge old temp bans
+					ps = db.getConnection().prepareStatement("DELETE FROM bans WHERE expires <> 0 AND expires < ?");
+					ps.setLong(1, System.currentTimeMillis());
+					ps.execute(); 
+				}
 				
-				if(expires != 0){
-					TempBan tb = new TempBan(name, reason, banner, time, expires);
-					this.tempbans.put(name.toLowerCase(), tb);
+				plugin.getLogger().info("Loading bans");
+				query = "SELECT * FROM bans";
+				ps = db.getConnection().prepareStatement(query);
+				rs = ps.executeQuery();
+				
+				while(rs.next()){
+					String name = rs.getString("name");
+					String reason = rs.getString("reason");
+					String banner = rs.getString("banner");
+					players.add(name);
+					long expires = rs.getLong("expires");
+					long time = rs.getLong("time");
+					
+					if(expires != 0){
+						TempBan tb = new TempBan(name, reason, banner, time, expires);
+						this.tempbans.put(name.toLowerCase(), tb);
+					}
+					else{
+						Ban ban = new Ban(name, reason, banner, time);
+						this.bans.put(name.toLowerCase(), ban);
+					}
 				}
-				else{
-					Ban ban = new Ban(name, reason, banner, time);
-					this.bans.put(name.toLowerCase(), ban);
-				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 			
 			//Phase 2: Load IP Bans
-			
-			if(!readOnly){
-				//Purge old temp ip bans
-				ps = db.getConnection().prepareStatement("DELETE FROM ipbans WHERE expires <> 0 AND expires < ?");
-				ps.setLong(1, System.currentTimeMillis());
-				ps.execute(); 
-			}
-			
-			plugin.getLogger().info("Loading ipbans");
-			query = "SELECT * FROM ipbans";
-			ps = db.getConnection().prepareStatement(query);
-			rs = ps.executeQuery();
-			
-			while(rs.next()){
-				String ip = rs.getString("ip");
-				String reason = rs.getString("reason");
-				String banner = rs.getString("banner");
-				
-				long expires = rs.getLong("expires");
-				long time = rs.getLong("time");
-				
-				if(expires != 0){
-					TempIPBan tib = new TempIPBan(ip, reason, banner, time, expires);
-					this.tempipbans.put(ip, tib);
+			try{
+				if(!readOnly){
+					//Purge old temp ip bans
+					ps = db.getConnection().prepareStatement("DELETE FROM ipbans WHERE expires <> 0 AND expires < ?");
+					ps.setLong(1, System.currentTimeMillis());
+					ps.execute(); 
 				}
-				else{
-					IPBan ipban = new IPBan(ip, reason, banner, time);
-					this.ipbans.put(ip, ipban);
+				
+				plugin.getLogger().info("Loading ipbans");
+				query = "SELECT * FROM ipbans";
+				ps = db.getConnection().prepareStatement(query);
+				rs = ps.executeQuery();
+				
+				while(rs.next()){
+					String ip = rs.getString("ip");
+					String reason = rs.getString("reason");
+					String banner = rs.getString("banner");
+					
+					long expires = rs.getLong("expires");
+					long time = rs.getLong("time");
+					
+					if(expires != 0){
+						TempIPBan tib = new TempIPBan(ip, reason, banner, time, expires);
+						this.tempipbans.put(ip, tib);
+					}
+					else{
+						IPBan ipban = new IPBan(ip, reason, banner, time);
+						this.ipbans.put(ip, ipban);
+					}
 				}
 			}
-			
+			catch(Exception e){
+				e.printStackTrace();
+			}
 			//Phase 3: Load Mutes
-			
-			if(!readOnly){
-				//Purge old temp mutes
-				ps = db.getConnection().prepareStatement("DELETE FROM mutes WHERE expires <> 0 AND expires < ?");
-				ps.setLong(1, System.currentTimeMillis());
-				ps.execute();
+			try{
+				if(!readOnly){
+					//Purge old temp mutes
+					ps = db.getConnection().prepareStatement("DELETE FROM mutes WHERE expires <> 0 AND expires < ?");
+					ps.setLong(1, System.currentTimeMillis());
+					ps.execute();
+				}
+				
+				plugin.getLogger().info("Loading mutes");
+				query = "SELECT * FROM mutes";
+				ps = db.getConnection().prepareStatement(query);
+				rs = ps.executeQuery();
+				
+				while(rs.next()){
+					String name = rs.getString("name");
+					String banner = rs.getString("muter");
+					String reason = rs.getString("reason");
+					players.add(name);
+					
+					long expires = rs.getLong("expires");
+					long time = rs.getLong("time");
+					
+					if(expires != 0){
+						TempMute tmute = new TempMute(name, banner, reason, time, expires);
+						this.tempmutes.put(name.toLowerCase(), tmute);
+					}
+					else{
+						Mute mute = new Mute(name, banner, reason, time);
+						this.mutes.put(name.toLowerCase(), mute);
+					}
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 			
-			plugin.getLogger().info("Loading mutes");
-			query = "SELECT * FROM mutes";
-			ps = db.getConnection().prepareStatement(query);
-			rs = ps.executeQuery();
-			
-			while(rs.next()){
-				String name = rs.getString("name");
-				String banner = rs.getString("muter");
-				String reason = rs.getString("reason");
-				players.add(name);
+			try{
+				//Phase 4 loading: Load Player names.
+				plugin.getLogger().info("Loading player names...");
+				query = "SELECT * FROM players";
+				ps = db.getConnection().prepareStatement(query);
+				rs = ps.executeQuery();
 				
-				long expires = rs.getLong("expires");
-				long time = rs.getLong("time");
-				
-				if(expires != 0){
-					TempMute tmute = new TempMute(name, banner, reason, time, expires);
-					this.tempmutes.put(name.toLowerCase(), tmute);
-				}
-				else{
-					Mute mute = new Mute(name, banner, reason, time);
-					this.mutes.put(name.toLowerCase(), mute);
+				while(rs.next()){
+					String actual = rs.getString("actual"); //Real name (May have capitals)
+					String name = rs.getString("name"); //Lower case
+					
+					this.actualNames.put(name, actual);
+					this.players.add(name); //For auto completion. 
 				}
 			}
-			
-			//Phase 4 loading: Load Player names.
-			plugin.getLogger().info("Loading player names...");
-			query = "SELECT * FROM players";
-			ps = db.getConnection().prepareStatement(query);
-			rs = ps.executeQuery();
-			
-			while(rs.next()){
-				String actual = rs.getString("actual"); //Real name (May have capitals)
-				String name = rs.getString("name"); //Lower case
-				
-				this.actualNames.put(name, actual);
-				this.players.add(name); //For auto completion. 
+			catch(Exception e){
+				e.printStackTrace();
 			}
-			
-			
-			//Phase 5 loading: Load IP history
-			plugin.getLogger().info("Loading IP History");
-			query = "SELECT * FROM iphistory";
-			ps = db.getConnection().prepareStatement(query);
-			rs = ps.executeQuery();
-			
-			while(rs.next()){
-				String name = rs.getString("name").toLowerCase();
-				String ip = rs.getString("ip");
 				
-				this.recentips.put(name, ip); //So we don't need it here
-				HashSet<String> list = this.iplookup.get(ip);
-				if(list == null){
-					list = new HashSet<String>(2);
-					this.iplookup.put(ip, list);
+			try{
+				//Phase 5 loading: Load IP history
+				plugin.getLogger().info("Loading IP History");
+				query = "SELECT * FROM iphistory";
+				ps = db.getConnection().prepareStatement(query);
+				rs = ps.executeQuery();
+				
+				while(rs.next()){
+					String name = rs.getString("name").toLowerCase();
+					String ip = rs.getString("ip");
+					
+					this.recentips.put(name, ip); //So we don't need it here
+					HashSet<String> list = this.iplookup.get(ip);
+					if(list == null){
+						list = new HashSet<String>(2);
+						this.iplookup.put(ip, list);
+					}
+					list.add(name); //Or here.
 				}
-				list.add(name); //Or here.
+			}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 			
 			//Phase 6 loading: Load Warn history
-			
-			if(!readOnly){
-				//Purge old warnings
-				ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
-				ps.setLong(1, System.currentTimeMillis());
-				ps.execute();
-			}
-			
-			plugin.getLogger().info("Loading warn history...");
-			//We only want warns that haven't expired.
-			query = "SELECT * FROM warnings";
-			ps = db.getConnection().prepareStatement(query);
-			rs = ps.executeQuery();
-			
-			while(rs.next()){
-				String name = rs.getString("name");
-				String reason = rs.getString("reason");
-				String banner = rs.getString("banner");
-				players.add(name);
-				
-				long expires = rs.getLong("expires");
-				
-				Warn warn = new Warn(reason,banner, expires);
-				
-				List<Warn> warns = this.warnings.get(name.toLowerCase());
-				if(warns == null){
-					warns = new ArrayList<Warn>();
-					this.warnings.put(name.toLowerCase(), warns);
+			try{
+				if(!readOnly){
+					//Purge old warnings
+					ps = db.getConnection().prepareStatement("DELETE FROM warnings WHERE expires < ?");
+					ps.setLong(1, System.currentTimeMillis());
+					ps.execute();
 				}
-				warns.add(warn);
-			}
-			
-			//Phase 7 loading: Load Chat Commands
-			plugin.getLogger().info("Loading chat commands...");
-			List<String> cmds = plugin.getConfig().getStringList("chat-commands");
-			for(String s : cmds){
-				this.addChatCommand(s);
-			}
-			
-			//Phase 8 loading: Load history
-			plugin.getLogger().info("Loading history...");
-			
-			if(!readOnly){
-				if(plugin.getConfig().getInt("history-expirey-minutes", 10080) > 0){
-					db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+				
+				plugin.getLogger().info("Loading warn history...");
+				//We only want warns that haven't expired.
+				query = "SELECT * FROM warnings";
+				ps = db.getConnection().prepareStatement(query);
+				rs = ps.executeQuery();
+				
+				while(rs.next()){
+					String name = rs.getString("name");
+					String reason = rs.getString("reason");
+					String banner = rs.getString("banner");
+					players.add(name);
+					
+					long expires = rs.getLong("expires");
+					
+					Warn warn = new Warn(reason,banner, expires);
+					
+					List<Warn> warns = this.warnings.get(name.toLowerCase());
+					if(warns == null){
+						warns = new ArrayList<Warn>();
+						this.warnings.put(name.toLowerCase(), warns);
+					}
+					warns.add(warn);
 				}
 			}
-			
-			query = "SELECT * FROM history ORDER BY created DESC";
-			rs = db.getConnection().prepareStatement(query).executeQuery();
-			while(rs.next()){
-				String name = rs.getString("name");
-				players.add(name);
-				
-				String banner = rs.getString("banner");
-				String message = rs.getString("message");
-				long created = rs.getLong("created");
-				
-				if(name == null) name = "unknown";
-				if(banner == null) banner = "unknown";
-				
-				HistoryRecord record = new HistoryRecord(name, banner, message, created);
-				history.add(record);
-				
-				//TODO: This is partially a copy paste... Is there a way I can put this in some kind of (useful) method?
-				ArrayList<HistoryRecord> personal = personalHistory.get(name); //Insert it under the history for that person
-				if(personal == null){
-					personal = new ArrayList<HistoryRecord>();
-					personalHistory.put(name, personal);
-				}
-				personal.add(record); //Add it to the END because we're doing SELECT ORDER BY **DESC** not ASC.
-				
-				if(record.getName().equals(banner)) continue; //If the player was the banner, there's no point in doing it twice!
-				
-				personal = personalHistory.get(banner); //Insert it under the history for the banner
-				if(personal == null){
-					personal = new ArrayList<HistoryRecord>();
-					personalHistory.put(banner, personal);
-				}
-				personal.add(record);
+			catch(Exception e){
+				e.printStackTrace();
 			}
 			
-			//Phase 9: Load whitelisted users
-			query = "SELECT * FROM whitelist";
-			rs = db.getConnection().prepareStatement(query).executeQuery();
 			
-			while(rs.next()){
-				String name = rs.getString("name");
-				whitelist.add(name);
+			try{
+				//Phase 7 loading: Load Chat Commands
+				plugin.getLogger().info("Loading chat commands...");
+				List<String> cmds = plugin.getConfig().getStringList("chat-commands");
+				for(String s : cmds){
+					this.addChatCommand(s);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			try{
+				//Phase 8 loading: Load history
+				plugin.getLogger().info("Loading history...");
+				
+				if(!readOnly){
+					if(plugin.getConfig().getInt("history-expirey-minutes", 10080) > 0){
+						db.getConnection().prepareStatement("DELETE FROM history WHERE created < " + (System.currentTimeMillis() - plugin.getConfig().getInt("history-expirey-minutes", 10080) * 60000)).execute();
+					}
+				}
+				
+				query = "SELECT * FROM history ORDER BY created DESC";
+				rs = db.getConnection().prepareStatement(query).executeQuery();
+				while(rs.next()){
+					String name = rs.getString("name");
+					players.add(name);
+					
+					String banner = rs.getString("banner");
+					String message = rs.getString("message");
+					long created = rs.getLong("created");
+					
+					if(name == null) name = "unknown";
+					if(banner == null) banner = "unknown";
+					
+					HistoryRecord record = new HistoryRecord(name, banner, message, created);
+					history.add(record);
+					
+					//TODO: This is partially a copy paste... Is there a way I can put this in some kind of (useful) method?
+					ArrayList<HistoryRecord> personal = personalHistory.get(name); //Insert it under the history for that person
+					if(personal == null){
+						personal = new ArrayList<HistoryRecord>();
+						personalHistory.put(name, personal);
+					}
+					personal.add(record); //Add it to the END because we're doing SELECT ORDER BY **DESC** not ASC.
+					
+					if(record.getName().equals(banner)) continue; //If the player was the banner, there's no point in doing it twice!
+					
+					personal = personalHistory.get(banner); //Insert it under the history for the banner
+					if(personal == null){
+						personal = new ArrayList<HistoryRecord>();
+						personalHistory.put(banner, personal);
+					}
+					personal.add(record);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			try{
+				//Phase 9: Load whitelisted users
+				query = "SELECT * FROM whitelist";
+				rs = db.getConnection().prepareStatement(query).executeQuery();
+				
+				while(rs.next()){
+					String name = rs.getString("name");
+					whitelist.add(name);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 			
 			rs.close();
+			ps.close();
 		}
 		catch(SQLException e){
 			plugin.getLogger().severe(Formatter.secondary + "Could not load database history using: " + query);
