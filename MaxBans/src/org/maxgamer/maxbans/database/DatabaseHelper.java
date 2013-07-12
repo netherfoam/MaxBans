@@ -29,8 +29,9 @@ public class DatabaseHelper{
 		if(!db.hasTable("mutes")){
 			createMuteTable(db);
 		}
-		else if(!db.hasColumn("mutes", "reason")){
-			db.getConnection().prepareStatement("ALTER TABLE mutes ADD COLUMN reason TEXT(100)");
+		if(!db.hasColumn("mutes", "reason")){
+			System.out.println("Updating mutes table (Adding reason column)");
+			db.getConnection().prepareStatement("ALTER TABLE mutes ADD COLUMN reason TEXT(100)").execute();
 		}
 		if(!db.hasTable("iphistory")){
 			createIPHistoryTable(db);

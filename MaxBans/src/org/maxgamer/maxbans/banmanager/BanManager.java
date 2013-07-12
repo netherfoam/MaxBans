@@ -183,7 +183,7 @@ public class BanManager{
 		plugin.reloadConfig();
 		
 		try {
-			DatabaseHelper.createTables(db);
+			DatabaseHelper.setup(db);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
