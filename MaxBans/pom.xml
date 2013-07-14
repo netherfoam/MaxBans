@@ -22,7 +22,7 @@
 		</plugins>
 		<resources>
 			<resource>
-				<targetPath>MaxBans</targetPath>
+				<targetPath>MaxBans/.</targetPath>
 				<filtering>true</filtering>
 				<directory>${project.basedir}</directory>
 				<includes>
