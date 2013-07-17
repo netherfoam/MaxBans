@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>CreativeVitals</groupId>
-	<artifactId>CreativeVitals</artifactId>
-	<name>CreativeVitals ${project.version}</name>
+	<groupId>MaxBans</groupId>
+	<artifactId>MaxBans</artifactId>
+	<name>MaxBans ${project.version}</name>
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -27,6 +27,12 @@
 				<directory>${project.basedir}</directory>
 				<includes>
 					<include>plugin.yml</include>
+				</includes>
+				<includes>
+					<include>config.yml</include>
+				</includes>
+				<includes>
+					<include>messages.yml</include>
 				</includes>
 			</resource>
 		</resources>
@@ -53,5 +59,19 @@
 			<artifactId>craftbukkit</artifactId>
 			<version>1.6.2-R0.1-SNAPSHOT</version>
 		</dependency>
+         	<dependency>
+  	        	<groupId>org.dthielke</groupId>
+  		        <artifactId>Herochat</artifactId>
+  	        	<version>5.6.5</version>
+  			<scope>system</scope>
+  			<systemPath>${project.basedir}/lib/Herochat.jar</systemPath>
+        	</dependency>
+        	<dependency>
+  	        	<groupId>co.cc.dynamicdev</groupId>
+  		        <artifactId>DynamicBan</artifactId>
+  	        	<version>1.2.9</version>
+  			<scope>system</scope>
+  			<systemPath>${project.basedir}/lib/DynamicBan.jar</systemPath>
+        	</dependency>
 	</dependencies>
 </project>
