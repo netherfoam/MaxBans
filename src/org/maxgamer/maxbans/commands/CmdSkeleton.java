@@ -95,8 +95,7 @@ public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comp
 	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(hasPermission(sender) == false){
-			//sender.sendMessage(ChatColor.RED + "You don't have the permission: " + perm + " to do that.");
-			sender.sendMessage(Msg.get("no-permission"));
+			sender.sendMessage(Msg.get("error.no-permission"));
 			return true;
 		}
 		
