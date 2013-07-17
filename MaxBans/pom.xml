@@ -27,11 +27,7 @@
 				<directory>${project.basedir}</directory>
 				<includes>
 					<include>plugin.yml</include>
-				</includes>
-				<includes>
 					<include>config.yml</include>
-				</includes>
-				<includes>
 					<include>messages.yml</include>
 				</includes>
 			</resource>
