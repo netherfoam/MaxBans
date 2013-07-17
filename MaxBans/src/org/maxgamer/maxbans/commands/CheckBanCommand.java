@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.Mute;
@@ -31,7 +32,7 @@ public class CheckBanCommand extends CmdSkeleton{
 				args = new String[]{((Player) sender).getName()}; //Let them checkban themself, that's all.
 			}
 			else{
-				sender.sendMessage(Formatter.secondary + "You don't have permission to do that");
+				sender.sendMessage(Msg.get("error.no-permission"));
 				return true;
 			}
 		}
