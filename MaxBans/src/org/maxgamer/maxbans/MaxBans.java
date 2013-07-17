@@ -24,7 +24,7 @@ import org.maxgamer.maxbans.commands.ImmuneCommand;
 import org.maxgamer.maxbans.commands.KickCommand;
 import org.maxgamer.maxbans.commands.LockdownCommand;
 import org.maxgamer.maxbans.commands.MBCommand;
-import org.maxgamer.maxbans.commands.MBDebug;
+import org.maxgamer.maxbans.commands.MBDebugCommand;
 import org.maxgamer.maxbans.commands.MBExportCommand;
 import org.maxgamer.maxbans.commands.MBImportCommand;
 import org.maxgamer.maxbans.commands.MuteCommand;
@@ -343,7 +343,7 @@ public class MaxBans extends JavaPlugin{
 		//Admin commands
 		new MBImportCommand();
 		new MBExportCommand();
-		new MBDebug();
+		new MBDebugCommand();
 		new ReloadCommand();
 		
 		//MBWhitelist

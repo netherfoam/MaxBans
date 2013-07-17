@@ -14,8 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-public class MBDebug extends CmdSkeleton{
-	public MBDebug(){
+public class MBDebugCommand extends CmdSkeleton{
+	public MBDebugCommand(){
 		super("mbdebug", "maxbans.debug");
 		namePos = -1;
 		minArgs = 1;
@@ -57,6 +57,9 @@ public class MBDebug extends CmdSkeleton{
 		}
 		else{
 			sender.sendMessage("No such output method... " + args[0]);
+			sender.sendMessage("/mbdebug file - Outputs debug info to Server\\plugins\\MaxBans\\debug.txt");
+			sender.sendMessage("/mbdebug chat - Outputs debug info to chat");
+			sender.sendMessage("/mbdebug console - Outputs debug info to Console");
 			return true;
 		}
 		
@@ -98,6 +101,8 @@ public class MBDebug extends CmdSkeleton{
 		out.print(Bukkit.getPluginManager().getPlugins());
 		out.print("=== Whitelisted Players ===");
 		out.print(Bukkit.getWhitelistedPlayers());
+		out.print("=== Immune Players ===");
+		out.print(plugin.getBanManager().getImmunities());
 		out.print("=== Worlds ===");
 		out.print(Bukkit.getWorlds());
 		

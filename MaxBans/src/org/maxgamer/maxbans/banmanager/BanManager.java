@@ -1342,4 +1342,12 @@ public class BanManager{
 		}
 		return success;
 	}
+	/**
+	 * Returns a HashSet of all players who will not be affected by bans, mutes, kicks etc
+	 * @return a HashSet of all players who will not be affected by bans, mutes, kicks etc
+	 * The names are in lowercase. Modifying this hashset will not modify the stored names.
+	 */
+	public HashSet<String> getImmunities(){
+		return new HashSet<String>(this.immunities);
+	}
 }
