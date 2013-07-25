@@ -116,7 +116,6 @@ public class DNSBL{
 							public void run(){
 								if(kick && player.isOnline()){
 									String msg = Msg.get("disconnection.you-are-proxied", "ip", address);
-									//player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
 									player.kickPlayer(msg);
 								}
 								if(notify){ 
@@ -146,7 +145,6 @@ public class DNSBL{
 			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
     		if(kick){
     			String msg = Msg.get("disconnection.you-are-proxied", "ip", address);
-				//player.kickPlayer(Formatter.message + "Kicked by " + Formatter.banner + "MaxBans:\n" + Formatter.reason + "Your IP ("+address+") is listed as a proxy.");
 				player.kickPlayer(msg);
     			return;
     		}
