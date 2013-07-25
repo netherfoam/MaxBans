@@ -52,7 +52,6 @@ public class JoinListener extends ListenerSkeleton{
 	
     @EventHandler(priority = EventPriority.LOW)
 	public void onJoinLockdown(PlayerLoginEvent event) {
-		if(event.getResult() != Result.ALLOWED) return;
     	Player player = event.getPlayer();
     	if(this.getPlugin().getBanManager().isLockdown()){
 	        if(!player.hasPermission("maxbans.lockdown.bypass")){
@@ -126,7 +125,7 @@ public class JoinListener extends ListenerSkeleton{
         IPBan ipban = null;
         boolean whitelisted = this.getPlugin().getBanManager().isWhitelisted(player.getName());
         if(!whitelisted){ //Only fetch the IP ban if the user is not whitelisted.
-        	 ipban = this.getPlugin().getBanManager().getIPBan(address); 
+        	ipban = this.getPlugin().getBanManager().getIPBan(address); 
         }
         
         //If they haven't been banned or IP banned, they can join.
@@ -153,13 +152,10 @@ public class JoinListener extends ListenerSkeleton{
 	        	//DNS Blacklist handling, only if NOT whitelisted
 	            if(this.getPlugin().getBanManager().getDNSBL() != null){
 	            	this.getPlugin().getBanManager().getDNSBL().handle(e);
-	            	if(e.getResult() != Result.ALLOWED) return; //DNSBL doesn't want them joining.
 	            }
         	}
-        	
         	return;
         }
-        
         e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         e.setKickMessage((ipban != null ? ipban.getKickMessage() : ban.getKickMessage()));
         
