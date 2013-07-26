@@ -1,0 +1,48 @@
+disconnection:
+    you-were-kicked: "&fKicked af &a{banner}&f - Reason: \n&a'{reason}'&f"
+    you-are-banned: "&fDu er blevet banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\n{appeal-message}"
+    you-are-ipbanned: "&fDin IP er blevet banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\n{appeal-message}"
+    you-are-temp-banned: "&fDu er midlertidigt banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\nExpires in: {time}.\n{appeal-message}"
+    you-are-temp-ipbanned: "&fDu er midlertidigt IP banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\nExpires in: {time}.\n{appeal-message}"
+    
+    you-are-proxied: "Kicked af MaxBans:\nDin IP ({ip}) er listed som pornografisk" 
+    
+    lockdown-active: "&fServeren er låst!. Prøv igen snart. Reason: \n{reason}"
+    invalid-letters: "&fKicked af MaxBans.\nDit navn indeholder ugyldige tegn:\n&c'{letters}'&f"
+    invalid-name: "&fKicked by MaxBans.\nYour name is invalid!"
+    
+    
+announcement:
+    player-was-kicked: "&a{name}&f blev kicked af &a{banner}&f for &a'{reason}'&f."
+    player-was-banned: "&a{banner}&f blev banned &a{name}&f for &a'{reason}'&f."
+    player-was-ip-banned: "&a{banner}&f blev IP banned &a{name}&f ('{ip}') for &a'{reason}'&f."
+    player-was-muted: "&a{banner}&f mundlam &a{name}&f"
+    player-was-tempbanned: "&a{banner}&f blev midlertidigt banned &a{name}&f i {time} for &a'{reason}'&f"
+    player-was-tempipbanned: "&a{banner}&f IP bannede midlertidigt &a{name}&f ('{ip}') i {time} for &a'{reason}'&f"
+    player-was-temp-muted: "&a{banner}&f blev midlertidigt mundlam &a{name}&f for {time}."
+    player-was-unbanned: "&a{banner}&f unbanned &a{name}&f"
+    player-was-unmuted: "&a{banner}&f unmuted &a{name}&f"
+    player-was-warned: "&a{banner}&f advarede &a{name}&f for &a'{reason}'&f"
+    ip-was-unbanned: "&f{ip} blev unbanned af &a{banner}&f."
+    player-warnings-cleared: "&a{banner}&f fjernede &a{name}&f's advarelser."
+    unwarn-success: "&a{banner}&f fjernede en af &a{name}&f's advarelser."
+    
+error:
+    no-player-given: "&fNo name given."
+    no-permission: "&fDu har ikke retighedder til det."
+    no-ip-known: "&fDenne spiller har ingen IP historie!"
+    no-ipban-found: "&fkunne ikke finde nogle ban for {ip}."
+    no-ban-found: "&fkunne ikke finde nogle bans for &a{name}&f."
+    no-mute-found: "&a{name}&f kan godt tale."
+    no-dupeip-duplicates: "&fDer blev ikke fundet andre spillere på den IP!"
+    no-history: "&fIngen historie."
+    no-warnings: "&a{name}&f har ingen advarelser."
+    
+    unknown-player: "&fKunne ikke finde en spiller ved navn: &a{name}&f"
+    player-already-banned: "&fDen spiller er allerede banned."
+    ip-already-banned: "&fDen IP er allerede banned."
+    
+    
+    tempban-shorter-than-last: "&fDen spiller har et midlertidigt ban, som vil vare længere end den du leverede!!"
+    tempipban-shorter-than-last: "&fDen IP har et midlertidigt forbud, som vil vare længere end den, du leverede!!"
+    tempmute-shorter-than-last: "&fDen spiller er længere mundlam end du forsøgte at give."
