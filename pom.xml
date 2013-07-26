@@ -35,16 +35,20 @@
 	</build>
 
 	<version>1.0</version>
-
-
+	
 	<repositories>
-		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
-		</repository>
-	</repositories>
-
+	        <repository>
+                      <id>bukkit-repo</id>
+                      <url>http://repo.bukkit.org/content/groups/public/</url>
+                </repository>
+        </repositories>
+        
 	<dependencies>
+	        <dependency>
+                       <groupId>org.bukkit</groupId>
+                       <artifactId>bukkit</artifactId>
+                       <version>1.6.2-R0.1-SNAPSHOT</version>
+                </dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
