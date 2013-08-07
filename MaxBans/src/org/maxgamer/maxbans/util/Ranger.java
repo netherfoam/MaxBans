@@ -116,7 +116,7 @@ public class Ranger{
 	public void unban(RangeBan rb){
 		if(banned.contains(rb)){
 			banned.remove(rb);
-			plugin.getDB().execute("DELETE FROM rangebans WHERE start = ? AND end = ?", rb.getStart(), rb.getEnd());
+			plugin.getDB().execute("DELETE FROM rangebans WHERE start = ? AND end = ?", rb.getStart().toString(), rb.getEnd().toString());
 		}
 	}
 }
