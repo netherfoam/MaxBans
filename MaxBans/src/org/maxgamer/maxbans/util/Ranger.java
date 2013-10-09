@@ -105,7 +105,7 @@ public class Ranger{
 		if(rb instanceof Temporary){
 			expires = ((Temporary) rb).getExpires();
 		}
-		plugin.getDB().execute("INSERT INTO rangebans (banner, reason, start, end, created, expires) VALUES (?, ?, ?, ?, ?, ?)", rb.getBanner(), rb.getReason(), rb.getStart(), rb.getEnd(), rb.getCreated(), expires);
+		plugin.getDB().execute("INSERT INTO rangebans (banner, reason, start, end, created, expires) VALUES (?, ?, ?, ?, ?, ?)", rb.getBanner(), rb.getReason(), rb.getStart().toString(), rb.getEnd().toString(), rb.getCreated(), expires);
 		return null;
 	}
 	

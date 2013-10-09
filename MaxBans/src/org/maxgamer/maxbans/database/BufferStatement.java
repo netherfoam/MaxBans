@@ -35,7 +35,7 @@ public class BufferStatement{
 		PreparedStatement ps;
 		ps = con.prepareStatement(query);
 		for(int i = 1; i <= values.length; i++){
-			ps.setObject(i, values[i-1]);
+			ps.setObject(i, String.valueOf(values[i-1]));
 		}
 		return ps;
 	}
