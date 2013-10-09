@@ -102,7 +102,7 @@ public class RangeBan extends Punishment implements Comparable<RangeBan>{
 		 //Append the appeal message, if necessary.
         String appeal = MaxBans.instance.getBanManager().getAppealMessage();
         if(appeal != null && appeal.isEmpty() == false){
-        	reason += "\n" + Formatter.regular + appeal;
+        	sb.append("\n" + Formatter.regular + appeal);
         }
         return sb.toString();
 	}
