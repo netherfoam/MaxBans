@@ -69,13 +69,10 @@ public class RangeBan extends Punishment implements Comparable<RangeBan>{
 	 * @return True if they overlap.
 	 */
 	public boolean overlaps(RangeBan rb){
-		System.out.println("Checking overlap: " + this.toString() + " vs " + rb.toString());
 		if(start.compareTo(rb.end) == end.compareTo(rb.start)){
-			System.out.println("No overlap!");
 			//If this one starts after the other one ends, OR this one ends before the other one starts...
 			return false;
 		}
-		System.out.println("Yes overlap!");
 		return true;
 	}
 	
