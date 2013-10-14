@@ -1,5 +1,5 @@
 name: MaxBans
-version: 1.9 #Beta
+version: 1.9 #Release
 main: org.maxgamer.maxbans.MaxBans
 authors: [Darekfive, Netherfoam]
 
