@@ -11,7 +11,7 @@ import org.maxgamer.maxbans.sync.Packet;
 
 public class UnWarnCommand extends CmdSkeleton{
     public UnWarnCommand(){
-        super("unwarn", "maxbans.clearwarnings");
+        super("unwarn", "maxbans.unwarn");
     }
 	public boolean run(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length > 0){
