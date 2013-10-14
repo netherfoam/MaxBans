@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans.util;
 
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Punishment;
 
 /**
@@ -91,16 +92,6 @@ public class RangeBan extends Punishment implements Comparable<RangeBan>{
 	 * By Console.
 	 */
 	public String getKickMessage(){
-		StringBuilder sb = new StringBuilder(50);
-		sb.append(Formatter.regular + "Your IP Address (" + Formatter.secondary + this.toString() + Formatter.regular + ") is RangeBanned.\n");
-		sb.append(Formatter.regular + "Reason: " + Formatter.reason + this.getReason() + "\n");
-		sb.append(Formatter.regular + "By: " + Formatter.banner + this.getBanner());
-		
-		 //Append the appeal message, if necessary.
-        String appeal = MaxBans.instance.getBanManager().getAppealMessage();
-        if(appeal != null && appeal.isEmpty() == false){
-        	sb.append("\n" + Formatter.regular + appeal);
-        }
-        return sb.toString();
+		return Msg.get("disconnection.you-are-rangebanned", new String[]{"reason", "banner", "appeal-message", "range"}, new String[]{getReason(), getBanner(), MaxBans.instance.getBanManager().getAppealMessage(), this.toString()});
 	}
 }

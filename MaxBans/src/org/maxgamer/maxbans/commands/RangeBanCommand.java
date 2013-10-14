@@ -1,8 +1,10 @@
 package org.maxgamer.maxbans.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
@@ -51,6 +53,12 @@ public class RangeBanCommand extends CmdSkeleton{
 		plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " RangeBanned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: " + Formatter.secondary + rb.getReason(), silent, sender);
 		String msg = Formatter.secondary + banner + Formatter.primary + " RangeBanned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: " + Formatter.secondary + rb.getReason();
 		plugin.getBanManager().addHistory(rb.toString(), banner, msg);
+		
+		for(Player p : Bukkit.getOnlinePlayers()){
+			if(rb.contains(new IPAddress(p.getAddress().getAddress().getHostAddress()))){
+				p.kickPlayer(rb.getKickMessage());
+			}
+		}
 		
     	if(plugin.getSyncer() != null){
     		Packet prop = new Packet();

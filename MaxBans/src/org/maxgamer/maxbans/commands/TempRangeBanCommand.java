@@ -1,8 +1,10 @@
 package org.maxgamer.maxbans.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
 import org.maxgamer.maxbans.util.RangeBan;
@@ -55,6 +57,11 @@ public class TempRangeBanCommand extends CmdSkeleton{
 		RangeBan overlap = plugin.getBanManager().getRanger().ban(rb);
 		if(overlap == null){
 			plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "' Remaining: "+ Formatter.secondary + Util.getTimeUntil(rb.getExpires()), silent, sender);
+			for(Player p : Bukkit.getOnlinePlayers()){
+				if(rb.contains(new IPAddress(p.getAddress().getAddress().getHostAddress()))){
+					p.kickPlayer(rb.getKickMessage());
+				}
+			}
 		}
 		else{
 			sender.sendMessage(ChatColor.RED + "That RangeBan overlaps an existing one! (" + overlap.toString() + ")");

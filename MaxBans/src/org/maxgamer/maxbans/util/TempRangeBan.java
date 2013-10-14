@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans.util;
 
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Temporary;
 
 public class TempRangeBan extends RangeBan implements Temporary{
@@ -27,17 +28,6 @@ public class TempRangeBan extends RangeBan implements Temporary{
 	 */
 	@Override
 	public String getKickMessage(){
-		StringBuilder sb = new StringBuilder(50);
-		sb.append(Formatter.regular + "Your IP Address (" + Formatter.secondary + this.toString() + Formatter.regular + ") is RangeBanned.\n");
-		sb.append("The ban expires in " + Formatter.time + Util.getTimeUntil(this.getExpires()) + Formatter.regular + ".\n"); 
-		sb.append(Formatter.regular + "Reason: " + Formatter.reason + this.getReason() + "\n");
-		sb.append(Formatter.regular + "By: " + Formatter.banner + this.getBanner());
-		
-		 //Append the appeal message, if necessary.
-        String appeal = MaxBans.instance.getBanManager().getAppealMessage();
-        if(appeal != null && appeal.isEmpty() == false){
-        	reason += "\n" + Formatter.regular + appeal;
-        }
-        return sb.toString();
+		return Msg.get("disconnection.you-are-temp-rangebanned", new String[]{"reason", "banner", "appeal-message", "range", "time"}, new String[]{getReason(), getBanner(), MaxBans.instance.getBanManager().getAppealMessage(), this.toString(), Util.getTimeUntil(expires)});
 	}
 }

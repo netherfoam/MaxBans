@@ -17,14 +17,17 @@ public class Msg{
 		File f = new File(MaxBans.instance.getDataFolder(), "messages.yml");
 		cfg = new YamlConfiguration();
 		try{
+			YamlConfiguration defaults = new YamlConfiguration();
+			InputStream in = MaxBans.instance.getResource("messages.yml");
+			defaults.load(in);
+			in.close();
+			
 			if(f.exists()){
-				cfg.load(f);
+				cfg.load(f); //If the existing message file exists, load it as well.
 			}
 			else{
+				//Save the file to disk if the messages.yml file doesn't exist yet.
 				FileOutputStream out = new FileOutputStream(f);
-				InputStream in = MaxBans.instance.getResource("messages.yml");
-				cfg.load(in);
-				in.close();
 				in = MaxBans.instance.getResource("messages.yml");
 				byte[] buffer = new byte[1024];
 				int len = in.read(buffer);
@@ -35,6 +38,7 @@ public class Msg{
 				in.close();
 				out.close();
 			}
+			cfg.setDefaults(defaults);
 		} catch(FileNotFoundException e){
 			e.printStackTrace();
 		} catch(InvalidConfigurationException e){

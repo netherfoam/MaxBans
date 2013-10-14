@@ -5,6 +5,9 @@ disconnection:
     you-are-temp-banned: "&fYou're temporarily banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\nExpires in: {time}.\n{appeal-message}"
     you-are-temp-ipbanned: "&fYou're temporarily IP Banned!\n Reason: &a'{reason}'&f\nBy &a{banner}&f.\nExpires in: {time}.\n{appeal-message}"
     
+    you-are-rangebanned: "&fYour IP Address (&c{range}&f) is RangeBanned.\nReason: &a{reason}&f\nBy: &a{banner}&f.\n{appeal-message}"
+    you-are-temp-rangebanned: "&fYour IP Address (&c{range}&f) is RangeBanned.\nThe ban expires in &a{time}&f.\nReason: &a{reason}&f\nBy: &a{banner}&f.\n{appeal-message}"
+    
     you-are-proxied: "Kicked by Maxbans:\n Your IP ({ip}) is listed as a proxy."
     
     lockdown-active: "&fServer is in lockdown mode. Try again shortly. Reason: \n{reason}"
