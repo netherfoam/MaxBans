@@ -34,22 +34,12 @@ public class UnWarnCommand extends CmdSkeleton{
 			List<Warn> warnings = plugin.getBanManager().getWarnings(name);
 			
 			if(warnings == null || warnings.size() == 0){
-				//sender.sendMessage(Formatter.secondary + name + Formatter.primary + " has no warnings to their name.");
 				sender.sendMessage(Msg.get("error.no-warnings", new String[]{"name"}, new String[]{name}));
 				return true;
 			}
 			
 			plugin.getBanManager().deleteWarning(name, warnings.get(warnings.size() - 1));
 			
-			/*
-			Player p = Bukkit.getPlayer(name);
-			if(p != null){
-				p.sendMessage(Formatter.primary + "Your previous warning has been pardoned by " + Formatter.secondary + banner);
-			}
-			sender.sendMessage(Formatter.primary + "Pardoned " + Formatter.secondary + name + Formatter.primary + "'s most recent warning.");
-			
-			String message = Formatter.secondary + banner + Formatter.primary + " pardoned one of " + Formatter.secondary + name + Formatter.primary + "'s warnings.";
-			plugin.getBanManager().addHistory(name, banner, message);*/
 			String message = Msg.get("announcement.unwarn-success", new String[]{"banner", "name"}, new String[]{banner, name});
 			plugin.getBanManager().announce(message);
 			plugin.getBanManager().addHistory(name, banner, message);
