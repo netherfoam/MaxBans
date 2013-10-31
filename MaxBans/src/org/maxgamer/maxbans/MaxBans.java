@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
+import org.maxgamer.maxbans.banmanager.SyncBanManager;
 import org.maxgamer.maxbans.commands.BanCommand;
 import org.maxgamer.maxbans.commands.CheckBanCommand;
 import org.maxgamer.maxbans.commands.CheckIPCommand;
@@ -200,8 +201,6 @@ public class MaxBans extends JavaPlugin{
 			return;
 		}
 		
-		//BanManager
-		banManager = new BanManager(this);
 		
 		ConfigurationSection syncConfig = this.getConfig().getConfigurationSection("sync");
 		if(syncConfig.getBoolean("use", false)){
@@ -234,6 +233,12 @@ public class MaxBans extends JavaPlugin{
 				e.printStackTrace();
 				getLogger().info("Could not encrypt SyncServer password!");
 			}
+			//Special sync ban manager
+			banManager = new SyncBanManager(this);
+		}
+		else{
+			//BanManager
+			banManager = new BanManager(this);
 		}
 		
 		

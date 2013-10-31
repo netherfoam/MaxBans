@@ -418,6 +418,7 @@ public class Syncer{
 					Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){ //Run it in the main thread
 						@Override
 						public void run(){
+							if(MaxBans.instance.getConfig().getBoolean("sync.debug")) System.out.println("Received: " + e.getPacket().serialize());
 							SyncBanManager sbm = (SyncBanManager) MaxBans.instance.getBanManager();
 							sbm.startSync(); //We don't want to echo data back
 							c.run(e.getPacket());

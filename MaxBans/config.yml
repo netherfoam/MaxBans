@@ -133,6 +133,7 @@ sync:
     #How many times should the Syncer try to ping the SyncServer
     #Before giving up? Each try is 5 seconds apart... 12 tries = 1 minute.
     tries: 120
+    debug: false
 
 database:
     mysql: false
