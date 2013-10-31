@@ -16,7 +16,6 @@ public class KickCommand extends CmdSkeleton{
 			boolean silent = Util.isSilent(args);
 			String name = args[0];
 			if(name.isEmpty()){
-				//sender.sendMessage(Formatter.primary + "No name given.");
 				sender.sendMessage(Msg.get("error.no-player-given"));
 				return true;
 			}

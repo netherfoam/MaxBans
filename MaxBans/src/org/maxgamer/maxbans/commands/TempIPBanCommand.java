@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
-import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempIPBanCommand extends CmdSkeleton{
@@ -44,7 +43,6 @@ public class TempIPBanCommand extends CmdSkeleton{
 				ip = plugin.getBanManager().getIP(name);
 				
 				if(ip == null){
-					//sender.sendMessage(Formatter.secondary + "No IP recorded for " + name + " - Try ban them normally instead?");
 					String msg = Msg.get("error.no-ip-known");
 					sender.sendMessage(msg);
 					return true;
@@ -65,7 +63,6 @@ public class TempIPBanCommand extends CmdSkeleton{
 					TempIPBan tBan = (TempIPBan) ban;
 					if(tBan.getExpires() > time){
 						//Their old ban lasts longer than this one!
-						//sender.sendMessage(Formatter.secondary + "That player has a tempban which will last longer than the one you supplied!");
 						String msg = Msg.get("error.tempipban-shorter-than-last");
 						sender.sendMessage(msg);
 						return true;
@@ -86,26 +83,8 @@ public class TempIPBanCommand extends CmdSkeleton{
 			
 			//Ban them
 			plugin.getBanManager().tempipban(ip, reason, banner, time); //IP
-			/*
-			plugin.getBanManager().announce(Formatter.secondary + name + Formatter.primary + " has been temp IP banned ("+Util.getTimeUntil(time)+") by " + Formatter.secondary + banner + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "'.", silent, sender);
-			String message = Formatter.secondary + banner + Formatter.primary + " temp IP banned " + Formatter.secondary + name + Formatter.primary + " ("+ Formatter.secondary + ip + Formatter.primary + ") for " + Formatter.secondary + Util.getTimeUntil(time) + Formatter.primary + " for '" + Formatter.secondary + reason + Formatter.primary + "'";
-			plugin.getBanManager().addHistory(name, banner, message);*/
 			String message = Msg.get("announcement.player-was-tempipbanned", new String[]{"banner", "name", "reason", "ip", "time"}, new String[]{banner, name, reason, ip, Util.getTimeUntil(time)});
 			plugin.getBanManager().announce(message, silent, sender);
-			
-	    	if(plugin.getSyncer() != null){
-	    		Packet prop = new Packet();
-	    		prop.setCommand("ipban");
-	    		prop.put("ip", ip);
-	    		prop.put("reason", reason);
-	    		prop.put("banner", banner);
-	    		prop.put("expires", time);
-	    		plugin.getSyncer().broadcast(prop);
-	    		
-	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
-	    		plugin.getSyncer().broadcast(history);
-	    	}
 			
 			return true;
 		}

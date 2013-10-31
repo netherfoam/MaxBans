@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Warn;
-import org.maxgamer.maxbans.sync.Packet;
 
 public class UnWarnCommand extends CmdSkeleton{
     public UnWarnCommand(){
@@ -43,19 +42,6 @@ public class UnWarnCommand extends CmdSkeleton{
 			String message = Msg.get("announcement.unwarn-success", new String[]{"banner", "name"}, new String[]{banner, name});
 			plugin.getBanManager().announce(message);
 			plugin.getBanManager().addHistory(name, banner, message);
-			
-			if(plugin.getSyncer() != null){
-				//Send the clearwarnings request
-	    		Packet prop = new Packet();
-	    		prop.setCommand("unwarn");
-	    		prop.put("name", name);
-	    		prop.put("banner", banner);
-	    		plugin.getSyncer().broadcast(prop);
-	    		
-	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
-	    		plugin.getSyncer().broadcast(history);
-	    	}
 			
 			return true;
 		}

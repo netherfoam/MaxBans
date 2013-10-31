@@ -4,7 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Mute;
-import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Util;
 
 public class UnMuteCommand extends CmdSkeleton{
@@ -33,19 +32,8 @@ public class UnMuteCommand extends CmdSkeleton{
 				
 				String message = Msg.get("announcement.player-was-unmuted", new String[]{"banner", "name"}, new String[]{banner, name});
 				plugin.getBanManager().announce(message, silent, sender);
-				
-		    	if(plugin.getSyncer() != null){
-		    		Packet prop = new Packet();
-		    		prop.setCommand("unmute");
-		    		prop.put("name", name);
-		    		plugin.getSyncer().broadcast(prop);
-		    		
-		    		//Send the addhistory request.
-		    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
-		    		plugin.getSyncer().broadcast(history);
-		    	}
 			}
-			else{;
+			else{
 				sender.sendMessage(Msg.get("error.no-mute-found", "name", name));
 			}
 			

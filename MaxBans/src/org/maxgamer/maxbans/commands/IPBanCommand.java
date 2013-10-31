@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.IPBan;
 import org.maxgamer.maxbans.banmanager.TempIPBan;
-import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.Util;
 
@@ -59,22 +58,6 @@ public class IPBanCommand extends CmdSkeleton{
 			String message = Msg.get("announcement.player-was-ip-banned", new String[]{"banner", "name", "reason", "ip"}, new String[]{banner, name, reason, ip});
 			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
-			
-	    	if(plugin.getSyncer() != null){
-	    		Packet prop = new Packet();
-	    		prop.setCommand("ipban");
-	    		prop.put("ip", ip);
-	    		prop.put("reason", reason);
-	    		prop.put("banner", banner);
-	    		plugin.getSyncer().broadcast(prop);
-	    		
-	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
-	    		plugin.getSyncer().broadcast(history);
-	    		
-	    		Packet msg = new Packet().setCommand("announce").put("string", message).put("silent", silent);
-	    		plugin.getSyncer().broadcast(msg);
-	    	}
 			
 			return true;
 		}

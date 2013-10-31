@@ -6,7 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.maxgamer.maxbans.banmanager.RangeBan;
-import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
 import org.maxgamer.maxbans.util.Util;
@@ -59,18 +58,6 @@ public class RangeBanCommand extends CmdSkeleton{
 				p.kickPlayer(rb.getKickMessage());
 			}
 		}
-		
-    	if(plugin.getSyncer() != null){
-    		Packet prop = new Packet();
-    		prop.setCommand("rangeban");
-    		prop.put("range", rb.toString());
-    		prop.put("banner", banner);
-    		plugin.getSyncer().broadcast(prop);
-    		
-    		//Send the addhistory request.
-    		Packet history = new Packet().setCommand("addhistory").put("string", msg).put("banner", banner).put("name", rb.toString());
-    		plugin.getSyncer().broadcast(history);
-    	}
 		
 		return true;
 	}

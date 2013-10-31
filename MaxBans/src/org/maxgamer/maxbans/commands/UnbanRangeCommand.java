@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.banmanager.RangeBan;
-import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
 import org.maxgamer.maxbans.util.Util;
@@ -38,18 +37,6 @@ public class UnbanRangeCommand extends CmdSkeleton{
 		
 		String msg = Formatter.secondary + banner + Formatter.primary + " unbanned the IP Range " + Formatter.secondary + rb.toString() + Formatter.primary + "!";
 		plugin.getBanManager().addHistory(rb.toString(), banner, msg);
-		
-    	if(plugin.getSyncer() != null){
-    		Packet prop = new Packet();
-    		prop.setCommand("unrangeban");
-    		prop.put("range", rb.toString());
-    		prop.put("banner", banner);
-    		plugin.getSyncer().broadcast(prop);
-    		
-    		//Send the addhistory request.
-    		Packet history = new Packet().setCommand("addhistory").put("string", msg).put("banner", banner).put("name", rb.toString());
-    		plugin.getSyncer().broadcast(history);
-    	}
 		
 		return true;
 	}

@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.banmanager.Mute;
-import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Util;
 
 public class MuteCommand extends CmdSkeleton{
@@ -43,19 +42,6 @@ public class MuteCommand extends CmdSkeleton{
 			
 			plugin.getBanManager().announce(message, silent, sender);
 			plugin.getBanManager().addHistory(name, banner, message);
-			
-	    	if(plugin.getSyncer() != null){
-	    		Packet prop = new Packet();
-	    		prop.setCommand("mute");
-	    		prop.put("name", name);
-	    		prop.put("banner", banner);
-	    		prop.put("reason", reason);
-	    		plugin.getSyncer().broadcast(prop);
-	    		
-	    		//Send the addhistory request.
-	    		Packet history = new Packet().setCommand("addhistory").put("string", message).put("banner", banner).put("name", name);
-	    		plugin.getSyncer().broadcast(history);
-	    	}
 			
 			return true;
 		}
