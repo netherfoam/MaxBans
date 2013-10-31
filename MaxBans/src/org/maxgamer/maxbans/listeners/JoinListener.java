@@ -11,12 +11,12 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.banmanager.Ban;
 import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.banmanager.RangeBan;
 import org.maxgamer.maxbans.banmanager.Temporary;
 import org.maxgamer.maxbans.commands.DupeIPCommand;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
-import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class JoinListener extends ListenerSkeleton{
@@ -133,7 +133,7 @@ public class JoinListener extends ListenerSkeleton{
         	if(!whitelisted){
         		//Check for a rangeban
 	        	IPAddress ip = new IPAddress(address);
-	        	RangeBan rb = this.getPlugin().getBanManager().getRanger().getBan(ip);
+	        	RangeBan rb = this.getPlugin().getBanManager().getBan(ip);
 	        	if(rb != null){
 	                e.disallow(Result.KICK_OTHER, rb.getKickMessage());
 	                

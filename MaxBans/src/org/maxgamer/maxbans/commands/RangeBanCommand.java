@@ -5,10 +5,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.banmanager.RangeBan;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
-import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class RangeBanCommand extends CmdSkeleton{
@@ -45,7 +45,7 @@ public class RangeBanCommand extends CmdSkeleton{
 		IPAddress end = new IPAddress(ips[1]);
 		
 		RangeBan rb = new RangeBan(banner, reason, System.currentTimeMillis(), start, end);
-		RangeBan result = plugin.getBanManager().getRanger().ban(rb);
+		RangeBan result = plugin.getBanManager().ban(rb);
 		if(result != null){
 			sender.sendMessage(ChatColor.RED + "That RangeBan overlaps another RangeBan! (" + result.toString() + ")");
 			return true;

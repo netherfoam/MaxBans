@@ -11,11 +11,14 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.maxgamer.maxbans.MaxBans;
+import org.maxgamer.maxbans.banmanager.RangeBan;
+import org.maxgamer.maxbans.banmanager.SyncBanManager;
 import org.maxgamer.maxbans.banmanager.Warn;
 import org.maxgamer.maxbans.sync.Connection.PacketEvent;
 import org.maxgamer.maxbans.sync.Connection.PacketListener;
 import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
+import org.maxgamer.maxbans.util.IPAddress;
 
 public class Syncer{
 	private HashMap<String, Command> commands = new HashMap<String, Command>();
@@ -76,6 +79,7 @@ public class Syncer{
 				String name = prop.get("name");
 				List<Warn> warnings = MaxBans.instance.getBanManager().getWarnings(name);
 				if(warnings == null) return;
+				//Possible error here if warnings are out of sync.
 				MaxBans.instance.getBanManager().deleteWarning(name, warnings.get(warnings.size() - 1));
 			}
 		};
@@ -303,6 +307,99 @@ public class Syncer{
 			}
 		};
 		commands.put("addhistory", addhistory);
+		
+		/* *************************
+		 * Adds the given rangeban
+		 * *************************/
+		Command rangeban = new Command(){
+			@Override
+			public void run(Packet props){
+				String reason = props.get("reason");
+				String start = props.get("start");
+				String end = props.get("end");
+				String banner = props.get("banner");
+				long created = Long.parseLong(props.get("created"));
+				
+				IPAddress ip1 = new IPAddress(start);
+				IPAddress ip2 = new IPAddress(end);
+				RangeBan rb = new RangeBan(banner, reason, created, ip1, ip2);
+				MaxBans.instance.getBanManager().ban(rb);
+			}
+		};
+		commands.put("rangeban", rangeban);
+		
+		/* *************************
+		 * Removes the given rangeban
+		 * *************************/
+		Command unrangeban = new Command(){
+			@Override
+			public void run(Packet props){
+				String start = props.get("start");
+				String end = props.get("end");
+				
+				IPAddress ip1 = new IPAddress(start);
+				IPAddress ip2 = new IPAddress(end);
+				RangeBan rb = new RangeBan("", "", -1, ip1, ip2);
+				MaxBans.instance.getBanManager().unban(rb);
+			}
+		};
+		commands.put("unrangeban", unrangeban);
+		
+		/* *************************
+		 * Whitelist or unwhitelists the given user
+		 * *************************/
+		Command whitelist = new Command(){
+			@Override
+			public void run(Packet props){
+				String name = props.get("name");
+				boolean white = props.has("white");
+				
+				MaxBans.instance.getBanManager().setWhitelisted(name, white);
+			}
+		};
+		commands.put("whitelist", whitelist);
+		
+		/* *************************
+		 * Kicks anyone with the given username
+		 * *************************/
+		Command kick = new Command(){
+			@Override
+			public void run(Packet props){
+				String name = props.get("name");
+				String reason = props.get("reason");
+				
+				MaxBans.instance.getBanManager().kick(name, reason);
+			}
+		};
+		commands.put("kick", kick);
+		
+		/* *************************
+		 * Kicks anyone with the given IP Address
+		 * *************************/
+		Command kickip = new Command(){
+			@Override
+			public void run(Packet props){
+				String ip = props.get("ip");
+				String reason = props.get("reason");
+				
+				MaxBans.instance.getBanManager().kickIP(ip, reason);
+			}
+		};
+		commands.put("kickip", kickip);
+		
+		/* *************************
+		 * Kicks anyone with the given IP Address
+		 * *************************/
+		Command setimmunity = new Command(){
+			@Override
+			public void run(Packet props){
+				String name = props.get("name");
+				boolean immune = props.has("immune");
+				
+				MaxBans.instance.getBanManager().setImmunity(name, immune);
+			}
+		};
+		commands.put("setimmunity", setimmunity);
 	}
 	
 	/**
@@ -321,7 +418,10 @@ public class Syncer{
 					Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){ //Run it in the main thread
 						@Override
 						public void run(){
+							SyncBanManager sbm = (SyncBanManager) MaxBans.instance.getBanManager();
+							sbm.startSync(); //We don't want to echo data back
 							c.run(e.getPacket());
+							sbm.stopSync();
 						}
 					});
 					e.setHandled();

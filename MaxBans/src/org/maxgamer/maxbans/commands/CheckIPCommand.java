@@ -5,12 +5,12 @@ import java.util.HashSet;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.maxgamer.maxbans.banmanager.IPBan;
+import org.maxgamer.maxbans.banmanager.RangeBan;
 import org.maxgamer.maxbans.banmanager.Temporary;
 import org.maxgamer.maxbans.util.DNSBL.CacheRecord;
 import org.maxgamer.maxbans.util.DNSBL.DNSStatus;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
-import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class CheckIPCommand extends CmdSkeleton{
@@ -40,7 +40,7 @@ public class CheckIPCommand extends CmdSkeleton{
 			}
 			
 			IPBan ban = plugin.getBanManager().getIPBan(ip);
-			RangeBan rb = plugin.getBanManager().getRanger().getBan(new IPAddress(ip));
+			RangeBan rb = plugin.getBanManager().getBan(new IPAddress(ip));
 			
 			sender.sendMessage(Formatter.secondary + "+---------------------------------------------------+");
 			sender.sendMessage(Formatter.primary + "IP: " + Formatter.secondary + ip);

@@ -5,10 +5,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.maxgamer.maxbans.banmanager.RangeBan;
+import org.maxgamer.maxbans.banmanager.TempRangeBan;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
-import org.maxgamer.maxbans.util.RangeBan;
-import org.maxgamer.maxbans.util.TempRangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class TempRangeBanCommand extends CmdSkeleton{
@@ -54,7 +54,7 @@ public class TempRangeBanCommand extends CmdSkeleton{
 		String reason = Util.buildReason(args);
 		
 		TempRangeBan rb = new TempRangeBan(banner, reason, System.currentTimeMillis(), expires, start, end);
-		RangeBan overlap = plugin.getBanManager().getRanger().ban(rb);
+		RangeBan overlap = plugin.getBanManager().ban(rb);
 		if(overlap == null){
 			plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " banned " + Formatter.secondary + rb.toString() + Formatter.primary + ". Reason: '" + Formatter.secondary + reason + Formatter.primary + "' Remaining: "+ Formatter.secondary + Util.getTimeUntil(rb.getExpires()), silent, sender);
 			for(Player p : Bukkit.getOnlinePlayers()){

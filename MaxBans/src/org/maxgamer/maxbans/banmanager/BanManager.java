@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
@@ -25,7 +26,7 @@ import org.maxgamer.maxbans.database.Database;
 import org.maxgamer.maxbans.database.DatabaseHelper;
 import org.maxgamer.maxbans.util.DNSBL;
 import org.maxgamer.maxbans.util.Formatter;
-import org.maxgamer.maxbans.util.Ranger;
+import org.maxgamer.maxbans.util.IPAddress;
 
 /**
  * The ban manager class.
@@ -42,14 +43,11 @@ import org.maxgamer.maxbans.util.Ranger;
  * @author netherfoam, darekfive
  */
 public class BanManager{
-	private MaxBans plugin;
+	protected MaxBans plugin;
 	private HashMap<String, Ban> bans = new HashMap<String, Ban>();
 	private HashMap<String, TempBan> tempbans = new HashMap<String, TempBan>();
 	private HashMap<String, IPBan> ipbans = new HashMap<String, IPBan>();
 	private HashMap<String, TempIPBan> tempipbans = new HashMap<String, TempIPBan>();
-	
-	/** The IP Ranger, which is used for banning IP ranges */
-	private Ranger ranger;
 	
 	/** A HashSet of lowercase usernames which are allowed to bypass IP bans / restrictions */
 	private HashSet<String> whitelist = new HashSet<String>();
@@ -163,7 +161,7 @@ public class BanManager{
 	 * Reloads from the database.
 	 * Don't use this except when starting up.  It is very resource intensive.
 	 */
-	public void reload(){
+	public void reload(){//TODO: Cleanup, close connections!
 		//Check the database is the same instance
 		this.db = plugin.getDB();
 		
@@ -466,6 +464,34 @@ public class BanManager{
 				e.printStackTrace();
 			}
 			
+			query = "SELECT * FROM rangebans";
+			
+			try{
+				rs = plugin.getDB().getConnection().prepareStatement(query).executeQuery();
+				while(rs.next()){
+					String banner = rs.getString("banner");
+					String reason = rs.getString("reason");
+					IPAddress start = new IPAddress(rs.getString("start"));
+					IPAddress end = new IPAddress(rs.getString("end"));
+					long created = rs.getLong("created");
+					long expires = rs.getLong("created");
+					
+					RangeBan rb;
+					if(expires == 0){
+						rb = new TempRangeBan(banner, reason, created, expires, start, end);
+					}
+					else{
+						rb = new RangeBan(banner, reason, created, start, end);
+					}
+					
+					rangebans.add(rb);
+				}
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+				plugin.getLogger().warning("Could not load rangebans!");
+			}
+			
 			rs.close();
 			ps.close();
 		}
@@ -473,8 +499,6 @@ public class BanManager{
 			plugin.getLogger().severe(Formatter.secondary + "Could not load database history using: " + query);
 			e.printStackTrace();
 		}
-		
-		ranger = new Ranger(plugin);
 		
 		if(plugin.getConfig().getBoolean("dnsbl.use", true)){
 			plugin.getLogger().info("Starting DNS blacklist");
@@ -495,14 +519,6 @@ public class BanManager{
 	 */
 	public DNSBL getDNSBL(){
 		return this.dnsbl;
-	}
-	
-	/** 
-	 * The Ranger object to handle banning IP address ranges.
-	 * @return The ranger object to handle banning IP address ranges.
-	 */
-	public Ranger getRanger(){
-		return this.ranger;
 	}
 	
 	/**
@@ -1349,5 +1365,85 @@ public class BanManager{
 	 */
 	public HashSet<String> getImmunities(){
 		return new HashSet<String>(this.immunities);
+	}
+	
+	//Ranger integrated here
+	private TreeSet<RangeBan> rangebans = new TreeSet<RangeBan>();
+	
+	/**
+	 * Returns true if the given IP is banned
+	 * @param ip The IPAddress to check
+	 * @return true if the given IP is banned
+	 */
+	public boolean isBanned(IPAddress ip){
+		return getBan(ip) != null;
+	}
+	
+	/**
+	 * Fetches the RangeBan for the given IP address
+	 * @param ip The IP Address
+	 * @return The RangeBan. This will always contain
+	 * the given IP address, and will never be expired.
+	 * If either of these two conditions are not satisfied,
+	 * then this method returns null.
+	 */
+	public RangeBan getBan(IPAddress ip){
+		RangeBan dummy = new RangeBan("dummy", "n/a", System.currentTimeMillis(), ip, ip);
+		RangeBan rb = rangebans.floor(dummy);
+		if(rb == null) return null;
+		if(rb.contains(ip)){
+			if(rb instanceof Temporary){
+				if(((Temporary) rb).hasExpired()){
+					unban(rb);
+					return null; //Ban is dead.
+				}
+			}
+			
+			return rb;
+		}
+		return null;
+	}
+	
+	/**
+	 * Bans the given range of IPs so that isBanned(rb.getEnd() through to rb.getStart()) is banned.
+	 * @param rb The RangeBan to apply
+	 * @return The RangeBan which is in the way of doing this. If this method returns null, then it has succeeded
+	 */
+	public RangeBan ban(RangeBan rb){
+		RangeBan previous = rangebans.floor(rb);
+		if(previous != null){
+			if(previous.overlaps(rb)){
+				return previous;
+			}
+		}
+		previous = rangebans.ceiling(rb);
+		if(previous != null){
+			if(previous.overlaps(rb)){
+				return previous;
+			}
+		}
+		
+		rangebans.add(rb);
+		long expires = 0;
+		if(rb instanceof Temporary){
+			expires = ((Temporary) rb).getExpires();
+		}
+		plugin.getDB().execute("INSERT INTO rangebans (banner, reason, start, end, created, expires) VALUES (?, ?, ?, ?, ?, ?)", rb.getBanner(), rb.getReason(), rb.getStart().toString(), rb.getEnd().toString(), rb.getCreated(), expires);
+		return null;
+	}
+	
+	/**
+	 * Deletes the given rangeban from memory and the database.
+	 * @param rb The rangeban to lift
+	 */
+	public void unban(RangeBan rb){
+		if(rangebans.contains(rb)){
+			rangebans.remove(rb);
+			plugin.getDB().execute("DELETE FROM rangebans WHERE start = ? AND end = ?", rb.getStart().toString(), rb.getEnd().toString());
+		}
+	}
+	
+	public TreeSet<RangeBan> getRangeBans(){
+		return rangebans;
 	}
 }

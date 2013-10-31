@@ -127,7 +127,7 @@ public class MBDebugCommand extends CmdSkeleton{
 		out.print(plugin.getBanManager().getPlayers());
 		
 		out.print("=== RangeBans ===");
-		out.print(plugin.getBanManager().getRanger().getBans());
+		out.print(plugin.getBanManager().getRangeBans());
 		
 		out.print("=== IP Whitelist ===");
 		out.print(plugin.getBanManager().getWhitelist());

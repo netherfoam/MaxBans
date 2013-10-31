@@ -1,8 +1,9 @@
-package org.maxgamer.maxbans.util;
+package org.maxgamer.maxbans.banmanager;
 
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.Msg;
-import org.maxgamer.maxbans.banmanager.Temporary;
+import org.maxgamer.maxbans.util.IPAddress;
+import org.maxgamer.maxbans.util.Util;
 
 public class TempRangeBan extends RangeBan implements Temporary{
 	private long expires;

@@ -3,10 +3,10 @@ package org.maxgamer.maxbans.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.maxgamer.maxbans.banmanager.RangeBan;
 import org.maxgamer.maxbans.sync.Packet;
 import org.maxgamer.maxbans.util.Formatter;
 import org.maxgamer.maxbans.util.IPAddress;
-import org.maxgamer.maxbans.util.RangeBan;
 import org.maxgamer.maxbans.util.Util;
 
 public class UnbanRangeCommand extends CmdSkeleton{
@@ -27,13 +27,13 @@ public class UnbanRangeCommand extends CmdSkeleton{
 		
 		IPAddress ip = new IPAddress(args[0]);
 		
-		RangeBan rb = plugin.getBanManager().getRanger().getBan(ip);
+		RangeBan rb = plugin.getBanManager().getBan(ip);
 		if(rb == null){
 			sender.sendMessage(ChatColor.RED + ip.toString() + " is not banned!");
 			return true;
 		}
 		
-		plugin.getBanManager().getRanger().unban(rb);
+		plugin.getBanManager().unban(rb);
 		plugin.getBanManager().announce(Formatter.secondary + banner + Formatter.primary + " unbanned the IP Range " + Formatter.secondary + rb.toString() + Formatter.primary + "!", silent, sender);
 		
 		String msg = Formatter.secondary + banner + Formatter.primary + " unbanned the IP Range " + Formatter.secondary + rb.toString() + Formatter.primary + "!";

@@ -1,8 +1,8 @@
-package org.maxgamer.maxbans.util;
+package org.maxgamer.maxbans.banmanager;
 
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.Msg;
-import org.maxgamer.maxbans.banmanager.Punishment;
+import org.maxgamer.maxbans.util.IPAddress;
 
 /**
  * Represents a ban on a set of IPs.  For example, a
