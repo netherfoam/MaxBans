@@ -1162,7 +1162,7 @@ public class BanManager{
 				if(p.hasPermission("maxbans.seebroadcast")) p.sendMessage(s);
 			}
 		}
-		plugin.getLogger().info(s);
+		Bukkit.getConsoleSender().sendMessage(s);
 	}
 	
 	/**
