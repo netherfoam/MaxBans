@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.maxgamer.maxbans.MaxBans;
@@ -32,6 +33,8 @@ public class ClientToServerConnection{
 	
 	/** The socket connection to the remote server */
 	private Socket socket;
+	
+	private LinkedList<Packet> queue = new LinkedList<Packet>();
 	
 	public ClientToServerConnection(String host, int port, String pass){
 		this.host = host;
@@ -457,6 +460,14 @@ public class ClientToServerConnection{
 					continue; //Retry.
 				}
 				
+				//Purge the queue.
+				synchronized(queue){
+					for(Packet p : queue){
+						write(p);
+					}
+					queue.clear();
+				}
+				
 				
 				//We can now read!
 				try {
@@ -501,7 +512,18 @@ public class ClientToServerConnection{
 	
 	public void write(Packet p){
 		if(SyncUtil.isDebug()) log("Writing packet: " + p.serialize());
-		out.write(p.serialize());
+		try{
+			out.write(p.serialize());
+		}
+		catch(Exception e){
+			if(SyncUtil.isDebug()){
+				e.printStackTrace();
+				log("Queued data for transmission upon reconnection instead!");
+			}
+			synchronized(queue){
+				queue.addLast(p);
+			}
+		}
 	}
 	
 	public boolean isReconnect(){
