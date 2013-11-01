@@ -64,6 +64,7 @@ public class ServerToClientConnection{
 						p = new Packet("connect");
 						write(p);
 						log("Connection Authenticated!");
+						server.getBlacklist().remove(socket.getInetAddress().getHostAddress()); //Successful auth, so we remove any failed attempts.
 					}
 				}
 				catch(Exception e){ //Error checking login packet, close.
