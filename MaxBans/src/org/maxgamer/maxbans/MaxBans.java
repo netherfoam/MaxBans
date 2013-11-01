@@ -4,9 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -212,27 +210,16 @@ public class MaxBans extends JavaPlugin{
 			if(syncConfig.getBoolean("server", false)){
 				try{
 					this.syncServer = new SyncServer(port, pass);
+					this.syncServer.start();
 				}
 				catch(IOException e){
 					e.printStackTrace();
 					getLogger().info("Could not start sync server!");
 				}
-				catch(NoSuchAlgorithmException e){
-					e.printStackTrace();
-					getLogger().info("Could not encrypt SyncServer password!");
-				}
 			}
 			
-			try {
-				syncer = new Syncer(host, port, pass);
-				syncer.start();
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-				getLogger().info("Could not encrypt SyncServer password!");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				getLogger().info("Could not encrypt SyncServer password!");
-			}
+			syncer = new Syncer(host, port, pass);
+			syncer.start();
 			//Special sync ban manager
 			banManager = new SyncBanManager(this);
 		}
@@ -279,7 +266,6 @@ public class MaxBans extends JavaPlugin{
 		this.getLogger().info("Disabling Maxbans...");
 		
 		if(syncer != null){
-			syncer.stopReconnect();
 			syncer.stop();
 			syncer = null; //Required when reloading, if sync.use changes to false
 		}

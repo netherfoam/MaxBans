@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import org.maxgamer.maxbans.MaxBans;
+
 public class SyncUtil{
 	/** The salt to add to all passwords */
 	public static final String PASSWORD_SALT = "fuQJ7_q#eF78A&D";
@@ -16,6 +18,11 @@ public class SyncUtil{
 	static{
 		chars = "abcdefghijklmnopqrstuvwrxyzABCDEFGHIJKLMNOPQRSTUVWRXYZ0123456789".toCharArray();
 	}
+	
+	public static boolean isDebug(){
+		return MaxBans.instance.getConfig().getBoolean("sync.debug");
+	}
+	
 	/**
 	 * Returns a random string of A-Z, a-z and 0-9 with the given length.
 	 * @param len The length of the required string
