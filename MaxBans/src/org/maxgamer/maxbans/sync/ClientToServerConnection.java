@@ -422,7 +422,7 @@ public class ClientToServerConnection{
 				/* 1. Attempt connection until successful
 				 * 2. Send queued data, if any
 				 * 3. Read data until failure
-				 * 4. Repeat
+				 * 4. Go to step #1.
 				 */
 				//Close any previous connections
 				if(socket != null){
