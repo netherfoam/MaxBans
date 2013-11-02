@@ -90,10 +90,11 @@ public class DNSBL{
 	 * @param event The PlayerLoginEvent.
 	 */
 	public void handle(PlayerLoginEvent event){
-		final Player player = event.getPlayer();
 		if(event.getAddress() == null) return; //"Legacy purposes" says bukkit?
-		
-		final String address = event.getAddress().getHostAddress();
+		handle(event.getPlayer(), event.getAddress().getHostAddress());
+	}
+	
+	public void handle(final Player p, final String address){
     	CacheRecord r = getRecord(address);
     	
     	//We have no record of their IP, or it has expired.
@@ -114,19 +115,19 @@ public class DNSBL{
 						//Notify console.
 						Bukkit.getScheduler().runTask(plugin, new Runnable(){
 							public void run(){
-								if(kick && player.isOnline()){
+								if(kick && p.isOnline()){
 									String msg = Msg.get("disconnection.you-are-proxied", "ip", address);
-									player.kickPlayer(msg);
+									p.kickPlayer(msg);
 								}
 								if(notify){ 
-									String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
+									String msg = Formatter.secondary + p.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
 									for(Player p : Bukkit.getOnlinePlayers()){
 										if(p.hasPermission("maxbans.notify")){
 											p.sendMessage(msg);
 										}
 									}
 								}
-								Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
+								Bukkit.getLogger().info(p.getName() + " is using a proxy IP!");
 							}
 						});
 					}
@@ -135,17 +136,17 @@ public class DNSBL{
     	}
     	else if(r.getStatus() == DNSStatus.DENIED){
     		if(notify){
-    			String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
-				for(Player p : Bukkit.getOnlinePlayers()){
-					if(p.hasPermission("maxbans.notify")){
-						p.sendMessage(msg);
+    			String msg = Formatter.secondary + p.getName() + Formatter.primary + " (" + Formatter.secondary + address + Formatter.primary + ") is joining from a proxy IP!";
+				for(Player pl : Bukkit.getOnlinePlayers()){
+					if(pl.hasPermission("maxbans.notify")){
+						pl.sendMessage(msg);
 					}
 				}
     		}
-			Bukkit.getLogger().info(player.getName() + " is using a proxy IP!");
+			Bukkit.getLogger().info(p.getName() + " is using a proxy IP!");
     		if(kick){
     			String msg = Msg.get("disconnection.you-are-proxied", "ip", address);
-				player.kickPlayer(msg);
+				p.kickPlayer(msg);
     			return;
     		}
     	}

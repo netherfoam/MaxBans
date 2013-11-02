@@ -56,7 +56,8 @@ warnings:
 
 #Should we check that we're running the latest version of MaxBans?
 #This does NOT update it for you, it just notifies you in the console when
-#the server boots up if there is a new version available. 
+#the server boots up if there is a new version available.
+#Not working in v1.9 & v2.0. 
 update-check: true
 
 #Accepts colorcodes. (v1.2)
@@ -115,6 +116,7 @@ dnsbl:
     #Should we kick players who are discovered to have proxy IPs?
     kick: false
 
+bungee: false
 # Sync is an advanced feature of MaxBans.
 # It only applies to server owners who want to BAN/etc Players using a WEBPAGE, such as PHP Script
 # Or owners who want two servers to have the SAME banlist!

@@ -11,6 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.maxgamer.maxbans.banmanager.BanManager;
 import org.maxgamer.maxbans.banmanager.SyncBanManager;
+import org.maxgamer.maxbans.bungee.BungeeListener;
 import org.maxgamer.maxbans.commands.BanCommand;
 import org.maxgamer.maxbans.commands.CheckBanCommand;
 import org.maxgamer.maxbans.commands.CheckIPCommand;
@@ -71,6 +72,8 @@ import org.maxgamer.maxbans.util.Metrics.Graph;
  * @author Netherfoam, Darekfive<br/><br/>
  */
 public class MaxBans extends JavaPlugin{
+	public static final String BUNGEE_CHANNEL = "BungeeCord";
+	
     private BanManager banManager;
     private Syncer syncer;
     private SyncServer syncServer;
@@ -250,17 +253,17 @@ public class MaxBans extends JavaPlugin{
         
         startMetrics();
         
-        if(getConfig().getBoolean("update-check", true)){
-	        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable(){
-	        	public void run(){
-	        		if(UpdateCheck.hasUpdate()){
-	        			getLogger().info("There is a new update for MaxBans.");
-	        			getLogger().info("Please visit http://dev.bukkit.org/server-mods/MaxBans to download it.");
-	        		}
-	        	}
-        	}, 0);
+        if(this.isBungee()){
+        	//Incoming (Results for IPs)
+        	Bukkit.getMessenger().registerIncomingPluginChannel(this, MaxBans.BUNGEE_CHANNEL, new BungeeListener());
+        	//Outgoing (Requests for IPs)
+        	Bukkit.getMessenger().registerOutgoingPluginChannel(this, MaxBans.BUNGEE_CHANNEL);
         }
     }
+	
+	public boolean isBungee(){
+		return MaxBans.instance.getConfig().getBoolean("bungee");
+	}
 	
 	public void onDisable(){
 		this.getLogger().info("Disabling Maxbans...");
