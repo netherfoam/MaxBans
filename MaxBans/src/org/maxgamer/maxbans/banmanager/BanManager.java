@@ -750,9 +750,12 @@ public class BanManager{
     public boolean kickIP(String ip, String msg){
     	short kicks = 0;
     	for(Player p : Bukkit.getOnlinePlayers()){
-    		if(p.isOnline() && p.getAddress().getAddress().getHostAddress().equals(ip) && hasImmunity(p.getName()) == false){
-    			p.kickPlayer(msg); //For some reason, this OFTEN causes "End of stream error"'s!
-    			kicks++;
+    		if(hasImmunity(p.getName()) == false){
+    			String pip = getIP(p.getName()); //The players IP, Don't use player.getIP(), incase we use bungee it could be wrong!
+    			if(ip.equals(pip)){
+    				p.kickPlayer(msg); 
+        			kicks++;
+    			}
     		}
     	}
     	return kicks != 0;

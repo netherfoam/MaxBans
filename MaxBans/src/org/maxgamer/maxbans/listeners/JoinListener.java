@@ -132,48 +132,53 @@ public class JoinListener extends ListenerSkeleton{
         		}
         	});
     	}
-    	else{
-    		final String address = e.getAddress().getHostAddress();
-    		//Specifically NON-BUNGEE things.
-    		//Log that the player connected from that IP address.
-            this.getPlugin().getBanManager().logIP(player.getName(), address);
-            
-            //Whitelisted players may bypass IP restrictions.
-            boolean whitelisted = this.getPlugin().getBanManager().isWhitelisted(player.getName());
-            
-            if(!whitelisted){
-            	IPBan ipban = this.getPlugin().getBanManager().getIPBan(address); 
-            	if(ipban != null){
-            		e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-                    e.setKickMessage(ipban.getKickMessage());
-                    return; //Failure - IPBanned
-            	}
-            	
-                //Check for a rangeban
-	        	IPAddress ip = new IPAddress(address);
-	        	RangeBan rb = this.getPlugin().getBanManager().getBan(ip);
-	        	if(rb != null){
-	                e.disallow(Result.KICK_OTHER, rb.getKickMessage());
-	                
-	                if(this.getPlugin().getConfig().getBoolean("notify", true)){
-	                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
-	        	        for(Player p : Bukkit.getOnlinePlayers()){
-	        	        	if(p.hasPermission("maxbans.notify")){
-	        	        		p.sendMessage(msg);
-	        	        	}
-	        	        }
-	                }
-	                
-	                return; //Failure - Rangebanned
-	        	}
-	        	
-	        	//DNS Blacklist handling, only if NOT whitelisted
-	            if(this.getPlugin().getBanManager().getDNSBL() != null){
-	            	this.getPlugin().getBanManager().getDNSBL().handle(e);
-	            }
-        	}
-    	}
+        else{
+    		this.getPlugin().getBanManager().logIP(player.getName(), e.getAddress().getHostAddress());
+        }
         
+        String address = this.getPlugin().getBanManager().getIP(player.getName());
+    	//This is a bit hacky, but basically...
+        //If we're using Bungee, we ask bungee to update their IP address.
+        //Then we use their cached IP address before it has been updated.
+        //If bungee finds the player has a new address, it will kick them.
+        //BUG: When a players IP gets banned, then connects from a NEW IP address,
+        //They will get the 'IPBanned' message.
+        //This only applies if the server uses bungee.
+        
+        //Whitelisted players may bypass IP restrictions.
+        boolean whitelisted = this.getPlugin().getBanManager().isWhitelisted(player.getName());
+        
+        if(!whitelisted){
+        	IPBan ipban = this.getPlugin().getBanManager().getIPBan(address); 
+        	if(ipban != null){
+        		e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+                e.setKickMessage(ipban.getKickMessage());
+                return; //Failure - IPBanned
+        	}
+        	
+            //Check for a rangeban
+        	IPAddress ip = new IPAddress(address);
+        	RangeBan rb = this.getPlugin().getBanManager().getBan(ip);
+        	if(rb != null){
+                e.disallow(Result.KICK_OTHER, rb.getKickMessage());
+                
+                if(this.getPlugin().getConfig().getBoolean("notify", true)){
+                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
+        	        for(Player p : Bukkit.getOnlinePlayers()){
+        	        	if(p.hasPermission("maxbans.notify")){
+        	        		p.sendMessage(msg);
+        	        	}
+        	        }
+                }
+                
+                return; //Failure - Rangebanned
+        	}
+        	
+        	//DNS Blacklist handling, only if NOT whitelisted
+            if(this.getPlugin().getBanManager().getDNSBL() != null){
+            	this.getPlugin().getBanManager().getDNSBL().handle(e);
+            }
+    	}
         
         //Log the players actual case-sensitive name.
         if(this.getPlugin().getBanManager().logActual(player.getName(), player.getName())){

@@ -17,46 +17,53 @@ import org.maxgamer.maxbans.util.IPAddress;
 public class BungeeListener implements PluginMessageListener{
 	private MaxBans plugin = MaxBans.instance;
 	@Override
-	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+	public void onPluginMessageReceived(String channel, final Player player, final byte[] message) {
 		try{
 			DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
 			if(in.readUTF().equals("IP")){
-				String ip = in.readUTF();
+				final String ip = in.readUTF();
 				MaxBans.instance.getBanManager().logIP(player.getName(), ip);
 				
-				//IP Ban
-		        boolean whitelisted = MaxBans.instance.getBanManager().isWhitelisted(player.getName());
-		        if(!whitelisted){ //Only fetch the IP ban if the user is not whitelisted.
-		        	IPBan ipban = plugin.getBanManager().getIPBan(ip); 
-	            	if(ipban != null){
-	            		player.kickPlayer(ipban.getKickMessage());
-	                    return; //Failure - IPBanned
-	            	}
-	            	
-	                //Check for a rangeban
-		        	IPAddress address = new IPAddress(ip);
-		        	RangeBan rb = plugin.getBanManager().getBan(address);
-		        	if(rb != null){
-		        		player.kickPlayer(rb.getKickMessage());
-		                
-		                if(plugin.getConfig().getBoolean("notify", true)){
-		                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
-		        	        for(Player p : Bukkit.getOnlinePlayers()){
-		        	        	if(p.hasPermission("maxbans.notify")){
-		        	        		p.sendMessage(msg);
-		        	        	}
-		        	        }
-		                }
-		                
-		                return; //Failure - Rangebanned
-		        	}
-		        	
-		        	//DNS Blacklist handling, only if NOT whitelisted
-		            if(plugin.getBanManager().getDNSBL() != null){
-		            	//plugin.getBanManager().getDNSBL().handle(e);
-		            	plugin.getBanManager().getDNSBL().handle(player, ip);
-		            }
-		        }
+				//We should wait another tick to stop the user from being disconnected with 'end of stream' instead.
+				Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
+					@Override
+					public void run(){
+						//IP Ban
+				        boolean whitelisted = MaxBans.instance.getBanManager().isWhitelisted(player.getName());
+				        if(!whitelisted){ //Only fetch the IP ban if the user is not whitelisted.
+				        	IPBan ipban = plugin.getBanManager().getIPBan(ip); 
+			            	if(ipban != null){
+			            		player.kickPlayer(ipban.getKickMessage());
+			                    return; //Failure - IPBanned
+			            	}
+			            	
+			                //Check for a rangeban
+				        	IPAddress address = new IPAddress(ip);
+				        	RangeBan rb = plugin.getBanManager().getBan(address);
+				        	if(rb != null){
+				        		player.kickPlayer(rb.getKickMessage());
+				                
+				                if(plugin.getConfig().getBoolean("notify", true)){
+				                	String msg = Formatter.secondary + player.getName() + Formatter.primary + " (" + ChatColor.RED + address + Formatter.primary + ")" + " tried to join, but is " + (rb instanceof Temporary ? "temp " : "") + "RangeBanned.";
+				        	        for(Player p : Bukkit.getOnlinePlayers()){
+				        	        	if(p.hasPermission("maxbans.notify")){
+				        	        		p.sendMessage(msg);
+				        	        	}
+				        	        }
+				                }
+				                
+				                return; //Failure - Rangebanned
+				        	}
+				        	
+				        	//DNS Blacklist handling, only if NOT whitelisted
+				            if(plugin.getBanManager().getDNSBL() != null){
+				            	//plugin.getBanManager().getDNSBL().handle(e);
+				            	plugin.getBanManager().getDNSBL().handle(player, ip);
+				            }
+				        }
+					}
+				}, 1);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
