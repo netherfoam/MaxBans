@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.bukkit.Bukkit;
+
 public class SyncServer{
 	public final int MAX_FAILED_AUTH_ATTEMPTS = 10;
 	private int port;
@@ -112,6 +114,6 @@ public class SyncServer{
 	 * @param s The string to log.
 	 */
 	public static void log(String s){
-		System.out.println("[MaxBans-SyncServer] " + s);
+		Bukkit.getConsoleSender().sendMessage("[MaxBans-SyncServer] " + s);
 	}
 }

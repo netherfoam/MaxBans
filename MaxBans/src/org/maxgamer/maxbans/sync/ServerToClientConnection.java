@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
+import org.bukkit.Bukkit;
 import org.maxgamer.maxbans.util.InputStreamWrapper;
 import org.maxgamer.maxbans.util.OutputStreamWrapper;
 
@@ -125,7 +126,7 @@ public class ServerToClientConnection{
 	 * @param s The string to log.
 	 */
 	public static void log(String s){
-		System.out.println("[MaxBans-SyncServer] " + s);
+		Bukkit.getConsoleSender().sendMessage("[MaxBans-SyncServer] " + s);
 	}
 	
 	@Override

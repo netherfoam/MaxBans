@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.RangeBan;
 import org.maxgamer.maxbans.banmanager.SyncBanManager;
@@ -551,7 +552,7 @@ public class ClientToServerConnection{
 	 * @param s The string to log.
 	 */
 	public static void log(String s){
-		System.out.println("[MaxBans-Syncer] " + s);
+		Bukkit.getConsoleSender().sendMessage("[MaxBans-Syncer] " + s);
 	}
 	
 }
