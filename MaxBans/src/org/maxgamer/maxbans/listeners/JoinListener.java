@@ -148,7 +148,10 @@ public class JoinListener extends ListenerSkeleton{
         //Whitelisted players may bypass IP restrictions.
         boolean whitelisted = this.getPlugin().getBanManager().isWhitelisted(player.getName());
         
-        if(!whitelisted){
+        
+        //If a players IP address is null, because they're new to a bungee server...
+        //What do I do?
+        if(!whitelisted && address != null){
         	IPBan ipban = this.getPlugin().getBanManager().getIPBan(address); 
         	if(ipban != null){
         		e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
