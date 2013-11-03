@@ -1,6 +1,7 @@
 package org.maxgamer.maxbans.commands;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -16,11 +17,21 @@ import org.maxgamer.maxbans.Msg;
 import org.maxgamer.maxbans.util.Formatter;
 
 public abstract class CmdSkeleton implements CommandExecutor, TabCompleter, Comparable<CmdSkeleton>{
-	private static ArrayList<CmdSkeleton> commands = new ArrayList<CmdSkeleton>();
+	private static HashSet<CmdSkeleton> commands = new HashSet<CmdSkeleton>();
 	public static CmdSkeleton[] getCommands(){ return commands.toArray(new CmdSkeleton[commands.size()]); }
 	
 	public int compareTo(CmdSkeleton skelly){
 		return this.cmd.getUsage().compareToIgnoreCase(skelly.cmd.getUsage());
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		return o.getClass() == this.getClass();
+	}
+	
+	@Override
+	public int hashCode(){
+		return this.getClass().hashCode();
 	}
 	
 	/** A quick reference to the MaxBans plugin */
