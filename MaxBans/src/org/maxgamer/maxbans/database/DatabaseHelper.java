@@ -95,11 +95,11 @@ public class DatabaseHelper{
 			} catch (SQLException e) {} //Already has expires column. Just no record of warnings yet.
 		}
 		if(!db.hasColumn("history", "name")){
-			System.out.println("History has no banner/name, adding them...");
 			try{
 				db.getConnection().prepareStatement("ALTER TABLE history ADD banner TEXT(30)").execute(); //Unfortunately, SQLite doesn't support adding
 				db.getConnection().prepareStatement("ALTER TABLE history ADD name TEXT(30)").execute();  //columns in a specific position.
 				db.getConnection().prepareStatement("UPDATE history SET banner = 'unknown', name = 'unknown'").execute();
+				System.out.println("History has no banner/name, adding them...");
 			}
 			catch(SQLException e){}
 		}
