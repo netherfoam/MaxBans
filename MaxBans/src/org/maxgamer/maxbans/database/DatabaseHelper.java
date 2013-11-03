@@ -30,8 +30,11 @@ public class DatabaseHelper{
 			createMuteTable(db);
 		}
 		if(!db.hasColumn("mutes", "reason")){
-			System.out.println("Updating mutes table (Adding reason column)");
-			db.getConnection().prepareStatement("ALTER TABLE mutes ADD COLUMN reason TEXT(100)").execute();
+			try{
+				db.getConnection().prepareStatement("ALTER TABLE mutes ADD COLUMN reason TEXT(100)").execute();
+				System.out.println("Updating mutes table (Adding reason column)");
+			}
+			catch(SQLException e){} //It appears you're using SQLite, and already have a reasons column.
 		}
 		if(!db.hasTable("iphistory")){
 			createIPHistoryTable(db);
