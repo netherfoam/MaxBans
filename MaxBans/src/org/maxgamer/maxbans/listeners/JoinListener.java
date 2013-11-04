@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.maxgamer.maxbans.MaxBans;
@@ -92,6 +93,29 @@ public class JoinListener extends ListenerSkeleton{
     }
     
     @EventHandler (priority = EventPriority.LOWEST)
+    public void onEnter(final PlayerJoinEvent e){
+    	if(MaxBans.instance.isBungee()){
+        	//Bungee things
+        	
+        	//This has to be executed in the next tick, because the player isn't 'online' yet. I think.
+        	Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){
+        		@Override
+        		public void run(){
+        			//Ask Bungee for the players real IP
+            		ByteArrayOutputStream b = new ByteArrayOutputStream();
+            		DataOutputStream out = new DataOutputStream(b);
+            		try {
+            			out.writeUTF("IP");
+        			} catch (IOException e1) {} //Can't happen
+            		
+            		e.getPlayer().sendPluginMessage(MaxBans.instance, MaxBans.BUNGEE_CHANNEL, b.toByteArray());
+            		//The BungeeListener handles the response.
+        		}
+        	});
+    	}
+    }
+    
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onJoinHandler(final PlayerLoginEvent e) {    	
         final Player player = e.getPlayer();
         
@@ -113,26 +137,7 @@ public class JoinListener extends ListenerSkeleton{
 	        }
         }
         
-        if(MaxBans.instance.isBungee()){
-        	//Bungee things
-        	
-        	//This has to be executed in the next tick, because the player isn't 'online' yet. I think.
-        	Bukkit.getScheduler().scheduleSyncDelayedTask(MaxBans.instance, new Runnable(){
-        		@Override
-        		public void run(){
-        			//Ask Bungee for the players real IP
-            		ByteArrayOutputStream b = new ByteArrayOutputStream();
-            		DataOutputStream out = new DataOutputStream(b);
-            		try {
-            			out.writeUTF("IP");
-        			} catch (IOException e1) {} //Can't happen
-            		
-            		e.getPlayer().sendPluginMessage(MaxBans.instance, MaxBans.BUNGEE_CHANNEL, b.toByteArray());
-            		//The BungeeListener handles the response.
-        		}
-        	});
-    	}
-        else{
+        if(MaxBans.instance.isBungee() == false){
     		this.getPlugin().getBanManager().logIP(player.getName(), e.getAddress().getHostAddress());
         }
         
@@ -149,9 +154,8 @@ public class JoinListener extends ListenerSkeleton{
         boolean whitelisted = this.getPlugin().getBanManager().isWhitelisted(player.getName());
         
         
-        //If a players IP address is null, because they're new to a bungee server...
-        //What do I do?
-        if(!whitelisted && address != null){
+        //If the player uses Bungee, we can't predict their IP address. So we wait for the Bungee query to respond.
+        if(!whitelisted && address != null && !this.getPlugin().isBungee()){
         	IPBan ipban = this.getPlugin().getBanManager().getIPBan(address); 
         	if(ipban != null){
         		e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
