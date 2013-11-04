@@ -731,13 +731,23 @@ public class BanManager{
      * @param msg The message to kick them with
      * @return True on success, false if the player was already offline.
      */
-    public boolean kick(String user, String msg){
-    	Player p = Bukkit.getPlayerExact(user);
-    	if(p != null && p.isOnline() && hasImmunity(user) == false){
-    		p.kickPlayer(msg);
-    		return true;
+    public void kick(final String user, final String msg){
+    	Runnable r = new Runnable(){
+    		@Override
+    		public void run(){
+    			Player p = Bukkit.getPlayerExact(user);
+    			if(p != null && p.isOnline() && hasImmunity(user) == false){
+    	    		p.kickPlayer(msg);
+    	    	}
+    		}
+    	};
+    	
+    	if(Bukkit.isPrimaryThread()){
+    		r.run();
     	}
-    	return false;
+    	else{
+    		Bukkit.getScheduler().runTask(MaxBans.instance, r);
+    	}
     }
     
     /**
@@ -747,18 +757,28 @@ public class BanManager{
      * @param msg The message to kick them all with
      * @return True on success, false if no players were online with the given IP
      */
-    public boolean kickIP(String ip, String msg){
-    	short kicks = 0;
-    	for(Player p : Bukkit.getOnlinePlayers()){
-    		if(hasImmunity(p.getName()) == false){
-    			String pip = getIP(p.getName()); //The players IP, Don't use player.getIP(), incase we use bungee it could be wrong!
-    			if(ip.equals(pip)){
-    				p.kickPlayer(msg); 
-        			kicks++;
-    			}
+    public void kickIP(final String ip, final String msg){
+    	Runnable r = new Runnable(){
+    		@Override
+    		public void run(){
+    	    	for(Player p : Bukkit.getOnlinePlayers()){
+    	    		if(hasImmunity(p.getName()) == false){
+    	    			String pip = getIP(p.getName()); //The players IP, Don't use player.getIP(), incase we use bungee it could be wrong!
+    	    			if(ip.equals(pip)){
+    	    				p.kickPlayer(msg); 
+    	    			}
+    	    		}
+    	    	}
     		}
+    	};
+
+
+    	if(Bukkit.isPrimaryThread()){
+    		r.run();
     	}
-    	return kicks != 0;
+    	else{
+    		Bukkit.getScheduler().runTask(MaxBans.instance, r);
+    	}
     }
     
     /**

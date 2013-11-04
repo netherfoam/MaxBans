@@ -63,21 +63,19 @@ public class SyncBanManager extends BanManager{
 			super.plugin.getSyncer().broadcast(p);
 		}
 	}
-	public boolean kick(String user, String msg){
-		boolean kick = super.kick(user, msg);
+	public void kick(String user, String msg){
+		super.kick(user, msg);
 		if(sync){
 			Packet p = new Packet("kick").put("name", user).put("reason", msg);
 			super.plugin.getSyncer().broadcast(p);
 		}
-		return kick;
 	}
-	public boolean kickIP(String ip, String msg){
-		boolean kick = super.kickIP(ip, msg);
+	public void kickIP(String ip, String msg){
+		super.kickIP(ip, msg);
 		if(sync){
 			Packet p = new Packet("kickip").put("ip", ip).put("reason", msg);
 			super.plugin.getSyncer().broadcast(p);
 		}
-		return kick;
 	}
 	public boolean setImmunity(String user, boolean immune){
 		boolean change = super.setImmunity(user, immune);
