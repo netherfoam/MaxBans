@@ -1,4 +1,4 @@
-version: 1.9
+version: 2.0
 
 lockdown: false
 lockdown-reason: ""
@@ -132,9 +132,6 @@ sync:
     port: 2711
     #The password required to join.
     pass: ChangeMeNow
-    #How many times should the Syncer try to ping the SyncServer
-    #Before giving up? Each try is 5 seconds apart... 12 tries = 1 minute.
-    tries: 120
     debug: false
 
 database:

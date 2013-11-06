@@ -121,14 +121,7 @@ public class MaxBans extends JavaPlugin{
 		this.reloadConfig();
 		Msg.reload();
 		
-		int result = UpdateCheck.compareVersion(getConfig().getString("version"), this.getDescription().getVersion());
-		
 		this.getConfig().options().copyDefaults();
-		if(result == -1){ //Config needs updating
-			getLogger().info("Updating config!");
-			this.getConfig().set("version", this.getDescription().getVersion());
-			this.saveConfig();
-		}
 		
 		final File geoCSV = new File(this.getDataFolder(), "geoip.csv");
 		if(!geoCSV.exists()){
