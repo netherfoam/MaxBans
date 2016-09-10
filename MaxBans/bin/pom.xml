@@ -33,14 +33,14 @@
   		        <artifactId>Herochat</artifactId>
   	        	<version>5.6.5</version>
   			<scope>system</scope>
-  			<systemPath>${project.basedir}/lib/Herochat.jar</systemPath>
+  			<systemPath>D:/ProjetosBukkit/APIs/Herochat.jar</systemPath>
         </dependency>
         <dependency>
   	        	<groupId>co.cc.dynamicdev</groupId>
   		        <artifactId>DynamicBan</artifactId>
   	        	<version>1.2.9</version>
   			<scope>system</scope>
-  			<systemPath>${project.basedir}/lib/DynamicBan.jar</systemPath>
+  			<systemPath>D:/ProjetosBukkit/APIs/DynamicBan.jar</systemPath>
         </dependency>
         	
   </dependencies>
