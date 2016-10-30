@@ -33,36 +33,36 @@ Block commands like /me when muted!
 Commands
 =======
 
-/unban <name or IP>
-/ban <name or IP> <reason>
-/ipban <name or IP> <reason>
-/tempban <name or IP> <number> <minutes|hours|days|weeks|etc> <reason>
-/tempipban <name or IP> <number> <minutes|hours|days|weeks|etc> <reason>
-/mute <name>
-/tempmute <name> <number> <minutes|hours|days|weeks|etc>
-/kick <name or * for everyone>
-/checkip <name>
-/dupeip <name or IP>
-/checkban <name or IP>
-/warn <name> <reason>
-/clearwarnings <name> <reason>
-/unwarn <name> - Removes a players most recent warning
-/unmute <name>
-/history [name] [number of records] - Displays a history of bans, kicks, mutes & more dealt
-/mbreload - Reloads the plugin
-/mbdebug - Outputs debug information for me if you're having issues!
-/mbwhitelist <name> - Allows the given user to bypass IP bans (Not regular bans! Eg, use for players with siblings who need to be IP banned)
-/ipreport - Basically, a mass /dupeip, on everyone who is online
-/lockdown [reason]
-/forcespawn - Teleports someone to the spawn (Twice, so /back won't work)
-/mbreload - Reloads maxbans
-/mbimport - Imports vanilla minecraft (And others) bans.
-/mbexport - Export bans to vanilla, MySQL or SQLite databases. (Allows swapping SQLite <-> MySQL), and others ban plugins.
-/rangeban <ip1-ip2> [reason] - Bans the IP range from ip1 to ip2 for the supplied reason.
-/temprangeban <ip1-ip2> <time> <hours/min/sec> [reason] - Temporary variant of above
-/unrangeban <ip> - Removes any RangeBan which overlaps with the given IP. Eg, if 127.0.0.1-127.0.0.5 is banned, unbanning 127.0.0.3 will lift the whole ban on 127.0.0.1-127.0.0.5.
+- /unban &lt;name or IP>
+- /ban &lt;name or IP> &lt;reason>
+- /ipban &lt;name or IP> &lt;reason>
+- /tempban &lt;name or IP> &lt;number> &lt;minutes|hours|days|weeks|etc> &lt;reason>
+- /tempipban &lt;name or IP> &lt;number> &lt;minutes|hours|days|weeks|etc> &lt;reason>
+- /mute &lt;name>
+- /tempmute &lt;name> &lt;number> &lt;minutes|hours|days|weeks|etc>
+- /kick &lt;name or * for everyone>
+- /checkip &lt;name>
+- /dupeip &lt;name or IP>
+- /checkban &lt;name or IP>
+- /warn &lt;name> &lt;reason>
+- /clearwarnings &lt;name> &lt;reason>
+- /unwarn &lt;name> - Removes a players most recent warning
+- /unmute &lt;name>
+- /history [name] [number of records] - Displays a history of bans, kicks, mutes & more dealt
+- /mbreload - Reloads the plugin
+- /mbdebug - Outputs debug information for me if you're having issues!
+- /mbwhitelist &lt;name> - Allows the given user to bypass IP bans (Not regular bans! Eg, use for players with siblings who need to be IP banned)
+- /ipreport - Basically, a mass /dupeip, on everyone who is online
+- /lockdown [reason]
+- /forcespawn - Teleports someone to the spawn (Twice, so /back won't work)
+- /mbreload - Reloads maxbans
+- /mbimport - Imports vanilla minecraft (And others) bans.
+- /mbexport - Export bans to vanilla, MySQL or SQLite databases. (Allows swapping SQLite <-> MySQL), and others ban plugins.
+- /rangeban &lt;ip1-ip2> [reason] - Bans the IP range from ip1 to ip2 for the supplied reason.
+- /temprangeban &lt;ip1-ip2> &lt;time> &lt;hours/min/sec> [reason] - Temporary variant of above
+- /unrangeban &lt;ip> - Removes any RangeBan which overlaps with the given IP. Eg, if 127.0.0.1-127.0.0.5 is banned, unbanning 127.0.0.3 will lift the whole ban on 127.0.0.1-127.0.0.5.
 Almost any command may have -s added in it to prevent announcing it, for example: 
-/tempban NewGuy101 -s 1 hour MaxBans is Awesome!
+- /tempban NewGuy101 -s 1 hour MaxBans is Awesome!
 
 - Nobody will see the announcement that NewGuy101 was temp banned, just the fact he "has left the game."
 
